@@ -1,3 +1,44 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+@import 'tailwindcss';
+@plugin "daisyui";
 
-@import "tailwindcss";
+@theme inline {
+  --color-primary-*: initial;
+  --color-primary: var(--color-blue-500);
+  --color-background: #101922;
+  --color-card: #16212e;
+  --color-text: #ffffff;
+  --color-text-muted: var(--color-slate-400);
+  --color-border: #2d3748;
+
+  --font-family-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --default-font-family: var(--font-family-sans);
+}
+
+@utility btn-primary {
+  @apply w-full font-bold py-3 bg-primary hover:bg-blue-600 text-xs rounded-lg cursor-pointer transition-all;
+}
+
+@utility btn-secondary {
+  @apply flex items-center gap-3 text-xs rounded-lg border border-border hover:bg-gray-800 transition-all px-6 md:px-11 py-3 cursor-pointer;
+}
+
+@utility hr {
+  @apply w-1/4 border-border;
+}
+
+html,
+body {
+  height: 100%;
+  --color-primary: var(--color-blue-500) !important;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-family-sans);
+}
+
+.signup-hero {
+  background: linear-gradient(to right, transparent, var(--color-card)), url('/images/Robot.png');
+  background-size: cover;
+  background-position: center;
+}

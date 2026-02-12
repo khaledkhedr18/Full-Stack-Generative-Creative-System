@@ -1,0 +1,28 @@
+<div class="flex flex-col gap-1.5">
+  @if (label) {
+    <label [for]="inputId" class="text-xs text-text-muted">{{ label }}</label>
+  }
+  <label class="input bg-background border-border w-full focus-within:outline-none">
+    @if (icon) {
+      <fa-icon [icon]="icon" class="text-text-muted"></fa-icon>
+    }
+    <input
+      [id]="inputId"
+      [type]="inputType()"
+      class="grow text-text-muted"
+      [placeholder]="placeholder"
+    />
+    @if (type === 'password') {
+      <button
+        type="button"
+        (click)="toggleVisibility()"
+        class="cursor-pointer text-text-muted hover:text-border focus:outline-none transition-all"
+      >
+        <fa-icon [icon]="isPasswordVisible() ? faEyeSlash : faEye"></fa-icon>
+      </button>
+    }
+  </label>
+  @if (type === 'password') {
+    <p class="text-xs text-text-muted">Must be at least 8 characters.</p>
+  }
+</div>
