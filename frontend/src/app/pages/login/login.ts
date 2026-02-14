@@ -1,22 +1,21 @@
 import { Component } from '@angular/core';
+import { Button } from '../../components/button/button';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faFacebook } from '@fortawesome/free-brands-svg-icons';
-import { Button } from '../../components/button/button';
 import { Divider } from '../../components/divider/divider';
-import { faUser, faEnvelope } from '@fortawesome/free-regular-svg-icons';
-import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { FormInput } from '../../components/form-input/form-input';
+import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
+import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { RouterLink } from "@angular/router";
 
 @Component({
-  selector: 'app-sign-up',
-  imports: [FontAwesomeModule, Button, Divider, FormInput, RouterLink],
-  templateUrl: './sign-up.html',
+  selector: 'app-login',
+  imports: [Button, FontAwesomeModule, Divider, FormInput, RouterLink],
+  templateUrl: './login.html',
   styles: ``,
 })
-export class SignUp {
+export class Login {
   faFacebook = faFacebook;
-  faUser = faUser;
   faEnvelope = faEnvelope;
   faLock = faLock;
 }

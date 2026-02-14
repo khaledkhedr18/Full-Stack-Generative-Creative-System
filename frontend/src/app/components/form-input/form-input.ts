@@ -15,6 +15,7 @@ export class FormInput {
   @Input() icon: IconDefinition | undefined = undefined;
   @Input() type: string = 'text';
   @Input() placeholder: string = '';
+  @Input() parent: string = '';
 
   isPasswordVisible = signal(false);
 

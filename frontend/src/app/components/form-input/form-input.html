@@ -22,7 +22,7 @@
       </button>
     }
   </label>
-  @if (type === 'password') {
+  @if (type === 'password' && parent === 'signup') {
     <p class="text-xs text-text-muted">Must be at least 8 characters.</p>
   }
 </div>

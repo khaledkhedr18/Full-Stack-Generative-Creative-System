@@ -30,7 +30,7 @@
           <h2 class="font-semibold text-2xl">Create an account</h2>
           <p class="text-text-muted text-sm">Start designing your future wardrobe today.</p>
         </div>
-        <div class="flex gap-3">
+        <div class="flex items-center gap-3">
           <app-button type="secondary">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -84,11 +84,13 @@
             [icon]="faLock"
             type="password"
             placeholder="••••••••"
+            parent="signup"
           ></app-form-input>
           <app-button type="primary">Create Account</app-button>
         </form>
         <p class="text-xs text-text-muted self-center">
-          Already have an account? <a href="/" class="text-primary font-semibold">Log in</a>
+          Already have an account?
+          <a routerLink="/login" class="text-primary font-semibold">Log in</a>
         </p>
       </div>
     </div>
