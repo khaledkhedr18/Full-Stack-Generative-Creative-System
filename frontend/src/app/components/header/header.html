@@ -1,7 +1,7 @@
 <header
-  class="top-0 z-50 fixed bg-card/90 shadow-sm backdrop-blur-md lg:px-8 pr-0 pl-4 sm:pl-6 border-slate-800 border-b text-slate-200 navbar"
+  class="top-0 z-50 fixed bg-card/90 shadow-sm backdrop-blur-md px-0 border-slate-800 border-b text-slate-200 navbar"
 >
-  <div class="navbar-start">
+  <div class="pl-2 navbar-start">
     <a class="flex items-center space-x-2.5" routerLink="/home">
       <span
         class="flex justify-center items-center bg-primary rounded-lg w-8 h-8 font-bold text-white text-xl"
@@ -18,17 +18,17 @@
       <li
         class="font-medium text-slate-400 hover:text-white text-sm transition-colors duration-300"
       >
-        <a routerLinkActive="active" routerLink="/home">Home</a>
+        <a routerLinkActive="text-white" routerLink="/home">Home</a>
       </li>
       <li
         class="font-medium text-slate-400 hover:text-white text-sm transition-colors duration-300"
       >
-        <a routerLinkActive="active" routerLink="/shop">Shop</a>
+        <a routerLinkActive="text-white" routerLink="/shop">Shop</a>
       </li>
       <li
         class="font-medium text-slate-400 hover:text-white text-sm transition-colors duration-300"
       >
-        <a routerLinkActive="active" routerLink="/orders">Orders </a>
+        <a routerLinkActive="text-white" routerLink="/orders">Orders </a>
       </li>
     </ul>
   </div>
@@ -77,32 +77,51 @@
         <span class="badge badge-xs badge-primary indicator-item">0</span>
       </div>
     </a>
-    <a
-      routerLink="/login"
-      class="hidden md:flex items-center space-x-1.5 hover:text-red-500 text-sm transition-colors duration-300"
-    >
-      <span>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="lucide lucide-log-out-icon lucide-log-out"
+    @if (!isLoggedIn) {
+      <div class="hidden md:flex items-center space-x-2.5">
+        <a
+          routerLinkActive="text-white"
+          routerLink="/login"
+          class="hidden md:flex items-center space-x-1.5 font-bold text-slate-400 hover:text-primary text-sm transition-colors duration-300"
         >
-          <path d="m16 17 5-5-5-5" />
-          <path d="M21 12H9" />
-          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-        </svg>
-      </span>
-      <span>Logout</span>
-    </a>
+          Login
+        </a>
+        <a
+          routerLinkActive="text-white"
+          routerLink="/signup"
+          class="hidden md:flex items-center space-x-1.5 font-bold text-slate-400 hover:text-primary text-sm transition-colors duration-300"
+        >
+          Sign up
+        </a>
+      </div>
+    }
+    @if (isLoggedIn) {
+      <button
+        class="hidden md:flex items-center space-x-1.5 font-bold text-slate-400 hover:text-red-500 text-sm transition-colors duration-300 cursor-pointer"
+      >
+        <span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-log-out-icon lucide-log-out"
+          >
+            <path d="m16 17 5-5-5-5" />
+            <path d="M21 12H9" />
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          </svg>
+        </span>
+        <span>Logout</span>
+      </button>
+    }
     <div class="md:hidden block dropdown dropdown-end">
-      <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+      <button tabindex="0" role="button" class="cursor-pointer btn btn-ghost btn-circle">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="w-5 h-5"
@@ -117,7 +136,7 @@
             d="M4 6h16M4 12h16M4 18h7"
           />
         </svg>
-      </div>
+      </button>
       <ul
         tabindex="-1"
         class="z-50 space-y-2.5 bg-base-100 shadow mt-3 px-0 py-5 w-screen menu menu-sm dropdown-content"
@@ -125,7 +144,7 @@
         <li class="font-medium text-slate-400 hover:text-white transition-colors duration-300">
           <a
             class="block px-0 rounded-none text-base text-center"
-            routerLinkActive="active"
+            routerLinkActive="text-white"
             routerLink="/home"
             >Home</a
           >
@@ -133,7 +152,7 @@
         <li class="font-medium text-slate-400 hover:text-white transition-colors duration-300">
           <a
             class="block px-0 rounded-none text-base text-center"
-            routerLinkActive="active"
+            routerLinkActive="text-white"
             routerLink="/shop"
             >Shop</a
           >
@@ -141,38 +160,58 @@
         <li class="font-medium text-slate-400 hover:text-white transition-colors duration-300">
           <a
             class="block px-0 rounded-none text-base text-center"
-            routerLinkActive="active"
+            routerLinkActive="text-white"
             routerLink="/orders"
             >Orders
           </a>
         </li>
-        <li class="font-medium text-slate-400 hover:text-red-500 transition-colors duration-300">
-          <a
-            class="flex justify-center items-center px-0 rounded-none text-base text-center"
-            routerLinkActive="active"
-            routerLink="/login"
-          >
-            <span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="lucide lucide-log-out-icon lucide-log-out"
-              >
-                <path d="m16 17 5-5-5-5" />
-                <path d="M21 12H9" />
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-              </svg>
-            </span>
-            <span>Logout</span>
-          </a>
-        </li>
+        @if (isLoggedIn) {
+          <li class="font-medium text-slate-400 hover:text-red-500 transition-colors duration-300">
+            <button
+              class="flex justify-center items-center px-0 rounded-none font-bold text-base text-center cursor-pointer"
+            >
+              <span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-log-out-icon lucide-log-out"
+                >
+                  <path d="m16 17 5-5-5-5" />
+                  <path d="M21 12H9" />
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                </svg>
+              </span>
+              <span>Logout</span>
+            </button>
+          </li>
+        }
+        @if (!isLoggedIn) {
+          <li>
+            <a
+              routerLinkActive="text-white"
+              routerLink="/login"
+              class="block px-0 rounded-none font-bold text-slate-400 hover:text-primary text-base text-center transition-colors duration-300"
+            >
+              Login
+            </a>
+          </li>
+          <li>
+            <a
+              routerLinkActive="text-white"
+              routerLink="/signup"
+              class="block px-0 rounded-none font-bold text-slate-400 hover:text-primary text-base text-center transition-colors duration-300"
+            >
+              Sign up
+            </a>
+          </li>
+        }
       </ul>
     </div>
   </div>

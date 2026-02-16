@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from "@angular/router";
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -8,5 +8,5 @@ import { RouterLink, RouterLinkActive } from "@angular/router";
   styles: ``,
 })
 export class Header {
-
+  isLoggedIn = false;
 }
