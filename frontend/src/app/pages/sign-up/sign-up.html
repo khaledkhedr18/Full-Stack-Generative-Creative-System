@@ -25,7 +25,7 @@
     <div
       class="md:w-1/2 rounded-2xl flex justify-center bg-card p-5 md:py-16 md:rounded-l-none md:rounded-r-2xl"
     >
-      <div class="flex flex-col gap-7">
+      <div class="flex flex-col gap-3">
         <div class="flex flex-col gap-1">
           <h2 class="font-semibold text-2xl">Create an account</h2>
           <p class="text-text-muted text-sm">Start designing your future wardrobe today.</p>
@@ -63,13 +63,20 @@
           </app-button>
         </div>
         <app-divider label="Or sign up with email"></app-divider>
-        <form action="" class="flex flex-col gap-5">
+        <form action="" class="flex flex-col gap-3">
           <app-form-input
-            inputId="name"
-            label="Full Name"
+            inputId="fName"
+            label="First Name"
             [icon]="faUser"
             type="text"
-            placeholder="John Doe"
+            placeholder="John"
+          ></app-form-input>
+          <app-form-input
+            inputId="lName"
+            label="Last Name"
+            [icon]="faUser"
+            type="text"
+            placeholder="Doe"
           ></app-form-input>
           <app-form-input
             inputId="email"
