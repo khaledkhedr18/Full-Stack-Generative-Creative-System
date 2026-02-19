@@ -1,0 +1,70 @@
+<section class="mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 max-w-7xl overflow-hidden">
+  <div class="flex md:flex-row flex-col justify-between items-center space-y-5 md:space-y-0 mb-8">
+    <div class="text-center md:text-start">
+      <h1 class="mb-2 font-bold text-white text-4xl">My Wishlist</h1>
+      <p class="text-slate-400">
+        Manage your saved designs.
+        <span class="font-semibold text-primary">4 Items</span>
+      </p>
+    </div>
+    <div class="flex items-center gap-2.5">
+      <button
+        class="flex items-center gap-2 bg-primary hover:bg-blue-600 shadow-lg shadow-primary/20 px-6 py-2.5 rounded-lg font-bold text-white text-sm transition-colors duration-300 cursor-pointer"
+      >
+        <span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-shopping-cart-icon lucide-shopping-cart"
+          >
+            <circle cx="8" cy="21" r="1" />
+            <circle cx="19" cy="21" r="1" />
+            <path
+              d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
+            />
+          </svg>
+        </span>
+        Add All to Cart
+      </button>
+      <button
+        class="flex items-center gap-2 bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/20 px-6 py-2.5 rounded-lg font-bold text-white text-sm transition-colors duration-300 cursor-pointer"
+      >
+        <span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-trash2-icon lucide-trash-2"
+          >
+            <path d="M10 11v6" />
+            <path d="M14 11v6" />
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+            <path d="M3 6h18" />
+            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+          </svg>
+        </span>
+        Remove All
+      </button>
+    </div>
+  </div>
+  <div class="gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+    <app-wishlist-card></app-wishlist-card>
+    <app-wishlist-card></app-wishlist-card>
+    <app-wishlist-card></app-wishlist-card>
+    <app-wishlist-card></app-wishlist-card>
+    <app-wishlist-card></app-wishlist-card>
+  </div>
+</section>
