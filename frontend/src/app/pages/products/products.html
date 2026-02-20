@@ -18,15 +18,15 @@
   </div>
   <div class="flex flex-col gap-5">
     <h2 class="font-bold">Price Range</h2>
-    <div class="px-1 flex flex-col gap-2">
+    <div class="flex flex-col gap-2 px-1">
       <input
         type="range"
         min="0"
         value="85"
         max="200"
-        class="w-full appearance-none bg-transparent cursor-pointer [&::-webkit-slider-runnable-track]:h-2 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-card [&::-moz-range-track]:h-2 [&::-moz-range-track]:rounded-full [&::-moz-range-track]:bg-card [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:-mt-1 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-primary"
+        class="bg-transparent [&::-moz-range-thumb]:bg-primary [&::-moz-range-track]:bg-card [&::-webkit-slider-runnable-track]:bg-card [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:-mt-1 [&::-moz-range-thumb]:rounded-full [&::-moz-range-track]:rounded-full [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-thumb]:rounded-full w-full [&::-moz-range-thumb]:w-4 [&::-webkit-slider-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-track]:h-2 [&::-webkit-slider-runnable-track]:h-2 [&::-webkit-slider-thumb]:h-4 appearance-none [&::-webkit-slider-thumb]:appearance-none cursor-pointer"
       />
-      <div class="flex justify-between text-xs text-text-muted">
+      <div class="flex justify-between text-text-muted text-xs">
         <span>$0</span>
         <span>$85</span>
         <span>$200+</span>
@@ -35,7 +35,7 @@
   </div>
   <div class="flex flex-col gap-3">
     <h2 class="font-bold">Color</h2>
-    <div class="grid grid-cols-5 md:grid-cols-4 lg:grid-cols-5 gap-y-3 gap-x-6">
+    <div class="gap-x-6 gap-y-3 grid grid-cols-5 md:grid-cols-4 lg:grid-cols-5">
       <app-color-filter color="bg-black" type="checkbox"></app-color-filter>
       <app-color-filter color="bg-white" type="checkbox"></app-color-filter>
       <app-color-filter color="bg-primary" type="checkbox"></app-color-filter>
@@ -47,7 +47,7 @@
   </div>
   <div class="flex flex-col gap-3">
     <h2 class="font-bold">Size</h2>
-    <div class="grid grid-cols-5 md:grid-cols-4 lg:grid-cols-5 gap-2">
+    <div class="gap-2 grid grid-cols-5 md:grid-cols-4 lg:grid-cols-5">
       <app-size-filter size="XS"></app-size-filter>
       <app-size-filter size="S"></app-size-filter>
       <app-size-filter size="M"></app-size-filter>
@@ -57,9 +57,9 @@
     </div>
   </div>
   <div
-    class="flex flex-col gap-2 p-4 rounded-xl bg-linear-to-br from-primary/20 to-transparent border border-primary/20"
+    class="flex flex-col gap-2 bg-linear-to-br from-primary/20 to-transparent p-4 border border-primary/20 rounded-xl"
   >
-    <h1 class="font-bold flex items-center gap-2">
+    <h1 class="flex items-center gap-2 font-bold">
       <fa-icon [icon]="faWandMagicSparkles" class="text-primary"></fa-icon
       ><span>AI Design Studio</span>
     </h1>
@@ -69,26 +69,31 @@
     </div>
   </div>
 </ng-template>
-<div class="grid grid-cols-1 md:grid-cols-12 py-20 px-3 md:px-6 gap-9">
-  <aside class="hidden md:flex flex-col md:col-span-3 xl:col-span-2 gap-5">
+<div
+  class="gap-9 grid grid-cols-1 md:grid-cols-12 mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 max-w-7xl overflow-hidden"
+>
+  <aside
+    class="hidden md:flex flex-col gap-5 md:col-span-3 xl:col-span-2 bg-amber pr-5 border-slate-800 border-r"
+  >
     <ng-container *ngTemplateOutlet="filterContent"></ng-container>
   </aside>
   <div class="md:col-span-9 xl:col-span-10">
     <div class="flex flex-col gap-5">
       <div class="flex flex-wrap justify-between items-center gap-5">
         <h1 class="font-bold">
-          All Apparel <span class="text-xs font-normal text-text-muted">(124 items)</span>
+          All Apparel
+          <span class="font-normal text-primary text-xs">(124 items)</span>
         </h1>
         <div class="flex items-center gap-3">
           <button
-            class="text-text-muted text-xs flex items-center gap-1 md:hidden"
+            class="md:hidden flex items-center gap-1 text-text-muted text-xs"
             (click)="filterModal.showModal()"
           >
             <fa-icon [icon]="faFilter"></fa-icon>
             <span>Filters</span>
           </button>
           <select
-            class="text-xs border border-border bg-card py-2 pl-2 pr-1.5 rounded-lg cursor-pointer"
+            class="bg-card py-2 pr-1.5 pl-2 border border-border rounded-lg hover:ring-1 hover:ring-blue-600 text-xs cursor-pointer"
           >
             <option value="" selected>Sort by: Recommended</option>
             <option value="">Price</option>
@@ -97,7 +102,7 @@
         </div>
       </div>
       <div
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4"
+        class="gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 xl:grid-cols-4"
       >
         <app-product-card></app-product-card>
         <app-product-card></app-product-card>
@@ -106,7 +111,7 @@
     </div>
   </div>
 </div>
-<dialog #filterModal class="modal modal-bottom sm:modal-middle">
+<dialog #filterModal class="modal-bottom modal sm:modal-middle">
   <div class="modal-box">
     <div class="flex justify-between items-center mb-5">
       <h3 class="font-bold text-lg">Filters</h3>
