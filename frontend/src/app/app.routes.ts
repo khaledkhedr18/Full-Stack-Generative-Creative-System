@@ -5,6 +5,7 @@ import { Home } from './pages/home/home';
 import { Products } from './pages/products/products';
 import { Wishlist } from './pages/wishlist/wishlist';
 import { Cart } from './pages/cart/cart';
+import { Checkout } from './pages/checkout/checkout';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -14,4 +15,5 @@ export const routes: Routes = [
   { path: 'shop', component: Products },
   { path: 'wishlist', component: Wishlist },
   { path: 'cart', component: Cart },
+  { path: 'checkout', component: Checkout },
 ];
