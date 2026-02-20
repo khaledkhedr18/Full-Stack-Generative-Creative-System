@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
-import { Footer } from "../../components/footer/footer";
-import { Header } from "../../components/header/header";
-import { RouterLink } from "@angular/router";
-import { ProductCard } from "../../components/product-card/product-card";
+import { Footer } from '../../components/footer/footer';
+import { Header } from '../../components/header/header';
+import { RouterLink } from '@angular/router';
+import { ProductCard } from '../../components/product-card/product-card';
 
 @Component({
   selector: 'app-home',
-  imports: [Footer, Header, RouterLink, ProductCard],
+  imports: [RouterLink, ProductCard],
   templateUrl: './home.html',
   styles: ``,
 })
-export class Home {
-
-}
+export class Home {}
