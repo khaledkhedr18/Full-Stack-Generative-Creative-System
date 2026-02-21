@@ -7,6 +7,7 @@ import { Wishlist } from './pages/wishlist/wishlist';
 import { Cart } from './pages/cart/cart';
 import { Checkout } from './pages/checkout/checkout';
 import { Confirmation } from './pages/confirmation/confirmation';
+import { Orders } from './pages/orders/orders';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -18,4 +19,5 @@ export const routes: Routes = [
   { path: 'cart', component: Cart },
   { path: 'checkout', component: Checkout },
   { path: 'confirmation', component: Confirmation },
+  { path: 'orders', component: Orders },
 ];
