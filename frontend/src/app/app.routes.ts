@@ -3,6 +3,9 @@ import { Login } from './pages/login/login';
 import { SignUp } from './pages/sign-up/sign-up';
 import { Home } from './pages/home/home';
 import { Products } from './pages/products/products';
+import { Wishlist } from './pages/wishlist/wishlist';
+import { Cart } from './pages/cart/cart';
+import { ProductDetails } from './pages/product-details/product-details';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -10,4 +13,7 @@ export const routes: Routes = [
   { path: 'login', component: Login, data: { hideHeaderFooter: true } },
   { path: 'signup', component: SignUp, data: { hideHeaderFooter: true } },
   { path: 'products', component: Products },
+  { path: 'wishlist', component: Wishlist },
+  { path: 'cart', component: Cart },
+  { path: 'products/:id', component: ProductDetails },
 ];
