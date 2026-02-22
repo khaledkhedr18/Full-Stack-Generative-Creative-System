@@ -14,6 +14,8 @@
 
   --font-family-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
   --default-font-family: var(--font-family-sans);
+
+  --shadow-primary-glow: 0 0 20px rgba(37, 99, 235, 0.3);
 }
 
 @utility btn-primary {
@@ -57,4 +59,10 @@ body {
   background: linear-gradient(to right, transparent, var(--color-card)), url('/images/Robot.png');
   background-size: cover;
   background-position: center;
+}
+
+.glitch-text {
+  text-shadow:
+    2px 0 #137fec,
+    -2px 0 #ff00c1;
 }

@@ -9,6 +9,7 @@ import { Checkout } from './pages/checkout/checkout';
 import { Confirmation } from './pages/confirmation/confirmation';
 import { Orders } from './pages/orders/orders';
 import { ProductDetails } from './pages/product-details/product-details';
+import { Error } from './pages/error/error';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -22,4 +23,5 @@ export const routes: Routes = [
   { path: 'checkout', component: Checkout },
   { path: 'confirmation', component: Confirmation },
   { path: 'orders', component: Orders },
+  { path: '**', component: Error },
 ];
