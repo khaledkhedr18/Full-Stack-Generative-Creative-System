@@ -17,7 +17,7 @@
     >
       <a
         class="flex items-center gap-2 bg-primary hover:bg-blue-600 px-6 py-2 rounded-lg font-semibold text-white transition-all translate-y-4 group-hover:translate-y-0 duration-300 cursor-pointer transform"
-        routerLink="/product/id"
+        routerLink="/products/id"
       >
         <span class="text-sm"
           ><svg
@@ -50,12 +50,23 @@
       <span class="font-semibold text-white">$35.00</span>
     </div>
     <div class="flex gap-1 mt-2">
-      <app-color-filter color="bg-white" type="radio" groupName="productColor"></app-color-filter>
-      <app-color-filter color="bg-black" type="radio" groupName="productColor"></app-color-filter>
+      <app-color-filter
+        color="bg-white"
+        type="radio"
+        groupName="productColor"
+        size="small"
+      ></app-color-filter>
+      <app-color-filter
+        color="bg-black"
+        type="radio"
+        groupName="productColor"
+        size="small"
+      ></app-color-filter>
       <app-color-filter
         color="bg-gray-500"
         type="radio"
         groupName="productColor"
+        size="small"
       ></app-color-filter>
     </div>
   </div>

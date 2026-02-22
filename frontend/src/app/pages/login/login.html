@@ -68,7 +68,7 @@
             </svg>
             <span>Google</span>
           </app-button>
-          <app-button class="secondary">
+          <app-button type="secondary">
             <fa-icon [icon]="faFacebook" class="text-primary" [size]="'xl'"></fa-icon>
             <span>Facebook</span>
           </app-button>
@@ -91,11 +91,7 @@
           ></app-form-input>
           <div class="flex justify-between items-center">
             <div class="flex gap-1.5">
-              <input
-                type="checkbox"
-                id="remember"
-                class="custom-checkbox"
-              />
+              <input type="checkbox" id="remember" class="custom-checkbox" />
               <label for="remember" class="text-xs text-text-muted">Remember me</label>
             </div>
             <a routerLink="/" class="text-primary text-xs">Forgot Password?</a>

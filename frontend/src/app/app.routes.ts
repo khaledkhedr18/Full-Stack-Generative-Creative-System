@@ -8,6 +8,7 @@ import { Cart } from './pages/cart/cart';
 import { Checkout } from './pages/checkout/checkout';
 import { Confirmation } from './pages/confirmation/confirmation';
 import { Orders } from './pages/orders/orders';
+import { ProductDetails } from './pages/product-details/product-details';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -15,6 +16,7 @@ export const routes: Routes = [
   { path: 'login', component: Login, data: { hideHeaderFooter: true } },
   { path: 'signup', component: SignUp, data: { hideHeaderFooter: true } },
   { path: 'shop', component: Products },
+  { path: 'shop/:id', component: ProductDetails },
   { path: 'wishlist', component: Wishlist },
   { path: 'cart', component: Cart },
   { path: 'checkout', component: Checkout },
