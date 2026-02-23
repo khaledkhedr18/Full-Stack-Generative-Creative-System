@@ -11,6 +11,7 @@
   --color-text: #ffffff;
   --color-text-muted: var(--color-slate-400);
   --color-border: #2d3748;
+  --color-danger: var(--color-red-500);
 
   --font-family-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
   --default-font-family: var(--font-family-sans);
@@ -44,6 +45,10 @@
 
 @utility art-style {
   @apply text-xs transition-all text-text-muted rounded-lg px-3 py-1 border border-border hover:peer-not-checked:border-primary cursor-pointer peer-checked:text-primary peer-checked:bg-card peer-checked:border-primary;
+}
+
+@utility error-message {
+  @apply text-danger text-xs;
 }
 
 html,

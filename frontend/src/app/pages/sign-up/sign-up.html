@@ -31,7 +31,7 @@
           <p class="text-text-muted text-sm">Start designing your future wardrobe today.</p>
         </div>
         <div class="flex items-center gap-3">
-          <app-button type="secondary">
+          <button class="btn-secondary">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 48 48"
@@ -56,44 +56,152 @@
               <path fill="none" d="M0 0h48v48H0z" />
             </svg>
             <span>Google</span>
-          </app-button>
-          <app-button type="secondary">
+          </button>
+          <button class="btn-secondary">
             <fa-icon [icon]="faFacebook" class="text-primary" [size]="'xl'"></fa-icon>
             <span>Facebook</span>
-          </app-button>
+          </button>
         </div>
-        <app-divider label="Or sign up with email"></app-divider>
-        <form action="" class="flex flex-col gap-3">
-          <app-form-input
-            inputId="fName"
-            label="First Name"
-            [icon]="faUser"
-            type="text"
-            placeholder="John"
-          ></app-form-input>
-          <app-form-input
-            inputId="lName"
-            label="Last Name"
-            [icon]="faUser"
-            type="text"
-            placeholder="Doe"
-          ></app-form-input>
-          <app-form-input
-            inputId="email"
-            label="Email Address"
-            [icon]="faEnvelope"
-            type="email"
-            placeholder="john@example.com"
-          ></app-form-input>
-          <app-form-input
-            inputId="password"
-            label="Password"
-            [icon]="faLock"
-            type="password"
-            placeholder="••••••••"
-            parent="signup"
-          ></app-form-input>
-          <app-button type="primary">Create Account</app-button>
+        <div class="flex items-center justify-center gap-1.5">
+          <hr class="hr" />
+          <p class="text-xs text-text-muted">Or sign up with email</p>
+          <hr class="hr" />
+        </div>
+        <form
+          [formGroup]="registrationForm"
+          (ngSubmit)="handleSubmit()"
+          class="flex flex-col gap-3"
+        >
+          <div class="flex flex-col gap-1.5">
+            <label for="fName" class="text-xs text-text-muted">First Name</label>
+            <label class="input bg-background border-border w-full focus-within:outline-none">
+              <fa-icon [icon]="faUser" class="text-text-muted"></fa-icon>
+              <input
+                formControlName="firstName"
+                id="fName"
+                type="text"
+                class="grow text-text-muted"
+                placeholder="John"
+              />
+            </label>
+            @if (
+              registrationForm.get('firstName')?.errors?.['required'] &&
+              registrationForm.get('firstName')?.touched
+            ) {
+              <p class="error-message">This field is required.</p>
+            } @else if (
+              registrationForm.get('firstName')?.errors?.['minlength'] &&
+              registrationForm.get('firstName')?.touched
+            ) {
+              <p class="error-message">Must be at least 2 characters.</p>
+            } @else if (
+              registrationForm.get('firstName')?.errors?.['pattern'] &&
+              registrationForm.get('firstName')?.touched
+            ) {
+              <p class="error-message max-w-xs">
+                First name cannot contain spaces. Please remove any spaces or use a hyphen instead.
+              </p>
+            }
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label for="lName" class="text-xs text-text-muted">Last Name</label>
+            <label class="input bg-background border-border w-full focus-within:outline-none">
+              <fa-icon [icon]="faUser" class="text-text-muted"></fa-icon>
+              <input
+                formControlName="lastName"
+                id="lName"
+                type="text"
+                class="grow text-text-muted"
+                placeholder="Doe"
+              />
+            </label>
+            @if (
+              registrationForm.get('lastName')?.errors?.['required'] &&
+              registrationForm.get('lastName')?.touched
+            ) {
+              <p class="error-message">This field is required.</p>
+            } @else if (
+              registrationForm.get('lastName')?.errors?.['minlength'] &&
+              registrationForm.get('lastName')?.touched
+            ) {
+              <p class="error-message">Must be at least 2 characters.</p>
+            } @else if (
+              registrationForm.get('lastName')?.errors?.['pattern'] &&
+              registrationForm.get('lastName')?.touched
+            ) {
+              <p class="error-message max-w-xs">
+                Last name cannot contain spaces. Please remove any spaces or use a hyphen instead.
+              </p>
+            }
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label for="email" class="text-xs text-text-muted">Email Address</label>
+            <label class="input bg-background border-border w-full focus-within:outline-none">
+              <fa-icon [icon]="faEnvelope" class="text-text-muted"></fa-icon>
+              <input
+                formControlName="email"
+                id="email"
+                type="email"
+                class="grow text-text-muted"
+                placeholder="john@example.com"
+              />
+            </label>
+            @if (
+              registrationForm.get('email')?.errors?.['required'] &&
+              registrationForm.get('email')?.touched
+            ) {
+              <p class="error-message">This field is required.</p>
+            } @else if (
+              registrationForm.get('email')?.errors?.['email'] &&
+              registrationForm.get('email')?.touched
+            ) {
+              <p class="error-message">
+                Please enter a valid email address (e.g., name@example.com).
+              </p>
+            }
+          </div>
+          <div class="flex flex-col gap-1.5">
+            <label for="password" class="text-xs text-text-muted">Password</label>
+            <label class="input bg-background border-border w-full focus-within:outline-none">
+              <fa-icon [icon]="faLock" class="text-text-muted"></fa-icon>
+              <input
+                formControlName="password"
+                id="password"
+                [type]="isPasswordVisible ? 'text' : 'password'"
+                class="grow text-text-muted"
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                (click)="toggleVisibility()"
+                class="cursor-pointer text-text-muted hover:text-border focus:outline-none transition-all"
+              >
+                <fa-icon [icon]="isPasswordVisible ? faEyeSlash : faEye"></fa-icon>
+              </button>
+            </label>
+            <p class="text-xs text-text-muted">Must be at least 8 characters.</p>
+            @if (
+              registrationForm.get('password')?.errors?.['required'] &&
+              registrationForm.get('password')?.touched
+            ) {
+              <p class="error-message">This field is required.</p>
+            } @else if (
+              registrationForm.get('password')?.errors?.['pattern'] &&
+              registrationForm.get('password')?.touched
+            ) {
+              <p class="error-message max-w-xs">
+                Your password doesn't meet the security requirements. Please ensure it includes at
+                least one uppercase letter, one number, and one special character (e.g., @, #, $).
+              </p>
+            }
+          </div>
+          <button class="btn-primary disabled:bg-primary/50" [disabled]="loading() ? true : false">
+            @if (loading()) {
+              <span class="loading loading-spinner"></span>
+            } @else {
+              Create Account
+            }
+          </button>
         </form>
         <p class="text-xs text-text-muted self-center">
           Already have an account?
