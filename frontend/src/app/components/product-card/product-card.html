@@ -2,25 +2,28 @@
   class="group relative bg-card shadow-sm hover:shadow-primary/10 hover:shadow-xl border border-slate-800 rounded-xl overflow-hidden transition-all duration-300"
 >
   <div class="top-3 left-3 z-10 absolute">
-    <span class="bg-black/80 backdrop-blur px-2 py-1 rounded font-bold text-white text-xs uppercase"
-      >Best Seller</span
+    <span
+      class="bg-black/80 backdrop-blur px-2 py-1 rounded font-bold text-white text-xs uppercase"
     >
+      {{ data.gender }}
+    </span>
   </div>
   <div class="relative bg-gray-800 aspect-4/5 overflow-hidden">
     <img
       class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBa9yyOqsTmicV7vIQMBpXI0CoYX_8xUqWQOXdTcu7e6zdVr-ixAilSJ5eTPjb-oFcLU_sCQbZ-pTZNG7lAZyiIq1E7CkpxZ4uRG2ozpSjEu2rCbA7AChLoaKuJMmXi0CR1QOawNK1jhoD-cYV2DIxbWoYk9yUYJWOV19ZTWWNl5XOnnx3uVRSt3NSe85Vaif2wVPUGKcPBr96BO-x0NCaUyD26WwGP1ZkUHOtbcwN0fa3Tut4s8zvptUx-HkaoIqZpkvKmtFDJK0"
-      alt="Heavyweight Tee"
+      src="{{ data?.variants?.at(0)?.images?.at(0)?.url }}"
+      alt="{{ data.name }}"
     />
     <div
       class="absolute inset-0 flex justify-center items-center bg-black/40 opacity-0 group-hover:opacity-100 backdrop-blur-[2px] transition-opacity"
     >
       <a
         class="flex items-center gap-2 bg-primary hover:bg-blue-600 px-6 py-2 rounded-lg font-semibold text-white transition-all translate-y-4 group-hover:translate-y-0 duration-300 cursor-pointer transform"
-        routerLink="/products/id"
+        routerLink="/products/{{ data._id }}"
+        [queryParams]="{ variant: selectedVariant()?.variantId }"
       >
-        <span class="text-sm"
-          ><svg
+        <span class="text-sm">
+          <svg
             xmlns="http://www.w3.org/2000/svg"
             width="14"
             height="14"
@@ -37,37 +40,50 @@
             />
             <path d="M20 2v4" />
             <path d="M22 4h-4" />
-            <circle cx="4" cy="20" r="2" /></svg
-        ></span>
+            <circle cx="4" cy="20" r="2" />
+          </svg>
+        </span>
         Customize
       </a>
     </div>
   </div>
   <div class="p-4">
-    <h3 class="mb-1 font-bold text-white text-lg">Heavyweight Tee</h3>
+    <h3 class="mb-1 font-bold text-white text-lg line-clamp-1">{{ data.name }}</h3>
     <div class="flex justify-between items-center">
-      <span class="text-slate-400 text-sm">Organic Cotton</span>
-      <span class="font-semibold text-white">$35.00</span>
+      <span class="text-slate-400 text-sm">{{ data.brand }}</span>
+      <span class="font-semibold text-white">${{ data.basePrice }}</span>
     </div>
     <div class="flex gap-1 mt-2">
-      <app-color-filter
-        color="bg-white"
-        type="radio"
-        groupName="productColor"
-        size="small"
-      ></app-color-filter>
-      <app-color-filter
-        color="bg-black"
-        type="radio"
-        groupName="productColor"
-        size="small"
-      ></app-color-filter>
-      <app-color-filter
-        color="bg-gray-500"
-        type="radio"
-        groupName="productColor"
-        size="small"
-      ></app-color-filter>
+      <div class="flex gap-2">
+        @for (variant of data.variants; track variant.variantId) {
+          <!-- <div
+            (click)="selectVariant(variant)"
+            [style.background-color]="variant.color.hex"
+            class="relative flex justify-center items-center border-2 rounded-full w-6 h-6 transition-all cursor-pointer"
+            [class.border-white]="selectedVariant()?.variantId === variant.variantId"
+            [class.border-transparent]="selectedVariant()?.variantId !== variant.variantId"
+          >
+            @if (selectedVariant()?.variantId === variant.variantId) {
+              <span class="text-[10px] text-white">✓</span>
+            }
+
+            <input
+              type="radio"
+              [checked]="selectedVariant()?.variantId === variant.variantId"
+              class="sr-only"
+            />
+          </div> -->
+          <div
+            (click)="selectVariant(variant)"
+            class="flex justify-center items-center border-2 rounded-full w-8 h-8 transition-all cursor-pointer"
+            [style.border-color]="
+              selectedVariant()?.variantId === variant.variantId ? '#2b7fff' : 'transparent'
+            "
+          >
+            <div [style.background-color]="variant.color.hex" class="rounded-full w-6 h-6"></div>
+          </div>
+        }
+      </div>
     </div>
   </div>
 </div>

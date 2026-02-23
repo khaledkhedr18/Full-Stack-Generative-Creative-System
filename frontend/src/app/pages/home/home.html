@@ -175,31 +175,55 @@
 </section>
 <!-- End Service Section -->
 <!-- Start Trending Section -->
-<section class="bg-background py-20">
-  <div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-    <div class="flex justify-between items-center mb-12">
-      <div>
-        <h2 class="mb-2 font-bold text-white text-3xl">Trending Base Layers</h2>
-        <p class="text-slate-400">Premium canvases ready for your AI designs.</p>
+@if (loading()) {
+  <section class="bg-background py-20">
+    <div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+      <div class="flex justify-between items-center mb-12">
+        <div>
+          <div class="bg-card mb-2 rounded w-3/4 h-8 animate-pulse"></div>
+          <div class="bg-card rounded w-1/2 h-4 animate-pulse"></div>
+        </div>
+        <div class="hidden sm:flex items-center">
+          <div class="bg-card rounded w-32 h-8 animate-pulse"></div>
+          <span class="flex justify-center items-center ml-1">
+            <div class="bg-card rounded-full w-6 h-6 animate-pulse"></div>
+          </span>
+        </div>
       </div>
-      <a
-        routerLink="/products"
-        class="hidden sm:flex items-center font-semibold text-primary hover:text-blue-400 transition-colors duration-300"
-      >
-        View All Products
-        <span class="flex justify-center items-center ml-1">
-          <ng-icon name="lucideMoveRight" size="24"></ng-icon>
-        </span>
-      </a>
+      <div class="gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="bg-card rounded h-48 animate-pulse"></div>
+        <div class="bg-card rounded h-48 animate-pulse"></div>
+        <div class="bg-card rounded h-48 animate-pulse"></div>
+        <div class="bg-card rounded h-48 animate-pulse"></div>
+      </div>
     </div>
-    <div class="gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-      <app-product-card></app-product-card>
-      <app-product-card></app-product-card>
-      <app-product-card></app-product-card>
-      <app-product-card></app-product-card>
+  </section>
+} @else {
+  <section class="bg-background py-20">
+    <div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+      <div class="flex justify-between items-center mb-12">
+        <div>
+          <h2 class="mb-2 font-bold text-white text-3xl">Trending Base Layers</h2>
+          <p class="text-slate-400">Premium canvases ready for your AI designs.</p>
+        </div>
+        <a
+          routerLink="/products"
+          class="hidden sm:flex items-center font-semibold text-primary hover:text-blue-400 transition-colors duration-300"
+        >
+          View All Products
+          <span class="flex justify-center items-center ml-1">
+            <ng-icon name="lucideMoveRight" size="24"></ng-icon>
+          </span>
+        </a>
+      </div>
+      <div class="gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        @for (product of products(); track product._id) {
+          <app-product-card [data]="product"></app-product-card>
+        }
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+}
 <!-- End Trending Section -->
 <!-- Start Gallery Section -->
 <section class="bg-card py-20 border-slate-800 border-t">
