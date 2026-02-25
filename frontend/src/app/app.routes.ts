@@ -10,18 +10,33 @@ import { Confirmation } from './pages/confirmation/confirmation';
 import { Orders } from './pages/orders/orders';
 import { ProductDetails } from './pages/product-details/product-details';
 import { Error } from './pages/error/error';
+import { authGuard } from './guards/auth-guard';
+import { guestGuard } from './guards/guest-guard';
+import { paymentSuccessGuard } from './guards/payment-success-guard';
+import { checkoutGuard } from './guards/checkout-guard';
+import { unsavedChangesGuard } from './guards/unsaved-changes-guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: Home },
-  { path: 'login', component: Login, data: { hideHeaderFooter: true } },
-  { path: 'signup', component: SignUp, data: { hideHeaderFooter: true } },
+  { path: 'login', component: Login, data: { hideHeaderFooter: true }, canActivate: [guestGuard] },
+  {
+    path: 'signup',
+    component: SignUp,
+    data: { hideHeaderFooter: true },
+    canActivate: [guestGuard],
+  },
   { path: 'products', component: Products },
   { path: 'products/:id', component: ProductDetails },
-  { path: 'wishlist', component: Wishlist },
-  { path: 'cart', component: Cart },
-  { path: 'checkout', component: Checkout },
-  { path: 'confirmation', component: Confirmation },
-  { path: 'orders', component: Orders },
+  { path: 'wishlist', component: Wishlist, canActivate: [authGuard] },
+  { path: 'cart', component: Cart, canActivate: [authGuard] },
+  {
+    path: 'checkout',
+    component: Checkout,
+    canActivate: [authGuard, checkoutGuard],
+    canDeactivate: [unsavedChangesGuard],
+  },
+  { path: 'confirmation', component: Confirmation, canActivate: [authGuard, paymentSuccessGuard] },
+  { path: 'orders', component: Orders, canActivate: [authGuard] },
   { path: '**', component: Error },
 ];

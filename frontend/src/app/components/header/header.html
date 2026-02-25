@@ -45,7 +45,7 @@
         <span class="badge badge-xs badge-primary indicator-item">0</span>
       </div>
     </a>
-    @if (!isLoggedIn) {
+    @if (!isLoggedIn()) {
       <div class="hidden md:flex items-center space-x-2.5">
         <a
           routerLinkActive="text-white"
@@ -63,8 +63,9 @@
         </a>
       </div>
     }
-    @if (isLoggedIn) {
+    @if (isLoggedIn()) {
       <button
+      (click)="handleLogout()"
         class="hidden md:flex items-center space-x-1.5 font-bold text-slate-400 hover:text-red-500 text-sm transition-colors duration-300 cursor-pointer"
       >
         <span>
@@ -105,7 +106,7 @@
             >Orders
           </a>
         </li>
-        @if (isLoggedIn) {
+        @if (isLoggedIn()) {
           <li class="font-medium text-slate-400 hover:text-red-500 transition-colors duration-300">
             <button
               class="flex justify-center items-center px-0 rounded-none font-bold text-base text-center cursor-pointer"
@@ -117,7 +118,7 @@
             </button>
           </li>
         }
-        @if (!isLoggedIn) {
+        @if (!isLoggedIn()) {
           <li>
             <a
               routerLinkActive="text-white"

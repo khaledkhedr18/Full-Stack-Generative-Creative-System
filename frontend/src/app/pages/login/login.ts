@@ -30,7 +30,7 @@ export class Login {
 
   isPasswordVisible = false;
 
-  errorMessage = '';
+  errorMessage = signal('');
 
   loading = signal(false);
 
@@ -57,12 +57,12 @@ export class Login {
           this.loading.set(false);
         },
         error: (error) => {
-          this.errorMessage = error.error.message;
+          this.errorMessage.set(error.error.message);
           this.loading.set(false);
         },
       });
     } else {
-      this.errorMessage = 'Invalid email or password.';
+      this.errorMessage.set('Invalid email or password.');
     }
   }
 
