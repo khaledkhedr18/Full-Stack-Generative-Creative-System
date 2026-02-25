@@ -1,0 +1,1336 @@
+{
+  "info": {
+    "_postman_id": "express-mongoose-api-collection",
+    "name": "ExpressAndMongoose API",
+    "description": "Full API collection for the Express & Mongoose project. Includes Auth, Users, Products, and Categories endpoints with all parameters, query options, and request bodies.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "productId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "categoryId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health & Info",
+      "description": "General server health and info endpoints.",
+      "item": [
+        {
+          "name": "Welcome",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": ["{{baseUrl}}"],
+              "path": [""]
+            },
+            "description": "Root endpoint – returns a welcome message and the current environment."
+          },
+          "response": []
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "health"]
+            },
+            "description": "Returns server health status, timestamp, and environment."
+          },
+          "response": []
+        },
+        {
+          "name": "About",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/about",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "about"]
+            },
+            "description": "Returns about page info and current port number."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "description": "Authentication endpoints: register, login, get profile, and update password.",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.token) {",
+                  "    pm.collectionVariables.set('token', res.token);",
+                  "}",
+                  "if (res.data && res.data.id) {",
+                  "    pm.collectionVariables.set('userId', res.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"Password123\",\n  \"age\": 25\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            },
+            "description": "Register a new user. Returns a JWT token on success.\n\n**Body fields:**\n- `firstName` (required, string, 2-50 chars)\n- `lastName` (required, string, 2-50 chars)\n- `email` (required, valid email, unique)\n- `password` (required, min 8 chars)\n- `age` (optional, number, 0-100)"
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.token) {",
+                  "    pm.collectionVariables.set('token', res.token);",
+                  "}",
+                  "if (res.data && res.data.id) {",
+                  "    pm.collectionVariables.set('userId', res.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"Password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Login with email and password. Returns a JWT token on success.\n\n**Body fields:**\n- `email` (required)\n- `password` (required)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Me (Profile)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "me"]
+            },
+            "description": "Get the currently logged-in user's profile.\n\n**Auth:** Bearer token required."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.token) {",
+                  "    pm.collectionVariables.set('token', res.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"Password123\",\n  \"newPassword\": \"NewPassword456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/update-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "update-password"]
+            },
+            "description": "Update the current user's password. Returns a new JWT token.\n\n**Auth:** Bearer token required.\n\n**Body fields:**\n- `currentPassword` (required)\n- `newPassword` (required)"
+          },
+          "response": []
+        },
+        {
+          "name": "Forgot Password (Send OTP)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john.doe@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/forgot-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "forgot-password"]
+            },
+            "description": "Send a 6-digit OTP to the user's email address for password reset.\n\n**Body fields:**\n- `email` (required, valid email)"
+          },
+          "response": []
+        },
+        {
+          "name": "Verify OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"otp\": \"123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/verify-otp",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "verify-otp"]
+            },
+            "description": "Verify the OTP sent to the user's email. Must be called before reset-password.\n\n**Body fields:**\n- `email` (required, valid email)\n- `otp` (required, 6-digit string)"
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.token) {",
+                  "    pm.collectionVariables.set('token', res.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"newPassword\": \"MyNewPassword123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/reset-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "reset-password"]
+            },
+            "description": "Reset the user's password after OTP verification. Returns a new JWT token.\n\n**Body fields:**\n- `email` (required, valid email)\n- `newPassword` (required, min 8 chars)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "description": "CRUD operations for users.",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users?page=1&limit=10&sort=-createdAt&fields=firstName,lastName,email&search=",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (default: 1)"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Results per page (default: 10, max: 100)"
+                },
+                {
+                  "key": "sort",
+                  "value": "-createdAt",
+                  "description": "Sort field(s). Prefix with - for descending. Comma-separated for multiple (e.g. firstName,-createdAt)"
+                },
+                {
+                  "key": "fields",
+                  "value": "firstName,lastName,email",
+                  "description": "Comma-separated list of fields to include in the response"
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "description": "Search across firstName, lastName, email (regex, case-insensitive)"
+                }
+              ]
+            },
+            "description": "Get all users with filtering, sorting, field selection, search, and pagination.\n\n**Query parameters:**\n- `page` – page number (default: 1)\n- `limit` – results per page (default: 10)\n- `sort` – sort field(s), prefix `-` for descending\n- `fields` – comma-separated field names to select\n- `search` – regex search across firstName, lastName, email\n- Any model field can be used as a filter (e.g. `role=admin`, `age[gte]=18`)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "{{userId}}"]
+            },
+            "description": "Get a single user by their MongoDB ObjectId.\n\n**Path parameters:**\n- `id` – valid MongoDB ObjectId"
+          },
+          "response": []
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Smith\",\n  \"email\": \"jane.smith@example.com\",\n  \"password\": \"Password123\",\n  \"age\": 28,\n  \"role\": \"user\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"]
+            },
+            "description": "Create a new user.\n\n**Body fields:**\n- `firstName` (required, string, 2-30 chars)\n- `lastName` (required, string, 2-30 chars)\n- `email` (required, valid email)\n- `password` (required, min 8 chars, must include uppercase, lowercase, and a number)\n- `age` (optional, integer, 13-120)\n- `role` (optional, one of: user, admin, moderator)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Jane Updated\",\n  \"age\": 30\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "{{userId}}"]
+            },
+            "description": "Update a user by ID (partial update).\n\n**Path parameters:**\n- `id` – valid MongoDB ObjectId\n\n**Body fields (all optional):**\n- `firstName` (string, 2-30 chars)\n- `lastName` (string, 2-30 chars)\n- `email` (valid email)\n- `age` (integer, 13-120)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "{{userId}}"]
+            },
+            "description": "Delete a user by ID. Also deletes all products created by the user and removes their reviews from other products.\n\n**Path parameters:**\n- `id` – valid MongoDB ObjectId"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "description": "CRUD operations for categories.",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/categories?page=1&limit=20&sort=-createdAt&search=",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (default: 1, min: 1)"
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Results per page (default: 20, min: 1, max: 100)"
+                },
+                {
+                  "key": "sort",
+                  "value": "-createdAt",
+                  "description": "Sort option. Allowed: name, -name, createdAt, -createdAt"
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "description": "Search by category name (regex, case-insensitive)"
+                }
+              ]
+            },
+            "description": "Get all categories with pagination, sorting, and search.\n\n**Query parameters:**\n- `page` – page number (default: 1)\n- `limit` – results per page (default: 20, max: 100)\n- `sort` – one of: name, -name, createdAt, -createdAt\n- `search` – search by category name (case-insensitive regex)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Category by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "{{categoryId}}"]
+            },
+            "description": "Get a single category by its MongoDB ObjectId.\n\n**Path parameters:**\n- `id` – valid MongoDB ObjectId"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Category",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data._id) {",
+                  "    pm.collectionVariables.set('categoryId', res.data._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Electronics\",\n  \"description\": \"Electronic devices and gadgets\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories"]
+            },
+            "description": "Create a new category.\n\n**Body fields:**\n- `name` (required, string, 2-50 chars, unique)\n- `description` (optional, string, max 200 chars)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Electronics\",\n  \"description\": \"Updated description for electronics\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "{{categoryId}}"]
+            },
+            "description": "Update a category by ID (partial update).\n\n**Path parameters:**\n- `id` – valid MongoDB ObjectId\n\n**Body fields (all optional):**\n- `name` (string, 2-50 chars)\n- `description` (string, max 200 chars)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "{{categoryId}}"]
+            },
+            "description": "Delete a category by ID. Also deletes all products in this category.\n\n**Path parameters:**\n- `id` – valid MongoDB ObjectId"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "description": "CRUD operations for products. Create, update, and delete require authentication. Products use a variant-based schema with colors, images (URLs), and per-size pricing/stock.",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products?page=1&limit=10&sort=-createdAt&fields=name,basePrice,category,brand&search=&minPrice=&maxPrice=&category=&brand=&gender=&status=&basePrice[gte]=&basePrice[lte]=",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (default: 1)"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Results per page (default: 10, max: 100)"
+                },
+                {
+                  "key": "sort",
+                  "value": "-createdAt",
+                  "description": "Sort field(s). Allowed: basePrice, -basePrice, name, -name, createdAt, -createdAt, ratings.average, -ratings.average"
+                },
+                {
+                  "key": "fields",
+                  "value": "name,basePrice,category,brand",
+                  "description": "Comma-separated field names to include in response"
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "description": "Search across name, description, brand, tags (regex, case-insensitive)"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "",
+                  "description": "Minimum price filter (validated as positive float)"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "",
+                  "description": "Maximum price filter (validated as positive float)"
+                },
+                {
+                  "key": "category",
+                  "value": "",
+                  "description": "Filter by category string (e.g. hoodies, t-shirts, jackets)",
+                  "disabled": true
+                },
+                {
+                  "key": "brand",
+                  "value": "",
+                  "description": "Filter by brand name",
+                  "disabled": true
+                },
+                {
+                  "key": "gender",
+                  "value": "",
+                  "description": "Filter by gender: male, female, or unisex",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "",
+                  "description": "Filter by status: active, inactive, or draft",
+                  "disabled": true
+                },
+                {
+                  "key": "basePrice[gte]",
+                  "value": "",
+                  "description": "Base price greater than or equal to",
+                  "disabled": true
+                },
+                {
+                  "key": "basePrice[lte]",
+                  "value": "",
+                  "description": "Base price less than or equal to",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get all products with advanced filtering, sorting, field selection, search, and pagination.\n\n**Query parameters:**\n- `page` – page number (default: 1)\n- `limit` – results per page (default: 10, max: 100)\n- `sort` – sort field(s): basePrice, -basePrice, name, -name, createdAt, -createdAt, ratings.average, -ratings.average\n- `fields` – comma-separated field names to select\n- `search` – regex search across name, description, brand, tags\n- `minPrice` / `maxPrice` – price range filter\n- `category` – filter by category string\n- `brand` – filter by brand name\n- `gender` – male, female, or unisex\n- `status` – active, inactive, or draft\n- Supports MongoDB operators via bracket notation: `basePrice[gte]=10`, `basePrice[lte]=100`"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "{{productId}}"]
+            },
+            "description": "Get a single product by its MongoDB ObjectId.\n\n**Path parameters:**\n- `id` – valid MongoDB ObjectId"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data._id) {",
+                  "    pm.collectionVariables.set('productId', res.data._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Classic Oversized Hoodie\",\n  \"description\": \"Premium cotton blend hoodie with a relaxed fit.\",\n  \"category\": \"hoodies\",\n  \"brand\": \"YourBrand\",\n  \"tags\": [\"oversized\", \"casual\", \"unisex\"],\n  \"gender\": \"unisex\",\n  \"variants\": [\n    {\n      \"variantId\": \"var_001\",\n      \"color\": {\n        \"name\": \"Midnight Black\",\n        \"hex\": \"#1a1a1a\"\n      },\n      \"images\": [\n        { \"url\": \"https://cdn.example.com/hoodie-black-front.jpg\", \"view\": \"front\" },\n        { \"url\": \"https://cdn.example.com/hoodie-black-back.jpg\", \"view\": \"back\" }\n      ],\n      \"sizes\": [\n        { \"size\": \"S\", \"sku\": \"HOD-BLK-S\", \"stock\": 30, \"price\": 49.99 },\n        { \"size\": \"M\", \"sku\": \"HOD-BLK-M\", \"stock\": 25, \"price\": 49.99 },\n        { \"size\": \"L\", \"sku\": \"HOD-BLK-L\", \"stock\": 18, \"price\": 49.99 },\n        { \"size\": \"XL\", \"sku\": \"HOD-BLK-XL\", \"stock\": 0, \"price\": 49.99 }\n      ]\n    },\n    {\n      \"variantId\": \"var_002\",\n      \"color\": {\n        \"name\": \"Ash Grey\",\n        \"hex\": \"#b0b0b0\"\n      },\n      \"images\": [\n        { \"url\": \"https://cdn.example.com/hoodie-grey-front.jpg\", \"view\": \"front\" }\n      ],\n      \"sizes\": [\n        { \"size\": \"S\", \"sku\": \"HOD-GRY-S\", \"stock\": 20, \"price\": 49.99 },\n        { \"size\": \"M\", \"sku\": \"HOD-GRY-M\", \"stock\": 15, \"price\": 49.99 }\n      ]\n    }\n  ],\n  \"basePrice\": 49.99,\n  \"currency\": \"USD\",\n  \"discountPercent\": 0,\n  \"sizeGuide\": {\n    \"unit\": \"cm\",\n    \"chart\": [\n      { \"size\": \"S\", \"chest\": 91, \"length\": 68 },\n      { \"size\": \"M\", \"chest\": 96, \"length\": 71 },\n      { \"size\": \"L\", \"chest\": 101, \"length\": 74 },\n      { \"size\": \"XL\", \"chest\": 106, \"length\": 77 }\n    ]\n  },\n  \"material\": \"80% Cotton, 20% Polyester\",\n  \"careInstructions\": [\"Machine wash cold\", \"Do not bleach\", \"Tumble dry low\"],\n  \"status\": \"active\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"]
+            },
+            "description": "Create a new product with variant-based schema.\n\n**Auth:** Bearer token required.\n\n**Body fields:**\n- `name` (required, string, 2-150 chars)\n- `description` (optional, string, max 1000 chars)\n- `category` (required, string, e.g. \"hoodies\", \"t-shirts\")\n- `brand` (required, string)\n- `tags` (optional, array of strings)\n- `gender` (optional, one of: male, female, unisex – default: unisex)\n- `variants` (required, array of variant objects):\n  - `variantId` (required, string)\n  - `color` (required, object: `name`, `hex`)\n  - `images` (optional, array: `url`, `view`)\n  - `sizes` (required, array: `size`, `sku`, `stock`, `price`)\n- `basePrice` (required, positive number)\n- `currency` (optional, 3-letter code, default: USD)\n- `discountPercent` (optional, 0-100)\n- `sizeGuide` (optional, object: `unit`, `chart[]`)\n- `material` (optional, string)\n- `careInstructions` (optional, array of strings)\n- `status` (optional, one of: active, inactive, draft – default: active)"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Product (Minimal)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data._id) {",
+                  "    pm.collectionVariables.set('productId', res.data._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Basic Cotton Tee\",\n  \"category\": \"t-shirts\",\n  \"brand\": \"SimpleBrand\",\n  \"variants\": [\n    {\n      \"variantId\": \"var_100\",\n      \"color\": { \"name\": \"White\", \"hex\": \"#ffffff\" },\n      \"images\": [\n        { \"url\": \"https://cdn.example.com/tee-white.jpg\", \"view\": \"front\" }\n      ],\n      \"sizes\": [\n        { \"size\": \"M\", \"sku\": \"TSH-WHT-M\", \"stock\": 50, \"price\": 19.99 }\n      ]\n    }\n  ],\n  \"basePrice\": 19.99\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"]
+            },
+            "description": "Create a product with only the required fields.\n\n**Auth:** Bearer token required.\n\n**Required fields:** name, category, brand, variants (min 1 with variantId, color, sizes), basePrice."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Classic Oversized Hoodie V2\",\n  \"description\": \"Updated premium cotton blend hoodie.\",\n  \"discountPercent\": 15,\n  \"tags\": [\"oversized\", \"casual\", \"unisex\", \"sale\"],\n  \"status\": \"active\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "{{productId}}"]
+            },
+            "description": "Update a product by ID (partial update). All fields are optional.\n\n**Auth:** Bearer token required.\n\n**Path parameters:**\n- `id` – valid MongoDB ObjectId\n\n**Body fields (all optional):**\n- `name` (string, 2-150 chars)\n- `description` (string, max 1000 chars)\n- `category` (string)\n- `brand` (string)\n- `tags` (array of strings)\n- `gender` (male, female, unisex)\n- `variants` (array of variant objects)\n- `basePrice` (positive number)\n- `currency` (3-letter code)\n- `discountPercent` (0-100)\n- `sizeGuide` (object)\n- `material` (string)\n- `careInstructions` (array of strings)\n- `status` (active, inactive, draft)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product Variants",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"variants\": [\n    {\n      \"variantId\": \"var_001\",\n      \"color\": { \"name\": \"Jet Black\", \"hex\": \"#0a0a0a\" },\n      \"images\": [\n        { \"url\": \"https://cdn.example.com/hoodie-black-v2-front.jpg\", \"view\": \"front\" },\n        { \"url\": \"https://cdn.example.com/hoodie-black-v2-back.jpg\", \"view\": \"back\" }\n      ],\n      \"sizes\": [\n        { \"size\": \"S\", \"sku\": \"HOD-BLK-S-V2\", \"stock\": 40, \"price\": 54.99 },\n        { \"size\": \"M\", \"sku\": \"HOD-BLK-M-V2\", \"stock\": 50, \"price\": 54.99 },\n        { \"size\": \"L\", \"sku\": \"HOD-BLK-L-V2\", \"stock\": 30, \"price\": 54.99 }\n      ]\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "{{productId}}"]
+            },
+            "description": "Update only the variants of a product. Replaces the entire variants array.\n\n**Auth:** Bearer token required.\n\n**Path parameters:**\n- `id` – valid MongoDB ObjectId\n\n**Body:**\n- `variants` (array of variant objects with variantId, color, images, sizes)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "{{productId}}"]
+            },
+            "description": "Delete a product by ID.\n\n**Auth:** Bearer token required.\n\n**Path parameters:**\n- `id` – valid MongoDB ObjectId"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "description": "Shopping cart operations. All endpoints require authentication.",
+      "item": [
+        {
+          "name": "Get Cart",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart"]
+            },
+            "description": "Get the current user's cart with populated product details.\n\n**Auth:** Bearer token required."
+          },
+          "response": []
+        },
+        {
+          "name": "Add to Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"variantId\": \"var_001\",\n  \"size\": \"M\",\n  \"quantity\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart"]
+            },
+            "description": "Add an item to the cart. If the same product+variant+size already exists, the quantity is increased.\n\n**Auth:** Bearer token required.\n\n**Body fields:**\n- `productId` (required, MongoDB ObjectId)\n- `variantId` (required, string – must match a variant on the product)\n- `size` (required, string – must match an available size in the variant)\n- `quantity` (optional, positive integer, default: 1)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Cart Item Quantity",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"variantId\": \"var_001\",\n  \"size\": \"M\",\n  \"quantity\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart"]
+            },
+            "description": "Update the quantity of a specific cart item. Set quantity to 0 to remove the item.\n\n**Auth:** Bearer token required.\n\n**Body fields:**\n- `productId` (required, MongoDB ObjectId)\n- `variantId` (required, string)\n- `size` (required, string)\n- `quantity` (required, non-negative integer – 0 removes the item)"
+          },
+          "response": []
+        },
+        {
+          "name": "Remove Cart Item",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"variantId\": \"var_001\",\n  \"size\": \"M\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/item",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "item"]
+            },
+            "description": "Remove a specific item from the cart.\n\n**Auth:** Bearer token required.\n\n**Body fields:**\n- `productId` (required, MongoDB ObjectId)\n- `variantId` (required, string)\n- `size` (required, string)"
+          },
+          "response": []
+        },
+        {
+          "name": "Clear Cart",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart"]
+            },
+            "description": "Remove all items from the cart.\n\n**Auth:** Bearer token required."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Wishlist",
+      "description": "Wishlist operations. All endpoints require authentication.",
+      "item": [
+        {
+          "name": "Get Wishlist",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/wishlist",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "wishlist"]
+            },
+            "description": "Get the current user's wishlist with populated product details.\n\n**Auth:** Bearer token required."
+          },
+          "response": []
+        },
+        {
+          "name": "Add to Wishlist",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"{{productId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/wishlist",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "wishlist"]
+            },
+            "description": "Add a product to the wishlist. Duplicates are rejected.\n\n**Auth:** Bearer token required.\n\n**Body fields:**\n- `productId` (required, MongoDB ObjectId)"
+          },
+          "response": []
+        },
+        {
+          "name": "Remove from Wishlist",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/wishlist/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "wishlist", "{{productId}}"]
+            },
+            "description": "Remove a specific product from the wishlist.\n\n**Auth:** Bearer token required.\n\n**Path parameters:**\n- `productId` – valid MongoDB ObjectId"
+          },
+          "response": []
+        },
+        {
+          "name": "Clear Wishlist",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/wishlist",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "wishlist"]
+            },
+            "description": "Remove all products from the wishlist.\n\n**Auth:** Bearer token required."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "description": "Order management. All endpoints require authentication. Users can place orders from their cart, view order history, get receipts, and cancel orders.",
+      "item": [
+        {
+          "name": "Create Order (from Cart)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shippingAddress\": {\n    \"fullName\": \"Khaled Khedr\",\n    \"address\": \"123 Main Street, Apt 4B\",\n    \"city\": \"Cairo\",\n    \"postalCode\": \"11511\",\n    \"country\": \"Egypt\",\n    \"phone\": \"+201234567890\"\n  },\n  \"payment\": {\n    \"method\": \"credit_card\",\n    \"transactionId\": \"txn_abc123\"\n  },\n  \"shippingCost\": 5.99,\n  \"tax\": 2.50,\n  \"notes\": \"Please leave at the front door\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders"]
+            },
+            "description": "Create a new order from the user's cart. The cart must contain at least one item. Stock is validated and decremented, and the cart is cleared upon success.\n\n**Auth:** Bearer token required.\n\n**Body fields:**\n- `shippingAddress` (required) – fullName, address, city, postalCode, country, phone\n- `payment` (required) – method (credit_card | debit_card | paypal | cash_on_delivery), transactionId (optional)\n- `shippingCost` (optional, default: 0)\n- `tax` (optional, default: 0)\n- `notes` (optional, max 500 chars)"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Order (Cash on Delivery)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shippingAddress\": {\n    \"fullName\": \"Khaled Khedr\",\n    \"address\": \"456 Elm Street\",\n    \"city\": \"Alexandria\",\n    \"postalCode\": \"21500\",\n    \"country\": \"Egypt\",\n    \"phone\": \"+201098765432\"\n  },\n  \"payment\": {\n    \"method\": \"cash_on_delivery\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders"]
+            },
+            "description": "Create an order with cash on delivery payment. Payment status will be 'pending' until delivery.\n\n**Auth:** Bearer token required."
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Orders (History)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders?page=1&limit=10&sort=-createdAt",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (default: 1)"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Items per page (default: 10, max: 100)"
+                },
+                {
+                  "key": "sort",
+                  "value": "-createdAt",
+                  "description": "Sort field(s). Prefix with - for descending."
+                },
+                {
+                  "key": "status",
+                  "value": "confirmed",
+                  "description": "Filter by order status",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get the current user's order history with pagination and filtering.\n\n**Auth:** Bearer token required.\n\n**Query params:**\n- `page` – page number\n- `limit` – results per page\n- `sort` – sort field(s), e.g. `-createdAt`, `totalAmount`\n- `status` – filter by status (pending, confirmed, processing, shipped, delivered, cancelled)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Order by ID (Receipt)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/{{orderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "{{orderId}}"]
+            },
+            "description": "Get full details of a specific order (receipt view). Includes all items, shipping address, payment info, and totals.\n\n**Auth:** Bearer token required.\n\n**Path params:**\n- `orderId` – valid MongoDB ObjectId"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Order by Number",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/number/{{orderNumber}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "number", "{{orderNumber}}"]
+            },
+            "description": "Get full details of a specific order by its order number.\n\n**Auth:** Bearer token required.\n\n**Path params:**\n- `orderNumber` – the order's unique number (e.g. ORD-XXXXXXX-XXXXXX)"
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Order",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Changed my mind about the purchase\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/{{orderId}}/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "{{orderId}}", "cancel"]
+            },
+            "description": "Cancel a pending or confirmed order. Stock is restored and payment is marked as refunded if applicable.\n\n**Auth:** Bearer token required.\n\n**Path params:**\n- `orderId` – valid MongoDB ObjectId\n\n**Body fields:**\n- `reason` (optional, max 500 chars) – cancellation reason"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
