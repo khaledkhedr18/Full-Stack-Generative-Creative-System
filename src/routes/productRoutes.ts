@@ -5,6 +5,7 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
+  uploadProductImage,
 } from "../controllers/productController.js";
 import {
   createProductRules,
@@ -14,6 +15,7 @@ import {
 } from "../middleware/validators/productValidator.js";
 import validate from "../middleware/validators/validate.js";
 import { protect } from "../middleware/auth.js";
+import { uploadProductImages } from "../middleware/upload.js";
 
 const router = Router();
 
@@ -27,5 +29,13 @@ router
   .get(getProductRules, validate, getProduct)
   .patch(protect, getProductRules, updateProductRules, validate, updateProduct)
   .delete(protect, getProductRules, validate, deleteProduct);
+
+router.post(
+  "/:id/variants/:variantId/images",
+  protect,
+  uploadProductImages,
+  uploadProductImage,
+);
+
 
 export default router;

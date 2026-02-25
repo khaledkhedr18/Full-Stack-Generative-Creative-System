@@ -129,3 +129,67 @@ export const updateProduct = asyncHandler(
     });
   },
 );
+
+/**
+ * @desc Upload images for a specific product variant
+ * @route POST /api/products/:id/variants/:variantId/images
+ * @access Private
+ */
+export const uploadProductImage = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return next(
+        new AppError(`Product with ID ${req.params.id} was not found`, 404),
+      );
+    }
+
+    const variant = product.variants.find(
+      (v) => v.variantId === req.params.variantId,
+    );
+
+    if (!variant) {
+      return next(
+        new AppError(
+          `Variant "${req.params.variantId}" not found on this product`,
+          404,
+        ),
+      );
+    }
+
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+    if (!files || (!files.image && !files.gallery)) {
+      return next(new AppError("No image files provided", 400));
+    }
+
+    const PORT = process.env.PORT || 3000;
+    const baseUrl =
+      process.env.IMAGE_BASE_URL || `http://localhost:${PORT}/uploads/products`;
+
+    if (files.image) {
+      variant.images.push({
+        url: `${baseUrl}/${files.image[0].filename}`,
+        view: (req.body.view as string) || "front",
+      });
+    }
+
+    if (files.gallery) {
+      for (const file of files.gallery) {
+        variant.images.push({
+          url: `${baseUrl}/${file.filename}`,
+          view: "gallery",
+        });
+      }
+    }
+
+    await product.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Images uploaded successfully",
+      data: variant,
+    });
+  },
+);
