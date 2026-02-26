@@ -20,6 +20,9 @@ interface Config {
   smtpPassword: string;
   emailFrom: string;
   otpExpiresMinutes: number;
+  stripeSecretKey: string;
+  stripeWebhookSecret: string;
+  clientUrl: string;
 }
 
 const config: Config = {
@@ -40,6 +43,9 @@ const config: Config = {
   smtpPassword: process.env.SMTP_PASSWORD || "",
   emailFrom: process.env.EMAIL_FROM || process.env.SMTP_USER || "",
   otpExpiresMinutes: parseInt(process.env.OTP_EXPIRES_MINUTES || "10", 10),
+  stripeSecretKey: process.env.STRIPE_SECRET_KEY || "",
+  stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET || "",
+  clientUrl: process.env.CLIENT_URL || "http://localhost:5173",
 };
 
 const requiredVars = ["MONGO_URI", "JWT_SECRET"];

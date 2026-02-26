@@ -64,10 +64,8 @@ export const createOrderRules = [
   body("payment.method")
     .notEmpty()
     .withMessage("Payment method is required")
-    .isIn(["credit_card", "debit_card", "paypal", "cash_on_delivery"])
-    .withMessage(
-      "Payment method must be one of: credit_card, debit_card, paypal, cash_on_delivery",
-    ),
+    .isIn(["cash_on_delivery", "stripe"])
+    .withMessage("Payment method must be cash_on_delivery or stripe"),
 
   body("payment.transactionId")
     .optional()

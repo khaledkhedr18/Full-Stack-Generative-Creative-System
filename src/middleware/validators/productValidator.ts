@@ -22,7 +22,7 @@ const variantImageRules = (prefix: string) => [
   body(`${prefix}.*.url`)
     .notEmpty()
     .withMessage("Image URL is required")
-    .isURL()
+    .isURL({ require_tld: false })
     .withMessage("Image URL must be a valid URL"),
   body(`${prefix}.*.view`)
     .notEmpty()
@@ -239,7 +239,7 @@ export const updateProductRules = [
     .withMessage("Images must be an array"),
   body("variants.*.images.*.url")
     .optional()
-    .isURL()
+    .isURL({ require_tld: false })
     .withMessage("Image URL must be a valid URL"),
   body("variants.*.images.*.view")
     .optional()

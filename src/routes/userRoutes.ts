@@ -1,5 +1,4 @@
 import { Router, Request, Response } from "express";
-import User from "../models/User.js";
 import {
   deleteUser,
   getUser,
@@ -13,8 +12,11 @@ import {
   updateUserRules,
 } from "../middleware/validators/userValidator.js";
 import validate from "../middleware/validators/validate.js";
+import { authorize, protect } from "../middleware/auth.js";
 
 const router = Router();
+
+router.use(protect, authorize("admin"));
 
 router.route("/").get(getUsers).post(createUserRules, validate, createUser);
 

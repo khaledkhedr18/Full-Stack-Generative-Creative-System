@@ -22,6 +22,8 @@ export interface IPayment {
   method: string;
   status: string;
   transactionId?: string;
+  stripeSessionId?: string;
+  stripePaymentIntentId?: string;
   paidAt?: Date;
 }
 
@@ -117,7 +119,10 @@ const paymentSchema = new Schema<IPayment>(
   {
     method: {
       type: String,
-      enum: ["credit_card", "debit_card", "paypal", "cash_on_delivery"],
+      enum: [
+        "cash_on_delivery",
+        "stripe",
+      ],
       required: [true, "Payment method is required"],
     },
     status: {
@@ -126,6 +131,12 @@ const paymentSchema = new Schema<IPayment>(
       default: "pending",
     },
     transactionId: {
+      type: String,
+    },
+    stripeSessionId: {
+      type: String,
+    },
+    stripePaymentIntentId: {
       type: String,
     },
     paidAt: {

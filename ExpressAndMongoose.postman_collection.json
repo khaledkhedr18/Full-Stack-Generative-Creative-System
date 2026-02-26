@@ -30,6 +30,26 @@
       "key": "categoryId",
       "value": "",
       "type": "string"
+    },
+    {
+      "key": "variantId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "orderId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "orderNumber",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "sessionId",
+      "value": "",
+      "type": "string"
     }
   ],
   "item": [
@@ -897,6 +917,56 @@
             "description": "Delete a product by ID.\n\n**Auth:** Bearer token required.\n\n**Path parameters:**\n- `id` – valid MongoDB ObjectId"
           },
           "response": []
+        },
+        {
+          "name": "Upload Product Variant Images",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "",
+                  "description": "Single main image for the variant (front/back/side)"
+                },
+                {
+                  "key": "gallery",
+                  "type": "file",
+                  "src": "",
+                  "description": "Multiple gallery images for the variant"
+                },
+                {
+                  "key": "view",
+                  "value": "front",
+                  "type": "text",
+                  "description": "View type for the main image (e.g. front, back, side)"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}/variants/{{variantId}}/images",
+              "host": ["{{baseUrl}}"],
+              "path": [
+                "api",
+                "products",
+                "{{productId}}",
+                "variants",
+                "{{variantId}}",
+                "images"
+              ]
+            },
+            "description": "Upload images for a specific product variant. Supports a single main image and/or multiple gallery images.\n\n**Auth:** Bearer token required.\n\n**Path parameters:**\n- `id` – product MongoDB ObjectId\n- `variantId` – the variant's variantId string\n\n**Body (form-data):**\n- `image` (file, optional) – single main image\n- `gallery` (file[], optional) – multiple gallery images\n- `view` (text, optional) – view type for the main image (default: front)"
+          },
+          "response": []
         }
       ]
     },
@@ -1327,6 +1397,98 @@
               "path": ["api", "orders", "{{orderId}}", "cancel"]
             },
             "description": "Cancel a pending or confirmed order. Stock is restored and payment is marked as refunded if applicable.\n\n**Auth:** Bearer token required.\n\n**Path params:**\n- `orderId` – valid MongoDB ObjectId\n\n**Body fields:**\n- `reason` (optional, max 500 chars) – cancellation reason"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "description": "Stripe payment endpoints. Includes checkout session creation, webhook handling, and session verification.",
+      "item": [
+        {
+          "name": "Create Checkout Session",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"shippingAddress\": {\n    \"street\": \"123 Main St\",\n    \"city\": \"Cairo\",\n    \"state\": \"Cairo\",\n    \"zip\": \"11511\",\n    \"country\": \"EG\"\n  },\n  \"notes\": \"Please deliver before 5 PM\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/payments/create-checkout-session",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "payments", "create-checkout-session"]
+            },
+            "description": "Create a Stripe Checkout Session from the authenticated user's cart. Returns a session ID and redirect URL.\n\n**Auth:** Bearer token required.\n\n**Body fields:**\n- `shippingAddress` (object, required) – street, city, state, zip, country\n- `notes` (string, optional) – order notes"
+          },
+          "response": []
+        },
+        {
+          "name": "Stripe Webhook",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "stripe-signature",
+                "value": "",
+                "description": "Stripe webhook signature header (set automatically by Stripe)"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/payments/webhook",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "payments", "webhook"]
+            },
+            "description": "Stripe webhook endpoint. Called by Stripe when payment events occur (e.g. checkout.session.completed). Verifies the webhook signature and fulfills the order.\n\n**Auth:** None (called by Stripe, verified via stripe-signature header).\n\n**Note:** This endpoint expects raw body (not JSON parsed). Do not call this manually — it is intended for Stripe's webhook system."
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Checkout Session",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/payments/verify-session/{{sessionId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "payments", "verify-session", "{{sessionId}}"]
+            },
+            "description": "Verify a Stripe checkout session status. Used by the frontend confirmation page to check payment status and retrieve the associated order.\n\n**Auth:** Bearer token required.\n\n**Path params:**\n- `sessionId` – Stripe checkout session ID (e.g. cs_test_...)"
           },
           "response": []
         }
