@@ -10,13 +10,13 @@ import { Confirmation } from './pages/confirmation/confirmation';
 import { Orders } from './pages/orders/orders';
 import { ProductDetails } from './pages/product-details/product-details';
 import { ForgetPassword } from './pages/forget-password/forget-password';
-import { Error } from './pages/error/error';
 import { authGuard } from './guards/auth-guard';
 import { guestGuard } from './guards/guest-guard';
 import { paymentSuccessGuard } from './guards/payment-success-guard';
 import { checkoutGuard } from './guards/checkout-guard';
 import { unsavedChangesGuard } from './guards/unsaved-changes-guard';
 import { ResetPassword } from './pages/reset-password/reset-password';
+import { Error } from './pages/error/error';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -41,7 +41,7 @@ export const routes: Routes = [
   { path: 'confirmation', component: Confirmation, canActivate: [authGuard, paymentSuccessGuard] },
   { path: 'orders', component: Orders, canActivate: [authGuard] },
   { path: 'forgetPassword', component: ForgetPassword, canActivate: [guestGuard] },
-  { path: 'resetPassword', component: ResetPassword},
+  { path: 'resetPassword/:email', component: ResetPassword},
   { path: '**', component: Error },
   
 ];

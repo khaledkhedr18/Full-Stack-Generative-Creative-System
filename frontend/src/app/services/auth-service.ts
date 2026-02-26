@@ -17,11 +17,27 @@ export class AuthService {
   register(newUser: UserRegisterInterface) {
     return this.httpClient.post(`${this.baseURL}/register`, newUser);
   }
+
   login(user: UserLoginInterface) {
     return this.httpClient.post(`${this.baseURL}/login`, user);
   }
 
   isLoggedIn(): boolean {
     return !!this.cookieService.get('jwt_token');
+  }
+
+  forgetPassword(email: string) {
+    return this.httpClient.post(`${this.baseURL}/forgot-password`, { email });
+  }
+
+  verifyOtp(email: string, otp: string) {
+    return this.httpClient.post(`${this.baseURL}/verify-otp`, { email, otp });
+  }
+
+  resetPassword(email: string, newPassword: string) {
+    return this.httpClient.patch(`${this.baseURL}/reset-password`, {
+      email,
+      newPassword,
+    });
   }
 }

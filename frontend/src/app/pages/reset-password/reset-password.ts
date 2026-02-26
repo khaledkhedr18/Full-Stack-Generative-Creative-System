@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-reset-password',
@@ -10,7 +10,11 @@ import { HttpClient } from '@angular/common/http';
   imports: [FormsModule, NgFor, NgIf, RouterLink],
   templateUrl: './reset-password.html',
 })
-export class ResetPassword implements OnInit {
+export class ResetPassword {
+
+  // ── Regex ──────────────────────────────────────────────────────────────────
+
+  readonly passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
 
   // ── Form State ─────────────────────────────────────────────────────────────
 
@@ -26,32 +30,20 @@ export class ResetPassword implements OnInit {
   alertMessage = '';
   alertType: 'success' | 'error' = 'error';
 
-  // ── Data from previous page (forgot-password) ──────────────────────────────
+  // ── Data from forgot-password page ─────────────────────────────────────────
 
   private email = '';
-  private resetToken = '';
 
   // ── Constructor ────────────────────────────────────────────────────────────
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private http: HttpClient,
-  ) {}
-
-  // ── Lifecycle ──────────────────────────────────────────────────────────────
-
-  ngOnInit(): void {
-    // Get email & token passed from the forgot-password page via queryParams
-    this.route.queryParams.subscribe(params => {
-      this.email = params['email'] ?? '';
-      this.resetToken = params['token'] ?? '';
-
-      // If user lands here without a token → redirect back to forgot-password
-      if (!this.email || !this.resetToken) {
-        this.router.navigate(['/resetPassword']);
-      }
-    });
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef,
+  ) {
+    this.email = route.snapshot.params["email"];
+    console.log(this.email);
   }
 
   // ── Helpers ────────────────────────────────────────────────────────────────
@@ -60,7 +52,6 @@ export class ResetPassword implements OnInit {
     return this.newPassword === this.confirmPassword && this.confirmPassword.length > 0;
   }
 
-  // Password strength: 0 = empty, 1 = weak, 2 = fair, 3 = good, 4 = strong
   get passwordStrength(): number {
     const p = this.newPassword;
     if (!p) return 0;
@@ -75,27 +66,25 @@ export class ResetPassword implements OnInit {
 
   getStrengthBarClass(bar: number): string {
     const s = this.passwordStrength;
-    if (s === 0) return 'bg-slate-200 dark:bg-slate-700';
-    if (bar > s)  return 'bg-slate-200 dark:bg-slate-700';
-    if (s === 1)  return 'bg-red-400';
-    if (s === 2)  return 'bg-orange-400';
-    if (s === 3)  return 'bg-yellow-400';
+    if (s === 0 || bar > s) return 'bg-slate-200 dark:bg-slate-700';
+    if (s === 1) return 'bg-red-400';
+    if (s === 2) return 'bg-orange-400';
+    if (s === 3) return 'bg-yellow-400';
     return 'bg-green-400';
   }
 
   getStrengthLabel(): string {
-    const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
-    return labels[this.passwordStrength] ?? '';
+    return ['', 'Weak', 'Fair', 'Good', 'Strong'][this.passwordStrength] ?? '';
   }
 
   getStrengthTextClass(): string {
-    const classes = ['', 'text-red-400', 'text-orange-400', 'text-yellow-400', 'text-green-400'];
-    return classes[this.passwordStrength] ?? '';
+    return ['', 'text-red-400', 'text-orange-400', 'text-yellow-400', 'text-green-400'][this.passwordStrength] ?? '';
   }
 
   private showAlert(message: string, type: 'success' | 'error'): void {
     this.alertMessage = message;
     this.alertType = type;
+    this.cdr.detectChanges();
   }
 
   // ── Submit ─────────────────────────────────────────────────────────────────
@@ -103,31 +92,37 @@ export class ResetPassword implements OnInit {
   onSubmit(): void {
     if (!this.passwordsMatch || this.isLoading || this.newPassword.length < 8) return;
 
+    // ✅ Regex validation
+    if (!this.passwordRegex.test(this.newPassword)) {
+      this.showAlert(
+        'Password must contain uppercase, lowercase, number and special character (@$!%*?&).',
+        'error'
+      );
+      return;
+    }
+
     this.isLoading = true;
     this.alertMessage = '';
 
-    // 🔁 Replace with your real API endpoint
-    this.http.post('/api/auth/reset-password', {
-      email: this.email,
-      token: this.resetToken,
-      newPassword: this.newPassword,
-    }).subscribe({
-      next: () => {
-        this.isLoading = false;
-        this.showAlert('Password updated successfully! Redirecting to login…', 'success');
+    this.authService.resetPassword(this.email, this.newPassword)
+      .subscribe({
+        next: (res) => {
+          console.log('✅ Reset Password Response:', res);
+          this.isLoading = false;
+          this.showAlert('Password updated successfully! Redirecting to login…', 'success');
 
-        // Redirect to login after short delay
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 1500);
-      },
-      error: (err) => {
-        this.isLoading = false;
-        this.showAlert(
-          err?.error?.message ?? 'Failed to reset password. Please try again.',
-          'error'
-        );
-      },
-    });
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 1500);
+        },
+        error: (err) => {
+          console.log('❌ Reset Password Error:', err);
+          this.isLoading = false;
+          this.showAlert(
+            err?.error?.message ?? 'Failed to reset password. Please try again.',
+            'error'
+          );
+        },
+      });
   }
 }
