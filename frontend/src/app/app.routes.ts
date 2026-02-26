@@ -9,6 +9,7 @@ import { Checkout } from './pages/checkout/checkout';
 import { Confirmation } from './pages/confirmation/confirmation';
 import { Orders } from './pages/orders/orders';
 import { ProductDetails } from './pages/product-details/product-details';
+import { ForgetPassword } from './pages/forget-password/forget-password';
 import { Error } from './pages/error/error';
 import { authGuard } from './guards/auth-guard';
 import { guestGuard } from './guards/guest-guard';
@@ -38,5 +39,7 @@ export const routes: Routes = [
   },
   { path: 'confirmation', component: Confirmation, canActivate: [authGuard, paymentSuccessGuard] },
   { path: 'orders', component: Orders, canActivate: [authGuard] },
+  { path: 'forgetPassword', component: ForgetPassword, canActivate: [authGuard] },
   { path: '**', component: Error },
+  
 ];
