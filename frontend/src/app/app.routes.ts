@@ -39,7 +39,7 @@ export const routes: Routes = [
   },
   { path: 'confirmation', component: Confirmation, canActivate: [authGuard, paymentSuccessGuard] },
   { path: 'orders', component: Orders, canActivate: [authGuard] },
-  { path: 'forgetPassword', component: ForgetPassword, canActivate: [authGuard] },
+  { path: 'forgetPassword', component: ForgetPassword, canActivate: [guestGuard] },
   { path: '**', component: Error },
   
 ];
