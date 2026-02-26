@@ -16,6 +16,7 @@ import { guestGuard } from './guards/guest-guard';
 import { paymentSuccessGuard } from './guards/payment-success-guard';
 import { checkoutGuard } from './guards/checkout-guard';
 import { unsavedChangesGuard } from './guards/unsaved-changes-guard';
+import { ResetPassword } from './pages/reset-password/reset-password';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -40,6 +41,7 @@ export const routes: Routes = [
   { path: 'confirmation', component: Confirmation, canActivate: [authGuard, paymentSuccessGuard] },
   { path: 'orders', component: Orders, canActivate: [authGuard] },
   { path: 'forgetPassword', component: ForgetPassword, canActivate: [guestGuard] },
+  { path: 'resetPassword', component: ResetPassword},
   { path: '**', component: Error },
   
 ];

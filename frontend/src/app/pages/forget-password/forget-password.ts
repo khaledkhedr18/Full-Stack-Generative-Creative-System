@@ -217,7 +217,7 @@ export class ForgetPassword implements OnDestroy {
 
         // Pass resetToken to the Change Password page
         setTimeout(() => {
-          this.router.navigate(['/change-password'], {
+          this.router.navigate(['/resetPassword'], {
             queryParams: { email: this.email, token: res?.resetToken ?? '' },
           });
         }, 800);
