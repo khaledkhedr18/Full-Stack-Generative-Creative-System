@@ -112,7 +112,7 @@ export const deleteProduct = asyncHandler(
 export const updateProduct = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     });
 

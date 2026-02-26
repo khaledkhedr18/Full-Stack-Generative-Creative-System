@@ -112,7 +112,7 @@ export const deleteUser = asyncHandler(
 export const updateUser = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
+      returnDocument: "after",
       runValidators: true,
     });
 
