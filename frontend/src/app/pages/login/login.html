@@ -127,8 +127,8 @@
                 Sign In
               }
             </button>
-            @if (errorMessage) {
-              <p class="error-message">{{ errorMessage }}</p>
+            @if (errorMessage()) {
+              <p class="error-message">{{ errorMessage() }}</p>
             }
           </div>
         </form>

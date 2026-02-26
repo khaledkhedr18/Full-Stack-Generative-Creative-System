@@ -4,6 +4,7 @@ import {
   ViewChildren,
   ElementRef,
   OnDestroy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
@@ -18,12 +19,8 @@ import { AuthService } from '../../services/auth-service';
 })
 export class ForgetPassword implements OnDestroy {
 
-  // ── Form State ─────────────────────────────────────────────────────────────
-
   email = '';
   codeArray: string[] = ['', '', '', '', '', ''];
-
-  // ── UI State ───────────────────────────────────────────────────────────────
 
   otpSent = false;
   isSendingOtp = false;
@@ -36,23 +33,21 @@ export class ForgetPassword implements OnDestroy {
   resendTimer = 0;
   private resendInterval: ReturnType<typeof setInterval> | null = null;
 
-  // ── DOM Refs ───────────────────────────────────────────────────────────────
-
   @ViewChildren('codeInput') codeInputs!: QueryList<ElementRef<HTMLInputElement>>;
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnDestroy(): void {
     this.clearResendTimer();
   }
 
-  // ── Theme ──────────────────────────────────────────────────────────────────
-
   toggleTheme(): void {
     document.documentElement.classList.toggle('dark');
   }
-
-  // ── Alerts ─────────────────────────────────────────────────────────────────
 
   private showAlert(message: string, type: 'success' | 'error'): void {
     this.alertMessage = message;
@@ -63,14 +58,13 @@ export class ForgetPassword implements OnDestroy {
     this.alertMessage = '';
   }
 
-  // ── Resend Timer ───────────────────────────────────────────────────────────
-
   private startResendTimer(seconds = 60): void {
     this.resendTimer = seconds;
     this.clearResendTimer();
     this.resendInterval = setInterval(() => {
       this.resendTimer--;
       if (this.resendTimer <= 0) this.clearResendTimer();
+      this.cdr.detectChanges();
     }, 1000);
   }
 
@@ -81,13 +75,12 @@ export class ForgetPassword implements OnDestroy {
     }
   }
 
-  // ── Edit Email ─────────────────────────────────────────────────────────────
-
   editEmail(): void {
     this.otpSent = false;
     this.codeArray = ['', '', '', '', '', ''];
     this.clearAlert();
     this.clearResendTimer();
+    this.cdr.detectChanges();
   }
 
   // ── Step 1: Send OTP ───────────────────────────────────────────────────────
@@ -99,19 +92,23 @@ export class ForgetPassword implements OnDestroy {
     this.clearAlert();
 
     this.authService.forgetPassword(this.email).subscribe({
-      next: () => {
+      next: (res) => {
+        console.log('✅ OTP Response:', res);
         this.isSendingOtp = false;
         this.otpSent = true;
         this.startResendTimer(60);
         this.showAlert(`Verification code sent to ${this.email}`, 'success');
+        this.cdr.detectChanges(); // ← Force UI update
         setTimeout(() => this.codeInputs?.first?.nativeElement?.focus(), 100);
       },
       error: (err) => {
+        console.log('❌ OTP Error:', err);
         this.isSendingOtp = false;
         this.showAlert(
           err?.error?.message ?? 'Failed to send OTP. Please try again.',
           'error'
         );
+        this.cdr.detectChanges();
       },
     });
   }
@@ -123,16 +120,14 @@ export class ForgetPassword implements OnDestroy {
     const digit = input.value.replace(/\D/g, '').slice(-1);
 
     this.codeArray[index] = digit;
-    input.value = digit; // keep DOM in sync
+    input.value = digit;
 
     if (!digit) return;
 
-    // Auto-advance to next box
     if (index < 5) {
       this.codeInputs.toArray()[index + 1].nativeElement.focus();
     }
 
-    // Auto-submit when all 6 digits filled
     if (this.codeArray.every(d => d !== '')) {
       this.onSubmit();
     }
@@ -183,18 +178,22 @@ export class ForgetPassword implements OnDestroy {
     this.clearAlert();
 
     this.authService.forgetPassword(this.email).subscribe({
-      next: () => {
+      next: (res) => {
+        console.log('✅ Resend Response:', res);
         this.isResending = false;
         this.startResendTimer(60);
         this.showAlert('A new verification code has been sent.', 'success');
+        this.cdr.detectChanges();
         setTimeout(() => this.codeInputs?.first?.nativeElement?.focus(), 100);
       },
       error: (err) => {
+        console.log('❌ Resend Error:', err);
         this.isResending = false;
         this.showAlert(
           err?.error?.message ?? 'Failed to resend. Please try again.',
           'error'
         );
+        this.cdr.detectChanges();
       },
     });
   }
@@ -210,8 +209,10 @@ export class ForgetPassword implements OnDestroy {
 
     this.authService.verifyOtp(this.email, code).subscribe({
       next: (res: any) => {
+        console.log('✅ Verify Response:', res);
         this.isVerifying = false;
         this.showAlert('Code verified! Redirecting…', 'success');
+        this.cdr.detectChanges();
 
         setTimeout(() => {
           this.router.navigate(['/resetPassword'], {
@@ -220,13 +221,14 @@ export class ForgetPassword implements OnDestroy {
         }, 800);
       },
       error: (err) => {
+        console.log('❌ Verify Error:', err);
         this.isVerifying = false;
         this.showAlert(
           err?.error?.message ?? 'Invalid or expired code. Try again.',
           'error'
         );
-        // Clear OTP boxes and refocus
         this.codeArray = ['', '', '', '', '', ''];
+        this.cdr.detectChanges();
         setTimeout(() => this.codeInputs?.first?.nativeElement?.focus(), 100);
       },
     });

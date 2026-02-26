@@ -11,6 +11,7 @@ import { Orders } from './pages/orders/orders';
 import { ProductDetails } from './pages/product-details/product-details';
 import { ForgetPassword } from './pages/forget-password/forget-password';
 import { ResetPassword } from './pages/reset-password/reset-password';
+// import { OTP } from './components/otp/otp';
 import { Error } from './pages/error/error';
 
 export const routes: Routes = [
@@ -27,5 +28,7 @@ export const routes: Routes = [
   { path: 'orders', component: Orders },
   { path: 'forgetPassword', component: ForgetPassword, data: { hideHeaderFooter: true } },
   { path: 'resetPassword', component: ResetPassword, data: { hideHeaderFooter: true } },
+  // { path: 'otp', component: OTP, data: { hideHeaderFooter: true } },
   { path: '**', component: Error },
 ];
+
