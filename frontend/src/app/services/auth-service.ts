@@ -13,7 +13,18 @@ export class AuthService {
   register(newUser: UserRegisterInterface) {
     return this.httpClient.post(`${this.baseURL}/register`, newUser);
   }
+
   login(user: UserLoginInterface) {
     return this.httpClient.post(`${this.baseURL}/login`, user);
+  }
+
+  // ✅ Fix: send email as object { email } not as plain string
+  forgetPassword(email: string) {
+    return this.httpClient.post(`${this.baseURL}/forgot-password`, { email });
+  }
+
+  // ✅ New: verify the OTP code
+  verifyOtp(email: string, otp: string) {
+    return this.httpClient.post(`${this.baseURL}/verify-otp`, { email, otp });
   }
 }

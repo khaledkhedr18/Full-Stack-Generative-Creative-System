@@ -10,6 +10,7 @@ import { Confirmation } from './pages/confirmation/confirmation';
 import { Orders } from './pages/orders/orders';
 import { ProductDetails } from './pages/product-details/product-details';
 import { ForgetPassword } from './pages/forget-password/forget-password';
+import { ResetPassword } from './pages/reset-password/reset-password';
 import { Error } from './pages/error/error';
 
 export const routes: Routes = [
@@ -24,6 +25,7 @@ export const routes: Routes = [
   { path: 'checkout', component: Checkout },
   { path: 'confirmation', component: Confirmation },
   { path: 'orders', component: Orders },
-  { path: 'forgetPassword', component: ForgetPassword },
+  { path: 'forgetPassword', component: ForgetPassword, data: { hideHeaderFooter: true } },
+  { path: 'resetPassword', component: ResetPassword, data: { hideHeaderFooter: true } },
   { path: '**', component: Error },
 ];
