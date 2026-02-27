@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnChanges, OnInit, signal } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideHeart, lucideLogOut, lucideMenu, lucideShoppingCart } from '@ng-icons/lucide';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
 import { CookieService } from 'ngx-cookie-service';
+import { CartService } from '../../services/cart-service';
 
 @Component({
   selector: 'app-header',
@@ -18,6 +19,9 @@ export class Header {
     private cookieService: CookieService,
     private router: Router,
   ) {}
+  private cartService = inject(CartService);
+
+  cartCount = this.cartService.cartCount;
 
   isLoggedIn() {
     return this.authService.isLoggedIn();
@@ -25,6 +29,7 @@ export class Header {
 
   handleLogout() {
     this.cookieService.delete('jwt_token');
+    this.cartService.clearCart();
     this.router.navigate(['/home']);
   }
 }

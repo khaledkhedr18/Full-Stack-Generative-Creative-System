@@ -1,85 +1,152 @@
-<section class="mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 max-w-7xl overflow-hidden">
-  <h1 class="mb-8 font-bold text-white text-2xl md:text-3xl">
-    Your Shopping Bag
-    <span class="ml-2 font-medium text-primary text-base align-middle">(3 Items)</span>
-  </h1>
-  <div class="flex lg:flex-row flex-col gap-8 lg:gap-12">
-    <div class="flex flex-col flex-1 space-y-6">
-      <app-cart-product-card></app-cart-product-card>
-      <app-cart-product-card></app-cart-product-card>
-      <app-cart-product-card></app-cart-product-card>
-      <app-cart-product-card></app-cart-product-card>
-      <app-cart-product-card></app-cart-product-card>
-      <app-cart-product-card></app-cart-product-card>
-    </div>
-    <div class="self-start w-full lg:w-96 shrink-0">
-      <div class="bg-card shadow-lg p-6 border border-slate-800 rounded-xl">
-        <h2 class="mb-6 font-bold text-white text-lg">Order Summary</h2>
-        <div class="space-y-4 mb-6 text-slate-400 textarea-md">
-          <div class="flex justify-between">
-            <span>Subtotal</span>
-            <span class="font-medium text-white">$210.00</span>
+@if (isLoading()) {
+  <section class="mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 max-w-7xl overflow-hidden">
+    <div class="skeleton h-10 w-64 mb-8"></div>
+
+    <div class="flex lg:flex-row flex-col gap-8 lg:gap-12">
+      <div class="flex flex-col flex-1 space-y-6">
+        @for (i of [1, 2, 3]; track i) {
+          <div class="bg-card shadow-sm p-4 sm:p-6 border border-slate-800 rounded-xl">
+            <div class="flex sm:flex-row flex-col gap-6">
+              <div class="skeleton w-full sm:w-32 h-40 shrink-0 rounded-lg"></div>
+              <div class="flex flex-col flex-1 justify-between">
+                <div>
+                  <div class="flex justify-between items-start">
+                    <div class="skeleton h-7 w-1/2"></div>
+                    <div class="skeleton h-7 w-20"></div>
+                  </div>
+                  <div class="skeleton h-4 w-3/4 mt-3"></div>
+                  <div class="flex gap-4 mt-6">
+                    <div class="skeleton h-5 w-16"></div>
+                    <div class="skeleton h-5 w-16"></div>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center mt-6 pt-4 border-slate-800 border-t">
+                  <div class="skeleton h-9 w-24 rounded-lg"></div>
+                  <div class="skeleton h-5 w-20"></div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="flex justify-between">
-            <span>Shipping Estimate</span>
-            <span class="font-medium text-white">$0.00</span>
+        }
+      </div>
+
+      <div class="self-start w-full lg:w-96 shrink-0">
+        <div class="bg-card shadow-lg p-6 border border-slate-800 rounded-xl">
+          <div class="skeleton h-6 w-32 mb-6"></div>
+          <div class="space-y-4 mb-6">
+            <div class="flex justify-between">
+              <div class="skeleton h-4 w-20"></div>
+              <div class="skeleton h-4 w-12"></div>
+            </div>
+            <div class="flex justify-between">
+              <div class="skeleton h-4 w-28"></div>
+              <div class="skeleton h-4 w-12"></div>
+            </div>
+            <div class="flex justify-between">
+              <div class="skeleton h-4 w-24"></div>
+              <div class="skeleton h-4 w-12"></div>
+            </div>
           </div>
-          <div class="flex justify-between">
-            <span>Tax Estimate</span>
-            <span class="font-medium text-white">$16.80</span>
+          <div class="flex justify-between items-center mb-6 pt-6 border-slate-800 border-t">
+            <div class="skeleton h-6 w-16"></div>
+            <div class="skeleton h-10 w-24"></div>
           </div>
-        </div>
-        <div
-          class="flex justify-between items-center mb-6 pt-6 border-slate-800 border-t font-bold text-white"
-        >
-          <span class="text-lg">Total</span>
-          <span class="text-3xl">$226.80</span>
-        </div>
-        <a
-          routerLink="/checkout"
-          class="flex justify-center items-center gap-2 bg-primary hover:bg-blue-600 shadow-lg shadow-primary/20 px-5 py-3.5 rounded-lg w-full font-bold text-white text-base transition-all duration-300 cursor-pointer"
-        >
-          Proceed to Checkout
-          <span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide-arrow-right lucide-arrow-right-icon lucide"
-            >
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
-            </svg>
-          </span>
-        </a>
-        <div class="flex justify-center items-center gap-2 mt-6 text-slate-400 text-xs">
-          <span class="text-green-500">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-lock-keyhole-icon lucide-lock-keyhole"
-            >
-              <circle cx="12" cy="16" r="1" />
-              <rect x="3" y="10" width="18" height="12" rx="2" />
-              <path d="M7 10V7a5 5 0 0 1 10 0v3" />
-            </svg>
-          </span>
-          <span>Secure Encrypted Payment</span>
+          <div class="skeleton h-14 w-full rounded-lg"></div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+} @else {
+  <section class="mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 max-w-7xl overflow-hidden">
+    <h1 class="mb-8 font-bold text-white text-2xl md:text-3xl">
+      Your Shopping Bag
+      <span class="ml-2 font-medium text-primary text-base align-middle"
+        >({{ cartData().totalItems }} Items)</span
+      >
+    </h1>
+    <div class="flex lg:flex-row flex-col gap-8 lg:gap-12">
+      <div class="flex flex-col flex-1 space-y-6">
+        @if (cartData().totalItems !== 0) {
+          @for (item of cartData().items; track item.product._id + item.variantId) {
+            <app-cart-product-card [item]="item" (itemsChange)="reRender()"></app-cart-product-card>
+          }
+        } @else {
+          <p
+            class="text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-bold self-center my-auto"
+          >
+            Your cart is empty.
+          </p>
+        }
+      </div>
+      <div class="self-start w-full lg:w-96 shrink-0">
+        <div class="bg-card shadow-lg p-6 border border-slate-800 rounded-xl">
+          <h2 class="mb-6 font-bold text-white text-lg">Order Summary</h2>
+          <div class="space-y-4 mb-6 text-slate-400 textarea-md">
+            <div class="flex justify-between">
+              <span>Subtotal</span>
+              <span class="font-medium text-white">{{ cartData().totalPrice | currency }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Shipping Estimate</span>
+              <span class="font-medium text-white">$0.00</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Tax Estimate</span>
+              <span class="font-medium text-white">$0.00</span>
+            </div>
+          </div>
+          <div
+            class="flex justify-between items-center mb-6 pt-6 border-slate-800 border-t font-bold text-white"
+          >
+            <span class="text-lg">Total</span>
+            <span class="text-3xl">{{ cartData().totalPrice | currency }}</span>
+          </div>
+          <a
+            routerLink="/checkout"
+            class="flex justify-center items-center gap-2 bg-primary hover:bg-blue-600 shadow-lg shadow-primary/20 px-5 py-3.5 rounded-lg w-full font-bold text-white text-base transition-all duration-300 cursor-pointer"
+          >
+            Proceed to Checkout
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide-arrow-right lucide-arrow-right-icon lucide"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </span>
+          </a>
+          <div class="flex justify-center items-center gap-2 mt-6 text-slate-400 text-xs">
+            <span class="text-green-500">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-lock-keyhole-icon lucide-lock-keyhole"
+              >
+                <circle cx="12" cy="16" r="1" />
+                <rect x="3" y="10" width="18" height="12" rx="2" />
+                <path d="M7 10V7a5 5 0 0 1 10 0v3" />
+              </svg>
+            </span>
+            <span>Secure Encrypted Payment</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+}
