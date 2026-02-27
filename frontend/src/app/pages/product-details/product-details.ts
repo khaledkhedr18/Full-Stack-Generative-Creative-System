@@ -5,6 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Product, ProductVariant } from '../../utils/product-interface';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideHeart, lucideMoveRight, lucideVan, lucideWandSparkles } from '@ng-icons/lucide';
+import { WishlistService } from '../../services/wishlist-service';
+import { WishlistItem } from '../../utils/wishlist-interface';
 
 @Component({
   selector: 'app-product-details',
@@ -48,21 +50,22 @@ export class ProductDetails {
   product = signal<Product>({} as Product);
   selectedVariant = signal<ProductVariant | null>(null);
   selectedSize = signal<string | undefined>('');
-  //  FIXME
   selectedImg = signal<string | undefined>('');
 
   loading = signal(true);
   error = signal<string | null>(null);
 
+  wishlistItems = signal<WishlistItem[]>([]);
+  loadingWishlist = signal(false);
+
   constructor(
     private readonly productService: ProductServices,
+    private wishlistService: WishlistService,
     activatedRoute: ActivatedRoute,
   ) {
     const { params, queryParams } = activatedRoute.snapshot;
     this.productId.set(params['id']);
     this.routeVariantId.set(queryParams['variant']);
-    console.log('id', this.productId());
-    console.log('variant', this.routeVariantId());
   }
 
   loadProduct(id: string): void {
@@ -71,7 +74,6 @@ export class ProductDetails {
 
     this.productService.getProductById(id).subscribe({
       next: (res) => {
-        console.log(res.data);
         this.product.set(res.data);
         this.loading.set(false);
       },
@@ -89,17 +91,15 @@ export class ProductDetails {
           );
           this.selectedVariant.set(res);
         }
-        console.log(this.selectedVariant());
-        console.log(this.selectedVariant()?.sizes[0].size);
         this.selectedSize.set(this.selectedVariant()?.sizes[0].size);
-        // FIXME
-        console.log(this.selectedVariant()?.images[0].url);
         this.selectedImg.set(this.selectedVariant()?.images[0].url);
       },
     });
   }
+
   ngOnInit(): void {
     this.loadProduct(this.productId());
+    this.loadWishlist();
   }
 
   stars = computed(() => {
@@ -117,7 +117,6 @@ export class ProductDetails {
 
   selectVariant(variant: ProductVariant) {
     this.selectedVariant.set(variant);
-    console.log(this.selectedVariant());
     this.selectedSize.set(variant.sizes[0]?.size);
 
     if (variant.images.length > 0) {
@@ -127,13 +126,47 @@ export class ProductDetails {
 
   selectSize(size: string) {
     this.selectedSize.set(size);
-    console.log(this.selectedSize());
   }
 
-  // FIXME
   selectImg(view: string) {
     const res = this.selectedVariant()?.images.filter((el) => el.view === view);
     this.selectedImg.set(res?.at(0)?.url);
-    console.log(res?.[0]?.url);
+  }
+
+  // wishlist
+  isFavorite = computed(() => {
+    const currentId = this.productId();
+    const items = this.wishlistItems();
+
+    return items.some((item) => item.product._id === currentId || item.product.id === currentId);
+  });
+
+  loadWishlist(): void {
+    this.wishlistService.getWishlist().subscribe({
+      next: (res) => {
+        if (res.success && res.data) {
+          this.wishlistItems.set(res.data.items);
+        }
+      },
+      error: (error) => {
+        console.error('Error loading wishlist:', error);
+      },
+    });
+  }
+
+  addToWishlist(productId: string) {
+    this.loadingWishlist.set(true);
+    this.wishlistService.addToWishlist(productId).subscribe({
+      next: (res) => {
+        if (res.data) {
+          this.wishlistItems.set(res.data.items);
+        }
+        this.loadingWishlist.set(false);
+      },
+      error: (err) => {
+        this.loadingWishlist.set(false);
+        console.log(err);
+      },
+    });
   }
 }

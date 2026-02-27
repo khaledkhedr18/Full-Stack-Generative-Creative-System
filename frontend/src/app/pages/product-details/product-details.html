@@ -297,9 +297,17 @@
               </span>
             </button>
             <button
-              class="bg-transparent px-4 py-2.5 border-2 border-border hover:border-red-500 rounded-xl w-fit text-text-muted hover:text-red-500 transition-all duration-300 cursor-pointer"
+              [disabled]="isFavorite()"
+              (click)="addToWishlist(productId())"
+              class="flex justify-center items-center px-4 py-2.5 border-2 rounded-xl w-fit transition-all duration-300 cursor-pointer"
+              [ngClass]="
+                isFavorite()
+                  ? 'bg-red-500 border-red-500 text-white shadow-lg shadow-red-500/20'
+                  : 'bg-transparent border-border text-text-muted hover:border-red-500 hover:text-red-500 transition-all duration-300'
+              "
             >
-              <ng-icon name="lucideHeart"></ng-icon>
+              <ng-icon name="lucideHeart" [style.fill]="isFavorite() ? 'currentColor' : 'none'">
+              </ng-icon>
             </button>
           </div>
           <p class="flex justify-center gap-1 text-text-muted text-xs">
