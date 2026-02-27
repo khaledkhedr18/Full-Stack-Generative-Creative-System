@@ -9,6 +9,8 @@ import { Button } from '../../components/button/button';
 import { NgTemplateOutlet } from '@angular/common';
 import { ProductServices } from '../../services/product-services';
 import { Product } from '../../utils/product-interface';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronLeft, lucideChevronRight } from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-products',
@@ -20,7 +22,9 @@ import { Product } from '../../utils/product-interface';
     SizeFilter,
     Button,
     NgTemplateOutlet,
+    NgIcon,
   ],
+  providers: [provideIcons({ lucideChevronLeft, lucideChevronRight })],
   templateUrl: './products.html',
   styles: ``,
 })
@@ -28,7 +32,6 @@ export class Products {
   faFilter = faFilter;
   faWandMagicSparkles = faWandMagicSparkles;
 
-  // ////
   constructor(private readonly productService: ProductServices) {}
 
   products = signal<Product[]>([]);
@@ -45,7 +48,7 @@ export class Products {
 
     this.productService.getProducts(page).subscribe({
       next: (res) => {
-        console.log(res.data);
+        // console.log(res.data);
         this.products.set(res.data);
         this.currentPage.set(res.page);
         this.totalPages.set(res.pages);
