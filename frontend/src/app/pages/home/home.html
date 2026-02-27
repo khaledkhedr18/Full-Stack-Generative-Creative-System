@@ -31,7 +31,7 @@
         </p>
         <div class="flex sm:flex-row flex-col gap-4">
           <a
-            routerLink="/products/id"
+            routerLink="/products/{{ products().at(0)?.id }}"
             class="flex justify-center items-center gap-2 bg-primary hover:bg-blue-600 shadow-lg shadow-primary/30 px-8 py-4 rounded-lg font-bold text-white transition-all hover:-translate-y-1 duration-300 transform"
           >
             <ng-icon name="lucideSparkles" size="24" color="white"></ng-icon>
@@ -178,23 +178,101 @@
 @if (loading()) {
   <section class="bg-background py-20">
     <div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+      <!-- Header -->
       <div class="flex justify-between items-center mb-12">
-        <div>
-          <div class="bg-card mb-2 rounded w-3/4 h-8 animate-pulse"></div>
-          <div class="bg-card rounded w-1/2 h-4 animate-pulse"></div>
+        <div class="space-y-3 animate-pulse">
+          <!-- Title -->
+          <div class="bg-slate-700 rounded-md w-64 h-8"></div>
+
+          <!-- Subtitle -->
+          <div class="bg-slate-800 rounded w-80 h-4"></div>
         </div>
-        <div class="hidden sm:flex items-center">
-          <div class="bg-card rounded w-32 h-8 animate-pulse"></div>
-          <span class="flex justify-center items-center ml-1">
-            <div class="bg-card rounded-full w-6 h-6 animate-pulse"></div>
-          </span>
+
+        <!-- View All Link -->
+        <div class="hidden sm:block animate-pulse">
+          <div class="bg-slate-700 rounded w-40 h-5"></div>
         </div>
       </div>
+
+      <!-- Product Grid -->
       <div class="gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="bg-card rounded h-48 animate-pulse"></div>
-        <div class="bg-card rounded h-48 animate-pulse"></div>
-        <div class="bg-card rounded h-48 animate-pulse"></div>
-        <div class="bg-card rounded h-48 animate-pulse"></div>
+        <!-- Repeat 4–8 times -->
+        <div class="bg-card border border-slate-800 rounded-xl overflow-hidden animate-pulse">
+          <!-- Image -->
+          <div class="bg-slate-800 aspect-4/5"></div>
+
+          <!-- Content -->
+          <div class="space-y-4 p-4">
+            <!-- Title + Price -->
+            <div class="flex justify-between items-center">
+              <div class="bg-slate-700 rounded w-3/5 h-4"></div>
+              <div class="bg-slate-700 rounded w-12 h-5"></div>
+            </div>
+
+            <!-- Category -->
+            <div class="bg-slate-800 rounded w-4/5 h-3"></div>
+
+            <!-- Button -->
+            <div class="bg-slate-700 rounded-lg w-full h-9"></div>
+          </div>
+        </div>
+        <div class="bg-card border border-slate-800 rounded-xl overflow-hidden animate-pulse">
+          <!-- Image -->
+          <div class="bg-slate-800 aspect-4/5"></div>
+
+          <!-- Content -->
+          <div class="space-y-4 p-4">
+            <!-- Title + Price -->
+            <div class="flex justify-between items-center">
+              <div class="bg-slate-700 rounded w-3/5 h-4"></div>
+              <div class="bg-slate-700 rounded w-12 h-5"></div>
+            </div>
+
+            <!-- Category -->
+            <div class="bg-slate-800 rounded w-4/5 h-3"></div>
+
+            <!-- Button -->
+            <div class="bg-slate-700 rounded-lg w-full h-9"></div>
+          </div>
+        </div>
+        <div class="bg-card border border-slate-800 rounded-xl overflow-hidden animate-pulse">
+          <!-- Image -->
+          <div class="bg-slate-800 aspect-4/5"></div>
+
+          <!-- Content -->
+          <div class="space-y-4 p-4">
+            <!-- Title + Price -->
+            <div class="flex justify-between items-center">
+              <div class="bg-slate-700 rounded w-3/5 h-4"></div>
+              <div class="bg-slate-700 rounded w-12 h-5"></div>
+            </div>
+
+            <!-- Category -->
+            <div class="bg-slate-800 rounded w-4/5 h-3"></div>
+
+            <!-- Button -->
+            <div class="bg-slate-700 rounded-lg w-full h-9"></div>
+          </div>
+        </div>
+        <div class="bg-card border border-slate-800 rounded-xl overflow-hidden animate-pulse">
+          <!-- Image -->
+          <div class="bg-slate-800 aspect-4/5"></div>
+
+          <!-- Content -->
+          <div class="space-y-4 p-4">
+            <!-- Title + Price -->
+            <div class="flex justify-between items-center">
+              <div class="bg-slate-700 rounded w-3/5 h-4"></div>
+              <div class="bg-slate-700 rounded w-12 h-5"></div>
+            </div>
+
+            <!-- Category -->
+            <div class="bg-slate-800 rounded w-4/5 h-3"></div>
+
+            <!-- Button -->
+            <div class="bg-slate-700 rounded-lg w-full h-9"></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>

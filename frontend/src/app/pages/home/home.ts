@@ -44,7 +44,7 @@ export class Home {
 
     this.productService.getProducts(1, 4).subscribe({
       next: (res) => {
-        console.log(res.data);
+        // console.log(res.data);
         this.products.set(res.data);
         this.loading.set(false);
       },
