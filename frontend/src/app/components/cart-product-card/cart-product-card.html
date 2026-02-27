@@ -5,7 +5,7 @@
     <div class="relative bg-slate-800 rounded-lg w-full sm:w-32 h-40 overflow-hidden shrink-0">
       <img
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVw80M_WO5VfoQm2b4KSTbD7oy9H4B6zzT3YEnB-mwsNXtkCEnQVkHGNQRrcXwibtqyhcSiQOhixrPods_3GKe5OA3qu3DRW_4TAez8glfZnnmYRJPXsrKhaV-IJ1vBaGt6Pt2UDBqYPeNCpsoiDjZHPz3O5MDjd7GVNTCO8M5u3UevsS11LEZxo2O5_CT50gT7HFL8Pq7-qUMRvK8v9v4ZGx4ISpKiyQI_-eI7kXCZSeKQ1_47vb2RAygHceLf6QuuJ6BY5U5SAg"
+        [src]="getVariantImage()"
         alt="Neon Cyberpunk Jacket - AI V2"
       />
       <div
@@ -38,8 +38,8 @@
     <div class="flex flex-col flex-1 justify-between">
       <div>
         <div class="flex justify-between items-start">
-          <h3 class="font-bold text-white text-lg">Neon Cyberpunk Jacket - AI V2</h3>
-          <p class="font-bold text-white text-lg">$120</p>
+          <h3 class="font-bold text-white text-lg">{{ item().product.name }}</h3>
+          <p class="font-bold text-white text-lg">{{ item().price | currency }}</p>
         </div>
         <p class="mt-1 text-slate-400 text-sm italic">
           Generated Prompt: "Neon lights, rain, dystopian city vibes"
@@ -47,17 +47,18 @@
         <div class="flex flex-wrap gap-4 mt-4 text-sm">
           <div class="flex items-center gap-2">
             <span class="text-slate-400">Size:</span>
-            <span class="font-medium text-white">M</span>
+            <span class="font-medium text-white">{{ item().size }}</span>
           </div>
           <div class="flex items-center gap-2">
             <span class="text-slate-400">Color:</span>
-            <span class="font-medium text-white">Cyan</span>
+            <span class="font-medium text-white">{{ getVariantColor() }}</span>
           </div>
         </div>
       </div>
       <div class="flex justify-between items-center mt-6 pt-4 border-slate-800 border-t">
         <div class="flex items-center border border-slate-700 rounded-lg">
           <button
+            (click)="handleMinus()"
             class="hover:bg-slate-700 p-1 rounded-l-lg text-slate-400 transition-colors duration-300 cursor-pointer"
           >
             <span class="text-sm">
@@ -80,10 +81,11 @@
           <input
             type="text"
             class="bg-transparent p-0 border-0 focus:ring-0 w-8 font-medium text-white text-sm text-center"
-            value="1"
+            [value]="item().quantity"
             disabled
           />
           <button
+            (click)="handlePlus()"
             class="hover:bg-slate-700 p-1 rounded-r-lg text-slate-400 transition-colors duration-300 cursor-pointer"
           >
             <span class="text-sm">
@@ -107,6 +109,7 @@
         </div>
         <div class="flex gap-4">
           <button
+          (click)="handleRemove()"
             class="flex items-center gap-1 text-slate-500 hover:text-red-400 text-sm transition-colors duration-300 cursor-pointer"
           >
             <span class="text-base">

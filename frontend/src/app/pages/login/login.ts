@@ -8,6 +8,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../../services/auth-service';
 import { UserLoginInterface } from '../../utils/user-interface';
 import { CookieService } from 'ngx-cookie-service';
+import { CartService } from '../../services/cart-service';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +21,7 @@ export class Login {
     private authService: AuthService,
     private cookieService: CookieService,
     private router: Router,
+    private cartService: CartService
   ) {}
 
   faFacebook = faFacebook;
@@ -53,6 +55,7 @@ export class Login {
         next: (data: any) => {
           const token = data.token;
           this.cookieService.set('jwt_token', token, undefined, '/', undefined, true, 'Strict');
+          this.cartService.getCart().subscribe()
           this.router.navigate(['/home']);
           this.loading.set(false);
         },

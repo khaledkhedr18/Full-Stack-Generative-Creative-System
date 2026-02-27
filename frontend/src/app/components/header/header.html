@@ -42,7 +42,7 @@
     <a routerLink="/cart" class="btn btn-ghost btn-circle">
       <div class="indicator">
         <ng-icon name="lucideShoppingCart" size="24" color="white"></ng-icon>
-        <span class="badge badge-xs badge-primary indicator-item">0</span>
+        <span class="badge badge-xs badge-primary indicator-item">{{ cartCount() }}</span>
       </div>
     </a>
     @if (!isLoggedIn()) {
@@ -65,7 +65,7 @@
     }
     @if (isLoggedIn()) {
       <button
-      (click)="handleLogout()"
+        (click)="handleLogout()"
         class="hidden md:flex items-center space-x-1.5 font-bold text-slate-400 hover:text-red-500 text-sm transition-colors duration-300 cursor-pointer"
       >
         <span>

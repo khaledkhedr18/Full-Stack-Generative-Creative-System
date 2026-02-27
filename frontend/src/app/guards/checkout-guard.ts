@@ -1,5 +1,13 @@
-import { CanActivateFn } from '@angular/router';
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
+import { CartService } from '../services/cart-service';
 
 export const checkoutGuard: CanActivateFn = (route, state) => {
-  return true;
+  const cartService = inject(CartService);
+  const router = inject(Router);
+
+  if (cartService.cartCount()) {
+    return true;
+  }
+  return router.createUrlTree(['/products']);
 };
