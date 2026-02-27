@@ -5,6 +5,8 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
 import { CookieService } from 'ngx-cookie-service';
 import { CartService } from '../../services/cart-service';
+import { WishlistService } from '../../services/wishlist-service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-header',
@@ -14,6 +16,9 @@ import { CartService } from '../../services/cart-service';
   styles: ``,
 })
 export class Header {
+  private wishlistService = inject(WishlistService);
+  wishlistCount = toSignal(this.wishlistService.wishlistCount$, { initialValue: 0 });
+
   constructor(
     private authService: AuthService,
     private cookieService: CookieService,
@@ -31,5 +36,6 @@ export class Header {
     this.cookieService.delete('jwt_token');
     this.cartService.clearCart();
     this.router.navigate(['/home']);
+    this.wishlistService.updateWishlistCount(0);
   }
 }

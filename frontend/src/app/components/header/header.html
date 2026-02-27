@@ -36,7 +36,9 @@
     <a routerLink="/wishlist" class="btn btn-ghost btn-circle">
       <div class="indicator">
         <ng-icon name="lucideHeart" size="24" color="white"></ng-icon>
-        <span class="bg-red-500 badge badge-xs indicator-item">0</span>
+        @if (wishlistCount() > 0) {
+          <span class="bg-red-500 badge badge-xs indicator-item">{{ wishlistCount() }}</span>
+        }
       </div>
     </a>
     <a routerLink="/cart" class="btn btn-ghost btn-circle">
