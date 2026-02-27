@@ -1,70 +1,289 @@
 <section class="mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 max-w-7xl overflow-hidden">
-  <div class="flex md:flex-row flex-col justify-between items-center space-y-5 md:space-y-0 mb-8">
-    <div class="text-center md:text-start">
-      <h1 class="mb-2 font-bold text-white text-4xl">My Wishlist</h1>
-      <p class="text-slate-400">
-        Manage your saved designs.
-        <span class="font-semibold text-primary">4 Items</span>
-      </p>
+  @if (isLoading()) {
+    <div class="flex md:flex-row flex-col justify-between items-center space-y-5 md:space-y-0 mb-8">
+      <!-- Left Content -->
+      <div class="text-center md:text-start animate-pulse">
+        <!-- Title -->
+        <div class="bg-slate-700 mx-auto md:mx-0 mb-2 rounded-md w-56 h-9"></div>
+
+        <!-- Subtitle -->
+        <div class="flex justify-center md:justify-start items-center gap-2">
+          <div class="bg-slate-800 rounded w-52 h-4"></div>
+          <div class="bg-slate-700 rounded w-14 h-4"></div>
+        </div>
+      </div>
+
+      <!-- Right Button -->
+      <div class="animate-pulse">
+        <div class="bg-slate-700 rounded-lg w-40 h-10"></div>
+      </div>
     </div>
-    <div class="flex items-center gap-2.5">
-      <button
-        class="flex items-center gap-2 bg-primary hover:bg-blue-600 shadow-lg shadow-primary/20 px-6 py-2.5 rounded-lg font-bold text-white text-sm transition-colors duration-300 cursor-pointer"
-      >
-        <span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="lucide lucide-shopping-cart-icon lucide-shopping-cart"
-          >
-            <circle cx="8" cy="21" r="1" />
-            <circle cx="19" cy="21" r="1" />
-            <path
-              d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
+  } @else {
+    <div class="flex md:flex-row flex-col justify-between items-center space-y-5 md:space-y-0 mb-8">
+      <div class="text-center md:text-start">
+        <h1 class="mb-2 font-bold text-white text-4xl">My Wishlist</h1>
+        <p class="text-slate-400">
+          Manage your saved designs.
+          <span class="font-semibold text-primary">{{ wishlistItems().length }} Items</span>
+        </p>
+      </div>
+      @if (wishlistItems().length) {
+        <button
+          (click)="clearAllWishlist()"
+          class="flex items-center gap-2 bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/20 px-6 py-2.5 rounded-lg font-bold text-white text-sm transition-colors duration-300 cursor-pointer"
+        >
+          <span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-trash2-icon lucide-trash-2"
+            >
+              <path d="M10 11v6" />
+              <path d="M14 11v6" />
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+              <path d="M3 6h18" />
+              <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+            </svg>
+          </span>
+          Remove All
+        </button>
+      }
+    </div>
+  }
+  @if (isLoading()) {
+    <div class="gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <!-- Repeat this card 4–8 times -->
+      <div class="bg-card border border-slate-800 rounded-xl overflow-hidden animate-pulse">
+        <!-- Image Area -->
+        <div class="relative bg-slate-800 aspect-4/5">
+          <!-- Remove button placeholder -->
+          <div class="top-3 right-3 absolute bg-slate-700 rounded-full w-8 h-8"></div>
+
+          <!-- Badge placeholder -->
+          <div class="top-3 left-3 absolute bg-slate-700 rounded w-16 h-5"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="space-y-4 p-4">
+          <!-- Title + Price -->
+          <div class="flex justify-between items-center">
+            <div class="bg-slate-700 rounded w-3/5 h-4"></div>
+            <div class="bg-slate-700 rounded w-12 h-5"></div>
+          </div>
+
+          <!-- Category | Brand -->
+          <div class="bg-slate-800 rounded w-4/5 h-3"></div>
+
+          <!-- Buttons -->
+          <div class="flex items-center gap-2.5 pt-2">
+            <div class="bg-slate-700 rounded-lg w-full h-9"></div>
+            <div class="bg-slate-700 rounded-lg w-10 h-9"></div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-card border border-slate-800 rounded-xl overflow-hidden animate-pulse">
+        <!-- Image Area -->
+        <div class="relative bg-slate-800 aspect-4/5">
+          <!-- Remove button placeholder -->
+          <div class="top-3 right-3 absolute bg-slate-700 rounded-full w-8 h-8"></div>
+
+          <!-- Badge placeholder -->
+          <div class="top-3 left-3 absolute bg-slate-700 rounded w-16 h-5"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="space-y-4 p-4">
+          <!-- Title + Price -->
+          <div class="flex justify-between items-center">
+            <div class="bg-slate-700 rounded w-3/5 h-4"></div>
+            <div class="bg-slate-700 rounded w-12 h-5"></div>
+          </div>
+
+          <!-- Category | Brand -->
+          <div class="bg-slate-800 rounded w-4/5 h-3"></div>
+
+          <!-- Buttons -->
+          <div class="flex items-center gap-2.5 pt-2">
+            <div class="bg-slate-700 rounded-lg w-full h-9"></div>
+            <div class="bg-slate-700 rounded-lg w-10 h-9"></div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-card border border-slate-800 rounded-xl overflow-hidden animate-pulse">
+        <!-- Image Area -->
+        <div class="relative bg-slate-800 aspect-4/5">
+          <!-- Remove button placeholder -->
+          <div class="top-3 right-3 absolute bg-slate-700 rounded-full w-8 h-8"></div>
+
+          <!-- Badge placeholder -->
+          <div class="top-3 left-3 absolute bg-slate-700 rounded w-16 h-5"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="space-y-4 p-4">
+          <!-- Title + Price -->
+          <div class="flex justify-between items-center">
+            <div class="bg-slate-700 rounded w-3/5 h-4"></div>
+            <div class="bg-slate-700 rounded w-12 h-5"></div>
+          </div>
+
+          <!-- Category | Brand -->
+          <div class="bg-slate-800 rounded w-4/5 h-3"></div>
+
+          <!-- Buttons -->
+          <div class="flex items-center gap-2.5 pt-2">
+            <div class="bg-slate-700 rounded-lg w-full h-9"></div>
+            <div class="bg-slate-700 rounded-lg w-10 h-9"></div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-card border border-slate-800 rounded-xl overflow-hidden animate-pulse">
+        <!-- Image Area -->
+        <div class="relative bg-slate-800 aspect-4/5">
+          <!-- Remove button placeholder -->
+          <div class="top-3 right-3 absolute bg-slate-700 rounded-full w-8 h-8"></div>
+
+          <!-- Badge placeholder -->
+          <div class="top-3 left-3 absolute bg-slate-700 rounded w-16 h-5"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="space-y-4 p-4">
+          <!-- Title + Price -->
+          <div class="flex justify-between items-center">
+            <div class="bg-slate-700 rounded w-3/5 h-4"></div>
+            <div class="bg-slate-700 rounded w-12 h-5"></div>
+          </div>
+
+          <!-- Category | Brand -->
+          <div class="bg-slate-800 rounded w-4/5 h-3"></div>
+
+          <!-- Buttons -->
+          <div class="flex items-center gap-2.5 pt-2">
+            <div class="bg-slate-700 rounded-lg w-full h-9"></div>
+            <div class="bg-slate-700 rounded-lg w-10 h-9"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      @for (item of wishlistItems(); track item.product.id) {
+        <!-- <app-wishlist-card [data]="item"></app-wishlist-card> -->
+        <div
+          class="group bg-card hover:shadow-xl border border-slate-800 rounded-xl overflow-hidden transition-all duration-300"
+        >
+          <div class="relative bg-slate-800 aspect-4/5">
+            <img
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              src="{{ item.product.variants.at(0)?.images?.at(0)?.url }}"
+              alt=""
             />
-          </svg>
-        </span>
-        Add All to Cart
-      </button>
-      <button
-        class="flex items-center gap-2 bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/20 px-6 py-2.5 rounded-lg font-bold text-white text-sm transition-colors duration-300 cursor-pointer"
-      >
-        <span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="lucide lucide-trash2-icon lucide-trash-2"
-          >
-            <path d="M10 11v6" />
-            <path d="M14 11v6" />
-            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-            <path d="M3 6h18" />
-            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-          </svg>
-        </span>
-        Remove All
-      </button>
+            <button
+              (click)="onRemoveItem(item.product.id)"
+              class="top-3 right-3 absolute flex justify-center items-center bg-black/60 hover:bg-red-500 backdrop-blur-sm rounded-full w-8 h-8 text-white transition-colors duration-300 cursor-pointer"
+            >
+              <span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-x-icon lucide-x"
+                >
+                  <path d="M18 6 6 18" />
+                  <path d="m6 6 12 12" />
+                </svg>
+              </span>
+            </button>
+            <!-- Badge -->
+            <div
+              class="top-3 left-3 absolute flex items-center gap-1 bg-primary shadow-lg px-2 py-1 rounded font-bold text-[10px] text-white"
+            >
+              <span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-sparkles-icon lucide-sparkles"
+                >
+                  <path
+                    d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"
+                  />
+                  <path d="M20 2v4" />
+                  <path d="M22 4h-4" />
+                  <circle cx="4" cy="20" r="2" />
+                </svg>
+              </span>
+              <span class="uppercase">{{ item.product.status }}</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <div class="flex justify-between items-center mb-1">
+              <h3 class="font-bold text-white text-base line-clamp-1 leading-tight">
+                {{ item.product.name }}
+              </h3>
+              <span class="font-bold text-primary text-lg">${{ item.product.basePrice }}</span>
+            </div>
+            <p class="flex gap-1 mb-4 text-slate-400 text-xs line-clamp-2">
+              <span>
+                {{ item.product.category }}
+              </span>
+              <span>|</span>
+              <span>
+                {{ item.product.brand }}
+              </span>
+            </p>
+            <div class="flex items-center gap-2.5">
+              <button
+                class="bg-primary hover:bg-blue-600 py-2 rounded-lg w-full font-bold text-white text-sm transition-colors duration-300 cursor-pointer"
+              >
+                Add to Cart
+              </button>
+              <a
+                class="block bg-transparent hover:bg-blue-600 px-4 py-2 rounded-lg ring-1 ring-primary w-fit text-white transition-colors duration-300"
+                routerLink="/products/{{ item.product.id }}"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-eye-icon lucide-eye"
+                >
+                  <path
+                    d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                  />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      }
     </div>
-  </div>
-  <div class="gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-    <app-wishlist-card></app-wishlist-card>
-    <app-wishlist-card></app-wishlist-card>
-    <app-wishlist-card></app-wishlist-card>
-    <app-wishlist-card></app-wishlist-card>
-    <app-wishlist-card></app-wishlist-card>
-  </div>
+  }
 </section>
