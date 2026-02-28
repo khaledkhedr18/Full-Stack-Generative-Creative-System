@@ -161,7 +161,7 @@ export const getMyOrders = asyncHandler(async (req: Request, res: Response) => {
 
   const orders = await features.query.populate(
     "items.product",
-    "name slug basePrice currency brand category",
+    "name slug basePrice currency brand category variants",
   );
 
   res.status(200).json({
