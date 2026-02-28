@@ -6,14 +6,19 @@
     />
   </div>
   <div class="flex-1">
-    <h4 class="font-bold text-white text-lg">Cyberpunk Bomber Jacket</h4>
+    <h4 class="font-bold text-white text-lg">{{ item.product.name }}</h4>
     <p class="mt-1 text-slate-400 text-sm">
       <span>Prompt:</span>
       <span>"Neo-Tokyo, electric blue, urban decay texturing" </span>
     </p>
     <div class="flex items-center gap-2 mt-4">
-      <div class="bg-yellow-500 rounded-full w-2.5 h-2.5 animate-pulse"></div>
-      <span class="font-medium text-yellow-500">Processing Custom Design</span>
+      @if (order.status === 'confirmed') {
+        <div class="bg-success rounded-full w-2.5 h-2.5"></div>
+        <span class="font-medium text-success">{{ order.status }}</span>
+      } @else {
+        <div class="bg-yellow-500 rounded-full w-2.5 h-2.5 animate-pulse"></div>
+        <span class="font-medium text-yellow-500">{{ order.status }}</span>
+      }
     </div>
   </div>
 </div>

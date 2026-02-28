@@ -1,4 +1,4 @@
-import { Product, ProductVariant } from './product-interface';
+import { ProductVariant } from './product-interface';
 
 export interface CartResponseI {
   success: boolean;

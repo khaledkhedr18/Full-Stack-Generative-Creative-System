@@ -1,7 +1,82 @@
-<section class="mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 max-w-7xl overflow-hidden">
-  <h2 class="mb-6 font-bold text-white text-2xl">Order History</h2>
-  <div class="flex flex-col space-y-4">
-    <app-orders-card></app-orders-card>
-    <app-orders-card></app-orders-card>
-  </div>
-</section>
+@if (isLoading()) {
+  <section class="mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 max-w-7xl overflow-hidden">
+    <div class="skeleton h-8 w-48 mb-6 bg-slate-800"></div>
+
+    <div class="flex flex-col space-y-4">
+      @for (dummy of [1, 2]; track dummy) {
+        <div class="bg-card border border-slate-800 rounded-xl overflow-hidden">
+          <div class="flex gap-8 bg-slate-800/50 px-6 py-4 border-slate-800 border-b">
+            <div class="flex flex-col gap-1.5">
+              <div class="skeleton h-3 w-20 bg-slate-700"></div>
+              <div class="skeleton h-4 w-24 bg-slate-700"></div>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <div class="skeleton h-3 w-10 bg-slate-700"></div>
+              <div class="skeleton h-4 w-16 bg-slate-700"></div>
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <div class="skeleton h-3 w-16 bg-slate-700"></div>
+              <div class="skeleton h-4 w-28 bg-slate-700"></div>
+            </div>
+          </div>
+
+          <div class="flex sm:flex-row flex-col gap-6 p-6 border-slate-800 border-t">
+            <div class="skeleton w-32 h-32 rounded-lg shrink-0 bg-slate-700"></div>
+
+            <div class="flex-1 flex flex-col justify-center gap-3 mt-2 sm:mt-0">
+              <div class="skeleton h-6 w-48 bg-slate-700"></div>
+
+              <div class="flex flex-col gap-2 mt-1">
+                <div class="skeleton h-4 w-full max-w-md bg-slate-700"></div>
+                <div class="skeleton h-4 w-3/4 max-w-sm bg-slate-700"></div>
+              </div>
+
+              <div class="flex items-center gap-2 mt-2">
+                <div class="skeleton h-3 w-3 rounded-full bg-slate-700"></div>
+                <div class="skeleton h-4 w-20 bg-slate-700"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+} @else {
+  <section class="mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 max-w-7xl overflow-hidden">
+    <h2 class="mb-6 font-bold text-white text-2xl">Order History</h2>
+    <div class="flex flex-col space-y-4">
+      @if (orders().length) {
+        @for (order of orders(); track order._id) {
+          <app-orders-card [order]="order"></app-orders-card>
+        }
+      } @else {
+        <div
+          class="flex flex-col items-center justify-center py-20 text-center border-2 border-dashed border-slate-800 rounded-2xl bg-slate-900/50"
+        >
+          <div class="bg-slate-800 p-4 rounded-full mb-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-8 h-8 text-slate-400"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+              />
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-white">No orders yet</h3>
+          <p class="mt-2 text-slate-400 max-w-sm mx-auto">
+            Your order history is currently empty. Start exploring our collection to find your next
+            favorite piece.
+          </p>
+          <a routerLink="/products" class="mt-8 btn btn-primary px-8 w-fit"> Start Shopping </a>
+        </div>
+      }
+    </div>
+  </section>
+}
