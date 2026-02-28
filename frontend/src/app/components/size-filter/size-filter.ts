@@ -8,4 +8,6 @@ import { Component, Input, signal } from '@angular/core';
 })
 export class SizeFilter {
   @Input() size = ""
+  @Input() type: 'radio' | 'checkbox' = 'checkbox'
+  @Input() groupName: string = ''
 }

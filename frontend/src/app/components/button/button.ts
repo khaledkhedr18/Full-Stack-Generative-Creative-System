@@ -7,5 +7,5 @@ import { Component, Input } from '@angular/core';
   styles: ``,
 })
 export class Button {
-  @Input() type: string = '';
+  @Input() type: 'primary' | 'secondary' = 'primary';
 }

@@ -11,13 +11,16 @@
   --color-text: #ffffff;
   --color-text-muted: var(--color-slate-400);
   --color-border: #2d3748;
+  --color-danger: var(--color-red-500);
 
   --font-family-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
   --default-font-family: var(--font-family-sans);
+
+  --shadow-primary-glow: 0 0 20px rgba(37, 99, 235, 0.3);
 }
 
 @utility btn-primary {
-  @apply w-full font-bold py-3 bg-primary hover:bg-blue-600 text-xs rounded-lg cursor-pointer transition-all;
+  @apply w-full flex items-center justify-center gap-1 font-bold py-3 bg-primary hover:bg-blue-600 text-xs rounded-lg cursor-pointer transition-all;
 }
 
 @utility btn-secondary {
@@ -36,6 +39,18 @@
   @apply appearance-none rounded-full w-8 h-8 cursor-pointer border border-border checked:outline-2 outline-primary outline-offset-2;
 }
 
+@utility product-view {
+  @apply transition-all text-xs text-text-muted font-medium rounded-3xl px-3 py-1.5 cursor-pointer hover:peer-not-checked:bg-background peer-checked:bg-primary peer-checked:text-white peer-checked:font-bold;
+}
+
+@utility art-style {
+  @apply text-xs transition-all text-text-muted rounded-lg px-3 py-1 border border-border hover:peer-not-checked:border-primary cursor-pointer peer-checked:text-primary peer-checked:bg-card peer-checked:border-primary;
+}
+
+@utility error-message {
+  @apply text-danger text-xs;
+}
+
 html,
 body {
   height: 100%;
@@ -49,4 +64,10 @@ body {
   background: linear-gradient(to right, transparent, var(--color-card)), url('/images/Robot.png');
   background-size: cover;
   background-position: center;
+}
+
+.glitch-text {
+  text-shadow:
+    2px 0 #137fec,
+    -2px 0 #ff00c1;
 }

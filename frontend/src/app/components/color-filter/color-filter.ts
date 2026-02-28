@@ -10,5 +10,6 @@ import { NgClass } from '@angular/common';
 export class ColorFilter {
   @Input() color = '';
   @Input() type: 'checkbox' | 'radio' = 'checkbox';
-  @Input() groupName: string = 'colorGroup';
+  @Input() groupName: string = '';
+  @Input() size: 'small' | 'large' = 'large';
 }

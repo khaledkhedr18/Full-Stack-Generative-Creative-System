@@ -47,7 +47,7 @@
   </div>
   <div class="flex flex-col gap-3">
     <h2 class="font-bold">Size</h2>
-    <div class="gap-2 grid grid-cols-5 md:grid-cols-4 lg:grid-cols-5">
+    <div class="gap-2 grid grid-cols-5 md:grid-cols-3 lg:grid-cols-5">
       <app-size-filter size="XS"></app-size-filter>
       <app-size-filter size="S"></app-size-filter>
       <app-size-filter size="M"></app-size-filter>
@@ -73,43 +73,155 @@
   class="gap-9 grid grid-cols-1 md:grid-cols-12 mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 max-w-7xl overflow-hidden"
 >
   <aside
-    class="hidden md:flex flex-col gap-5 md:col-span-3 xl:col-span-2 bg-amber pr-5 border-slate-800 border-r"
+    class="hidden md:flex flex-col gap-5 md:col-span-3 xl:col-span-2 bg-amber border-slate-800"
   >
     <ng-container *ngTemplateOutlet="filterContent"></ng-container>
   </aside>
-  <div class="md:col-span-9 xl:col-span-10">
-    <div class="flex flex-col gap-5">
-      <div class="flex flex-wrap justify-between items-center gap-5">
-        <h1 class="font-bold">
-          All Apparel
-          <span class="font-normal text-primary text-xs">(124 items)</span>
-        </h1>
-        <div class="flex items-center gap-3">
-          <button
-            class="md:hidden flex items-center gap-1 text-text-muted text-xs"
-            (click)="filterModal.showModal()"
-          >
-            <fa-icon [icon]="faFilter"></fa-icon>
-            <span>Filters</span>
-          </button>
-          <select
-            class="bg-card py-2 pr-1.5 pl-2 border border-border rounded-lg hover:ring-1 hover:ring-blue-600 text-xs cursor-pointer"
-          >
-            <option value="" selected>Sort by: Recommended</option>
-            <option value="">Price</option>
-            <option value="">Latest</option>
-          </select>
+  @if (loading()) {
+    <div class="md:col-span-9 xl:col-span-10">
+      <div class="flex flex-col gap-5 animate-pulse">
+        <!-- Header -->
+        <div class="flex flex-wrap justify-between items-center gap-5">
+          <!-- Title -->
+          <div class="bg-border rounded w-48 h-6"></div>
+
+          <!-- Controls -->
+          <div class="flex items-center gap-3">
+            <!-- Mobile filter button -->
+            <div class="md:hidden bg-border rounded w-24 h-8"></div>
+
+            <!-- Sort dropdown -->
+            <div class="bg-border rounded-lg w-44 h-8"></div>
+          </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <!-- Repeat card skeleton -->
+          <div class="bg-card border border-border rounded-xl overflow-hidden">
+            <div class="bg-border aspect-4/5"></div>
+            <div class="space-y-2 p-4">
+              <div class="bg-border rounded w-3/4 h-4"></div>
+              <div class="flex justify-between items-center">
+                <div class="bg-border rounded w-20 h-3"></div>
+                <div class="bg-border rounded w-12 h-4"></div>
+              </div>
+              <div class="flex gap-2 pt-1">
+                <div class="bg-border rounded-full w-5 h-5"></div>
+                <div class="bg-border rounded-full w-5 h-5"></div>
+                <div class="bg-border rounded-full w-5 h-5"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-card border border-border rounded-xl overflow-hidden">
+            <div class="bg-border aspect-4/5"></div>
+            <div class="space-y-2 p-4">
+              <div class="bg-border rounded w-3/4 h-4"></div>
+              <div class="flex justify-between items-center">
+                <div class="bg-border rounded w-20 h-3"></div>
+                <div class="bg-border rounded w-12 h-4"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-card border border-border rounded-xl overflow-hidden">
+            <div class="bg-border aspect-4/5"></div>
+            <div class="space-y-2 p-4">
+              <div class="bg-border rounded w-3/4 h-4"></div>
+              <div class="flex justify-between items-center">
+                <div class="bg-border rounded w-20 h-3"></div>
+                <div class="bg-border rounded w-12 h-4"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-card border border-border rounded-xl overflow-hidden">
+            <div class="bg-border aspect-4/5"></div>
+            <div class="space-y-2 p-4">
+              <div class="bg-border rounded w-3/4 h-4"></div>
+              <div class="flex justify-between items-center">
+                <div class="bg-border rounded w-20 h-3"></div>
+                <div class="bg-border rounded w-12 h-4"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex justify-center items-center gap-4 mt-12">
+          <div class="bg-border rounded-lg w-10 h-10"></div>
+          <div class="bg-border rounded-lg w-10 h-10"></div>
+          <div class="bg-border rounded-lg w-10 h-10"></div>
+          <div class="bg-border rounded-lg w-10 h-10"></div>
         </div>
       </div>
-      <div
-        class="gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 xl:grid-cols-4"
-      >
-        <app-product-card></app-product-card>
-        <app-product-card></app-product-card>
-        <app-product-card></app-product-card>
+    </div>
+  } @else {
+    <div class="md:col-span-9 xl:col-span-10">
+      <div class="flex flex-col gap-5">
+        <div class="flex flex-wrap justify-between items-center gap-5">
+          <h1 class="font-bold">
+            All Apparel
+            <span class="font-normal text-primary text-xs">({{ total() }} items)</span>
+          </h1>
+          <div class="flex items-center gap-3">
+            <button
+              class="md:hidden flex items-center gap-1 text-text-muted text-xs"
+              (click)="filterModal.showModal()"
+            >
+              <fa-icon [icon]="faFilter"></fa-icon>
+              <span>Filters</span>
+            </button>
+            <select
+              class="bg-card py-2 pr-1.5 pl-2 border border-border rounded-lg hover:ring-1 hover:ring-blue-600 text-xs cursor-pointer"
+            >
+              <option value="" selected>Sort by: Recommended</option>
+              <option value="">Price</option>
+              <option value="">Latest</option>
+            </select>
+          </div>
+        </div>
+        <div class="gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          @for (product of products(); track product._id) {
+            <app-product-card [data]="product"></app-product-card>
+          }
+        </div>
+        <!-- Pagination -->
+        <div class="flex justify-center items-center gap-4 mt-12">
+          <button
+            class="flex justify-center items-center disabled:opacity-50 border border-neutral-dark hover:border-primary rounded-lg w-10 h-10 text-gray-400 hover:text-white transition-colors duration-300 cursor-pointer disabled:cursor-not-allowed"
+            [disabled]="currentPage() === 1"
+            (click)="goToPage(currentPage() - 1)"
+          >
+            <span class="flex justify-center items-center">
+              <ng-icon size="24" name="lucideChevronLeft"></ng-icon>
+            </span>
+          </button>
+
+          <!-- @for (page of [].constructor(totalPages()); track $index) { -->
+          @for (page of [].constructor(totalPages()); track $index) {
+            <button
+              (click)="goToPage($index + 1)"
+              [attr.data-current]="currentPage() === $index + 1"
+              class="flex justify-center items-center data-[current=true]:bg-primary border data-[current=true]:border-primary rounded-lg w-10 h-10 font-bold text-gray-400 data-[current=true]:text-white hover:text-white transition-all duration-300 cursor-pointer"
+            >
+              {{ $index + 1 }}
+            </button>
+          }
+          <button
+            class="flex justify-center items-center disabled:opacity-50 border hover:border-primary rounded-lg w-10 h-10 text-gray-400 hover:text-white transition-colors cursor-pointer disabled:cursor-not-allowed"
+            [disabled]="currentPage() === totalPages()"
+            (click)="goToPage(currentPage() + 1)"
+          >
+            <span class="flex justify-center items-center">
+              <ng-icon size="24" name="lucideChevronRight"></ng-icon>
+            </span>
+          </button>
+        </div>
       </div>
     </div>
-  </div>
+  }
 </div>
 <dialog #filterModal class="modal-bottom modal sm:modal-middle">
   <div class="modal-box">

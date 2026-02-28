@@ -1,3 +1,4 @@
+
 <div class="flex h-full justify-center items-center">
   <div class="flex">
     <div
@@ -42,7 +43,7 @@
           <p class="text-text-muted text-sm">Welcome back! Please enter your details.</p>
         </div>
         <div class="flex items-center gap-3">
-          <app-button type="secondary">
+          <button class="btn-secondary">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 48 48"
@@ -67,40 +68,69 @@
               <path fill="none" d="M0 0h48v48H0z" />
             </svg>
             <span>Google</span>
-          </app-button>
-          <app-button class="secondary">
+          </button>
+          <button class="btn-secondary">
             <fa-icon [icon]="faFacebook" class="text-primary" [size]="'xl'"></fa-icon>
             <span>Facebook</span>
-          </app-button>
+          </button>
         </div>
-        <app-divider label="OR LOG IN WITH EMAIL"></app-divider>
-        <form action="" class="flex flex-col gap-5">
-          <app-form-input
-            [icon]="faEnvelope"
-            inputId="email"
-            label="Email Address"
-            type="email"
-            placeholder="john@example.com"
-          ></app-form-input>
-          <app-form-input
-            [icon]="faLock"
-            inputId="password"
-            label="Password"
-            type="password"
-            placeholder="••••••••"
-          ></app-form-input>
-          <div class="flex justify-between items-center">
-            <div class="flex gap-1.5">
+        <div class="flex items-center justify-center gap-1.5">
+          <hr class="hr" />
+          <p class="text-xs text-text-muted">OR LOG IN WITH EMAIL</p>
+          <hr class="hr" />
+        </div>
+        <form [formGroup]="loginForm" (ngSubmit)="handleSubmit()" class="flex flex-col gap-5">
+          <div class="flex flex-col gap-1.5">
+            <label for="email" class="text-xs text-text-muted">Email Address</label>
+            <label class="input bg-background border-border w-full focus-within:outline-none">
+              <fa-icon [icon]="faEnvelope" class="text-text-muted"></fa-icon>
               <input
-                type="checkbox"
-                id="remember"
-                class="custom-checkbox"
+                formControlName="email"
+                id="email"
+                type="email"
+                class="grow text-text-muted"
+                placeholder="john@example.com"
               />
-              <label for="remember" class="text-xs text-text-muted">Remember me</label>
-            </div>
-            <a routerLink="/" class="text-primary text-xs">Forgot Password?</a>
+            </label>
           </div>
-          <app-button type="primary">Sign In</app-button>
+          <div class="flex flex-col gap-1.5">
+            <label for="password" class="text-xs text-text-muted">Password</label>
+            <label class="input bg-background border-border w-full focus-within:outline-none">
+              <fa-icon [icon]="faLock" class="text-text-muted"></fa-icon>
+              <input
+                formControlName="password"
+                id="password"
+                [type]="isPasswordVisible ? 'text' : 'password'"
+                class="grow text-text-muted"
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                (click)="toggleVisibility()"
+                class="cursor-pointer text-text-muted hover:text-border focus:outline-none transition-all"
+              >
+                <fa-icon [icon]="isPasswordVisible ? faEyeSlash : faEye"></fa-icon>
+              </button>
+            </label>
+            <div class="flex justify-end">
+              <a routerLink="/forgetPassword" class="text-primary text-xs">Forgot Password?</a>
+            </div>
+          </div>
+          <div class="flex flex-col items-center gap-2">
+            <button
+              class="btn-primary disabled:bg-primary/50"
+              [disabled]="loading() ? true : false"
+            >
+              @if (loading()) {
+                <span class="loading loading-spinner"></span>
+              } @else {
+                Sign In
+              }
+            </button>
+            @if (errorMessage()) {
+              <p class="error-message">{{ errorMessage() }}</p>
+            }
+          </div>
         </form>
         <p class="text-xs text-text-muted self-center">
           Don't have an account? <a routerLink="/signup" class="text-primary">Sign up for free</a>
