@@ -7,6 +7,8 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideHeart, lucideMoveRight, lucideVan, lucideWandSparkles } from '@ng-icons/lucide';
 import { WishlistService } from '../../services/wishlist-service';
 import { WishlistItem } from '../../utils/wishlist-interface';
+import { HotToastService } from '@ngxpert/hot-toast';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-product-details',
@@ -62,6 +64,7 @@ export class ProductDetails {
     private readonly productService: ProductServices,
     private wishlistService: WishlistService,
     activatedRoute: ActivatedRoute,
+    private toast: HotToastService,
   ) {
     const { params, queryParams } = activatedRoute.snapshot;
     this.productId.set(params['id']);
@@ -156,17 +159,27 @@ export class ProductDetails {
 
   addToWishlist(productId: string) {
     this.loadingWishlist.set(true);
-    this.wishlistService.addToWishlist(productId).subscribe({
-      next: (res) => {
-        if (res.data) {
-          this.wishlistItems.set(res.data.items);
-        }
-        this.loadingWishlist.set(false);
-      },
-      error: (err) => {
-        this.loadingWishlist.set(false);
-        console.log(err);
-      },
-    });
+    this.wishlistService
+      .addToWishlist(productId)
+      .pipe(
+        this.toast.observe({
+          loading: 'Adding your product...',
+          success: 'Product added successfully to your wishlist!',
+          error: 'Could not add to wishlist',
+        }),
+        finalize(() => this.loadingWishlist.set(false)),
+      )
+      .subscribe({
+        next: (res) => {
+          if (res.data) {
+            this.wishlistItems.set(res.data.items);
+          }
+          this.loadingWishlist.set(false);
+        },
+        error: (err) => {
+          this.loadingWishlist.set(false);
+          console.log(err);
+        },
+      });
   }
 }

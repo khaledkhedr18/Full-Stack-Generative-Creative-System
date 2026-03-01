@@ -2,10 +2,13 @@ import { Component } from '@angular/core';
 import { CheckoutProductCard } from '../../components/checkout-product-card/checkout-product-card';
 import { CheckDeactivate } from '../../utils/check-deactivate';
 import { Observable } from 'rxjs';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCheck, lucideVan, lucideWalletCards } from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-checkout',
-  imports: [CheckoutProductCard],
+  imports: [CheckoutProductCard, NgIcon],
+  providers: [provideIcons({ lucideVan, lucideWalletCards, lucideCheck })],
   templateUrl: './checkout.html',
   styles: ``,
 })

@@ -4,10 +4,13 @@ import { RouterLink } from '@angular/router';
 import { CartService } from '../../services/cart-service';
 import { CartInterface, CartItemI, CartResponseI } from '../../utils/cart-interface';
 import { CurrencyPipe } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowRight, lucideLockKeyhole } from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-cart',
-  imports: [CartProductCard, RouterLink, CurrencyPipe],
+  imports: [CartProductCard, RouterLink, CurrencyPipe, NgIcon],
+  providers: [provideIcons({ lucideArrowRight, lucideLockKeyhole })],
   templateUrl: './cart.html',
   styles: ``,
 })

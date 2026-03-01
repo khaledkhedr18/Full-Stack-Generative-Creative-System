@@ -1,7 +1,7 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter, withInMemoryScrolling, withViewTransitions } from '@angular/router';
-
 import { routes } from './app.routes';
+import { provideHotToastConfig } from '@ngxpert/hot-toast';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,5 +13,25 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'enabled',
       }),
     ),
+    provideHotToastConfig({
+      visibleToasts: 5,
+      stacking: 'vertical',
+      position: 'top-center',
+      dismissible: false,
+      duration: 1500,
+      style: {
+        background: 'rgba(255, 255, 255, 0.1)',
+        backdropFilter: 'blur(10px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(10px) saturate(180%)', // For Safari support
+        border: '1px solid rgba(255, 255, 255, 0.2)',
+        boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.3)',
+        color: '#ffffff',
+        padding: '12px 24px',
+        borderRadius: '16px',
+        fontSize: '15px',
+        fontWeight: '500',
+        maxWidth: '400px',
+      },
+    }),
   ],
 };

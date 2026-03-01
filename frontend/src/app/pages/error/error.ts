@@ -1,16 +1,13 @@
 import { Component } from '@angular/core';
-import { RouterLink } from "@angular/router";
-import { FaIconComponent } from "@fortawesome/angular-fontawesome";
-import { faHouse } from '@fortawesome/free-regular-svg-icons';
-import { faBagShopping } from '@fortawesome/free-solid-svg-icons';
+import { RouterLink } from '@angular/router';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideHandbag, lucideHouse } from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-error',
-  imports: [RouterLink, FaIconComponent],
+  imports: [RouterLink, NgIcon],
+  providers: [provideIcons({ lucideHouse, lucideHandbag })],
   templateUrl: './error.html',
   styles: ``,
 })
-export class Error {
-  faHouse = faHouse;
-  faBagShopping = faBagShopping;
-}
+export class Error {}

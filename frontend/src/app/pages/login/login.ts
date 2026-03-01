@@ -1,8 +1,4 @@
 import { Component, signal } from '@angular/core';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faFacebook } from '@fortawesome/free-brands-svg-icons';
-import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
-import { faLock, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth-service';
@@ -10,10 +6,15 @@ import { UserLoginInterface } from '../../utils/user-interface';
 import { CookieService } from 'ngx-cookie-service';
 import { CartService } from '../../services/cart-service';
 import { WishlistService } from '../../services/wishlist-service';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideEye, lucideEyeOff, lucideLock, lucideMail, lucideSparkles } from '@ng-icons/lucide';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faFacebook } from '@fortawesome/free-brands-svg-icons';
 
 @Component({
   selector: 'app-login',
-  imports: [FontAwesomeModule, RouterLink, ReactiveFormsModule],
+  imports: [FontAwesomeModule, RouterLink, ReactiveFormsModule, NgIcon],
+  providers: [provideIcons({ lucideMail, lucideLock, lucideEye, lucideEyeOff, lucideSparkles })],
   templateUrl: './login.html',
   styles: ``,
 })
@@ -25,12 +26,7 @@ export class Login {
     private cartService: CartService,
     private wishlistService: WishlistService,
   ) {}
-
   faFacebook = faFacebook;
-  faEnvelope = faEnvelope;
-  faLock = faLock;
-  faEye = faEye;
-  faEyeSlash = faEyeSlash;
 
   isPasswordVisible = false;
 

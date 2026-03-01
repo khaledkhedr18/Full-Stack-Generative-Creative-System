@@ -1,10 +1,10 @@
-<div class="flex justify-center items-center p-10 xl:h-full xl:p-0">
+<div class="flex justify-center items-center p-10 xl:p-0 xl:h-full">
   <div class="flex lg:w-5xl">
     <div
-      class="w-1/2 signup-hero rounded-l-2xl md:flex flex-col justify-end p-5 lg:p-12 gap-4 hidden"
+      class="hidden md:flex flex-col justify-end gap-4 p-5 lg:p-12 rounded-l-2xl w-1/2 signup-hero"
     >
       <div class="flex items-center gap-1.5">
-        <div class="bg-primary w-fit p-1.5 rounded-md">
+        <div class="bg-primary p-1.5 rounded-md w-fit">
           <svg width="20" height="20" viewBox="0 0 1.4 1.4" xmlns="http://www.w3.org/2000/svg">
             <path
               fill="white"
@@ -15,15 +15,15 @@
         <h1 class="font-semibold">AI Fashion Studio</h1>
       </div>
       <div>
-        <p class="font-bold text-4xl w-72">Redefining style with artificial intelligence.</p>
+        <p class="w-72 font-bold text-4xl">Redefining style with artificial intelligence.</p>
       </div>
-      <p class="text-text-muted w-80">
+      <p class="w-80 text-text-muted">
         Join thousands of designers and creators generating custom, sustainable fashion pieces in
         seconds.
       </p>
     </div>
     <div
-      class="md:w-1/2 rounded-2xl flex justify-center bg-card p-5 md:py-16 md:rounded-l-none md:rounded-r-2xl"
+      class="flex justify-center bg-card p-5 md:py-16 rounded-2xl md:rounded-r-2xl md:rounded-l-none md:w-1/2"
     >
       <div class="flex flex-col gap-3">
         <div class="flex flex-col gap-1">
@@ -62,9 +62,9 @@
             <span>Facebook</span>
           </button>
         </div>
-        <div class="flex items-center justify-center gap-1.5">
+        <div class="flex justify-center items-center gap-1.5">
           <hr class="hr" />
-          <p class="text-xs text-text-muted">Or sign up with email</p>
+          <p class="text-text-muted text-xs">Or sign up with email</p>
           <hr class="hr" />
         </div>
         <form
@@ -73,14 +73,14 @@
           class="flex flex-col gap-3"
         >
           <div class="flex flex-col gap-1.5">
-            <label for="fName" class="text-xs text-text-muted">First Name</label>
-            <label class="input bg-background border-border w-full focus-within:outline-none">
+            <label for="fName" class="text-text-muted text-xs">First Name</label>
+            <label class="bg-background border-border focus-within:outline-none w-full input">
               <fa-icon [icon]="faUser" class="text-text-muted"></fa-icon>
               <input
                 formControlName="firstName"
                 id="fName"
                 type="text"
-                class="grow text-text-muted"
+                class="text-text-muted grow"
                 placeholder="John"
               />
             </label>
@@ -98,20 +98,20 @@
               registrationForm.get('firstName')?.errors?.['pattern'] &&
               registrationForm.get('firstName')?.touched
             ) {
-              <p class="error-message max-w-xs">
+              <p class="max-w-xs error-message">
                 First name cannot contain spaces. Please remove any spaces or use a hyphen instead.
               </p>
             }
           </div>
           <div class="flex flex-col gap-1.5">
-            <label for="lName" class="text-xs text-text-muted">Last Name</label>
-            <label class="input bg-background border-border w-full focus-within:outline-none">
+            <label for="lName" class="text-text-muted text-xs">Last Name</label>
+            <label class="bg-background border-border focus-within:outline-none w-full input">
               <fa-icon [icon]="faUser" class="text-text-muted"></fa-icon>
               <input
                 formControlName="lastName"
                 id="lName"
                 type="text"
-                class="grow text-text-muted"
+                class="text-text-muted grow"
                 placeholder="Doe"
               />
             </label>
@@ -129,20 +129,20 @@
               registrationForm.get('lastName')?.errors?.['pattern'] &&
               registrationForm.get('lastName')?.touched
             ) {
-              <p class="error-message max-w-xs">
+              <p class="max-w-xs error-message">
                 Last name cannot contain spaces. Please remove any spaces or use a hyphen instead.
               </p>
             }
           </div>
           <div class="flex flex-col gap-1.5">
-            <label for="email" class="text-xs text-text-muted">Email Address</label>
-            <label class="input bg-background border-border w-full focus-within:outline-none">
+            <label for="email" class="text-text-muted text-xs">Email Address</label>
+            <label class="bg-background border-border focus-within:outline-none w-full input">
               <fa-icon [icon]="faEnvelope" class="text-text-muted"></fa-icon>
               <input
                 formControlName="email"
                 id="email"
                 type="email"
-                class="grow text-text-muted"
+                class="text-text-muted grow"
                 placeholder="john@example.com"
               />
             </label>
@@ -161,25 +161,25 @@
             }
           </div>
           <div class="flex flex-col gap-1.5">
-            <label for="password" class="text-xs text-text-muted">Password</label>
-            <label class="input bg-background border-border w-full focus-within:outline-none">
+            <label for="password" class="text-text-muted text-xs">Password</label>
+            <label class="bg-background border-border focus-within:outline-none w-full input">
               <fa-icon [icon]="faLock" class="text-text-muted"></fa-icon>
               <input
                 formControlName="password"
                 id="password"
                 [type]="isPasswordVisible ? 'text' : 'password'"
-                class="grow text-text-muted"
+                class="text-text-muted grow"
                 placeholder="••••••••"
               />
               <button
                 type="button"
                 (click)="toggleVisibility()"
-                class="cursor-pointer text-text-muted hover:text-border focus:outline-none transition-all"
+                class="hover:text-border focus:outline-none text-text-muted transition-all cursor-pointer"
               >
                 <fa-icon [icon]="isPasswordVisible ? faEyeSlash : faEye"></fa-icon>
               </button>
             </label>
-            <p class="text-xs text-text-muted">Must be at least 8 characters.</p>
+            <p class="text-text-muted text-xs">Must be at least 8 characters.</p>
             @if (
               registrationForm.get('password')?.errors?.['required'] &&
               registrationForm.get('password')?.touched
@@ -189,13 +189,13 @@
               registrationForm.get('password')?.errors?.['pattern'] &&
               registrationForm.get('password')?.touched
             ) {
-              <p class="error-message max-w-xs">
+              <p class="max-w-xs error-message">
                 Your password doesn't meet the security requirements. Please ensure it includes at
                 least one uppercase letter, one number, and one special character (e.g., @, #, $).
               </p>
             }
           </div>
-          <button class="btn-primary disabled:bg-primary/50" [disabled]="loading() ? true : false">
+          <button class="disabled:bg-primary/50 btn-primary" [disabled]="loading() ? true : false">
             @if (loading()) {
               <span class="loading loading-spinner"></span>
             } @else {
@@ -203,9 +203,9 @@
             }
           </button>
         </form>
-        <p class="text-xs text-text-muted self-center">
+        <p class="self-center text-text-muted text-xs">
           Already have an account?
-          <a routerLink="/login" class="text-primary font-semibold">Log in</a>
+          <a routerLink="/login" class="font-semibold text-primary">Log in</a>
         </p>
       </div>
     </div>

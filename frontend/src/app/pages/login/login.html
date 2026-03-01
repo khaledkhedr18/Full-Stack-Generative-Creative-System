@@ -1,27 +1,23 @@
-
-<div class="flex h-full justify-center items-center">
+<div class="flex justify-center items-center h-full">
   <div class="flex">
     <div
-      class="hidden md:block bg-[url('/images/material.png')] bg-center bg-cover w-3xs rounded-l-2xl"
+      class="hidden md:block bg-[url('/images/material.png')] bg-cover bg-center rounded-l-2xl w-3xs"
     >
       <div
-        class="h-full flex flex-col p-5 relative bg-linear-to-t from-background via-background/60 to-transparent rounded-l-2xl"
+        class="relative flex flex-col bg-linear-to-t from-background via-background/60 to-transparent p-5 rounded-l-2xl h-full"
       >
         <div class="flex items-center gap-2">
-          <div class="bg-primary w-fit p-1.5 rounded-md">
-            <svg width="20" height="20" viewBox="0 0 1.4 1.4" xmlns="http://www.w3.org/2000/svg">
-              <path
-                fill="white"
-                d="M0.667 0.317c0.007 0 0.011 -0.004 0.012 -0.011 0.018 -0.098 0.017 -0.1 0.119 -0.12 0.007 -0.001 0.011 -0.005 0.011 -0.012 0 -0.007 -0.004 -0.011 -0.011 -0.012 -0.101 -0.021 -0.098 -0.023 -0.119 -0.12 -0.002 -0.006 -0.005 -0.011 -0.012 -0.011s-0.011 0.004 -0.012 0.011c-0.021 0.097 -0.017 0.099 -0.119 0.12 -0.006 0.001 -0.011 0.005 -0.011 0.012 0 0.007 0.005 0.011 0.011 0.012 0.102 0.021 0.101 0.022 0.119 0.12 0.002 0.006 0.005 0.011 0.012 0.011M0.384 0.72c0.011 0 0.019 -0.007 0.02 -0.018 0.021 -0.156 0.026 -0.156 0.188 -0.188 0.011 -0.002 0.018 -0.009 0.018 -0.02 0 -0.011 -0.008 -0.018 -0.018 -0.02 -0.162 -0.022 -0.168 -0.028 -0.188 -0.187 -0.001 -0.011 -0.009 -0.018 -0.02 -0.018 -0.011 0 -0.018 0.008 -0.019 0.019 -0.019 0.157 -0.028 0.156 -0.188 0.186 -0.011 0.002 -0.018 0.009 -0.018 0.02 0 0.012 0.008 0.018 0.021 0.02 0.159 0.026 0.166 0.03 0.186 0.186 0.001 0.012 0.009 0.019 0.019 0.019m0.397 0.649c0.015 0 0.026 -0.011 0.029 -0.027 0.042 -0.321 0.087 -0.37 0.404 -0.405 0.016 -0.002 0.028 -0.014 0.028 -0.029s-0.011 -0.027 -0.028 -0.029c-0.318 -0.035 -0.363 -0.084 -0.404 -0.405 -0.003 -0.016 -0.014 -0.026 -0.029 -0.026s-0.026 0.011 -0.029 0.026c-0.042 0.321 -0.087 0.37 -0.404 0.405 -0.017 0.002 -0.028 0.014 -0.028 0.029 0 0.015 0.011 0.028 0.028 0.029 0.316 0.042 0.36 0.084 0.404 0.405 0.002 0.016 0.013 0.027 0.029 0.027"
-              />
-            </svg>
+          <div class="bg-primary p-1.5 rounded-md w-fit">
+            <span class="flex justify-center items-center">
+              <ng-icon size="20" name="lucideSparkles"></ng-icon>
+            </span>
           </div>
           <h1 class="font-bold">AI Fashion Studio</h1>
         </div>
         <div class="flex flex-col gap-2.5 my-auto">
-          <div class="text-3xl font-bold">
+          <div class="font-bold text-3xl">
             <p class="w-60">Welcome back to</p>
-            <p class="text-transparent bg-clip-text bg-linear-to-r from-primary to-cyan-400">
+            <p class="bg-clip-text bg-linear-to-r from-primary to-cyan-400 text-transparent">
               your studio.
             </p>
           </div>
@@ -30,12 +26,12 @@
           </p>
         </div>
         <div
-          class="left-0 right-0 top-0 bottom-0 absolute flex flex-col bg-primary/20 mix-blend-overlay rounded-bl-2xl"
+          class="top-0 right-0 bottom-0 left-0 absolute flex flex-col bg-primary/20 rounded-bl-2xl mix-blend-overlay"
         ></div>
       </div>
     </div>
     <div
-      class="flex bg-card p-5 rounded-2xl md:rounded-r-2xl md:rounded-l-none md:w-md md:justify-center md:py-14 lg:w-xl"
+      class="flex md:justify-center bg-card p-5 md:py-14 rounded-2xl md:rounded-r-2xl md:rounded-l-none md:w-md lg:w-xl"
     >
       <div class="flex flex-col gap-6">
         <div class="flex flex-col gap-1.5">
@@ -74,42 +70,52 @@
             <span>Facebook</span>
           </button>
         </div>
-        <div class="flex items-center justify-center gap-1.5">
+        <div class="flex justify-center items-center gap-1.5">
           <hr class="hr" />
-          <p class="text-xs text-text-muted">OR LOG IN WITH EMAIL</p>
+          <p class="text-text-muted text-xs">OR LOG IN WITH EMAIL</p>
           <hr class="hr" />
         </div>
         <form [formGroup]="loginForm" (ngSubmit)="handleSubmit()" class="flex flex-col gap-5">
           <div class="flex flex-col gap-1.5">
-            <label for="email" class="text-xs text-text-muted">Email Address</label>
-            <label class="input bg-background border-border w-full focus-within:outline-none">
-              <fa-icon [icon]="faEnvelope" class="text-text-muted"></fa-icon>
+            <label for="email" class="text-text-muted text-xs">Email Address</label>
+            <label class="bg-background border-border focus-within:outline-none w-full input">
+              <span class="flex justify-center items-center text-text-muted">
+                <ng-icon size="14" name="lucideMail"></ng-icon>
+              </span>
               <input
                 formControlName="email"
                 id="email"
                 type="email"
-                class="grow text-text-muted"
+                class="text-text-muted grow"
                 placeholder="john@example.com"
               />
             </label>
           </div>
           <div class="flex flex-col gap-1.5">
-            <label for="password" class="text-xs text-text-muted">Password</label>
-            <label class="input bg-background border-border w-full focus-within:outline-none">
-              <fa-icon [icon]="faLock" class="text-text-muted"></fa-icon>
+            <label for="password" class="text-text-muted text-xs">Password</label>
+            <label class="bg-background border-border focus-within:outline-none w-full input">
+              <span class="flex justify-center items-center text-text-muted">
+                <ng-icon size="14" name="lucideLock"></ng-icon>
+              </span>
               <input
                 formControlName="password"
                 id="password"
                 [type]="isPasswordVisible ? 'text' : 'password'"
-                class="grow text-text-muted"
+                class="text-text-muted grow"
                 placeholder="••••••••"
               />
               <button
                 type="button"
                 (click)="toggleVisibility()"
-                class="cursor-pointer text-text-muted hover:text-border focus:outline-none transition-all"
+                class="hover:text-border focus:outline-none text-text-muted transition-all cursor-pointer"
               >
-                <fa-icon [icon]="isPasswordVisible ? faEyeSlash : faEye"></fa-icon>
+                <span class="flex justify-center items-center">
+                  @if (isPasswordVisible) {
+                    <ng-icon size="16" name="lucideEyeOff"></ng-icon>
+                  } @else {
+                    <ng-icon size="16" name="lucideEye"></ng-icon>
+                  }
+                </span>
               </button>
             </label>
             <div class="flex justify-end">
@@ -118,7 +124,7 @@
           </div>
           <div class="flex flex-col items-center gap-2">
             <button
-              class="btn-primary disabled:bg-primary/50"
+              class="disabled:bg-primary/50 btn-primary"
               [disabled]="loading() ? true : false"
             >
               @if (loading()) {
@@ -132,7 +138,7 @@
             }
           </div>
         </form>
-        <p class="text-xs text-text-muted self-center">
+        <p class="self-center text-text-muted text-xs">
           Don't have an account? <a routerLink="/signup" class="text-primary">Sign up for free</a>
         </p>
       </div>
