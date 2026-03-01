@@ -23,6 +23,10 @@ interface Config {
   stripeSecretKey: string;
   stripeWebhookSecret: string;
   clientUrl: string;
+  huggingfaceApiToken: string;
+  customDesignFee: number;
+  primaryModel: string;
+  fallbackModels: string[];
 }
 
 const config: Config = {
@@ -46,6 +50,10 @@ const config: Config = {
   stripeSecretKey: process.env.STRIPE_SECRET_KEY || "",
   stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET || "",
   clientUrl: process.env.CLIENT_URL || "http://localhost:5173",
+  huggingfaceApiToken: process.env.HUGGINGFACE_API_TOKEN || "",
+  customDesignFee: parseFloat(process.env.CUSTOM_DESIGN_FEE || "4.99"),
+  primaryModel: process.env.PRIMARY_MODEL || "",
+  fallbackModels: JSON.parse(process.env.FALLBACK_MODELS || "[]"),
 };
 
 const requiredVars = ["MONGO_URI", "JWT_SECRET"];

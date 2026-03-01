@@ -6,6 +6,8 @@ export interface ICartItem {
   size: string;
   quantity: number;
   price: number;
+  customDesignId?: mongoose.Types.ObjectId;
+  customDesignFee?: number;
 }
 
 export interface ICart extends Document {
@@ -42,6 +44,15 @@ const cartItemSchema = new Schema<ICartItem>(
       required: [true, "Price is required"],
       min: [0, "Price cannot be negative"],
     },
+    customDesignId: {
+      type: Schema.Types.ObjectId,
+      ref: "CustomDesign",
+    },
+    customDesignFee: {
+      type: Number,
+      default: 0,
+      min: [0, "Custom design fee cannot be negative"],
+    },
   },
   { _id: false },
 );
@@ -77,7 +88,8 @@ const cartSchema = new Schema<ICart>(
 cartSchema.pre("save", function () {
   this.totalItems = this.items.reduce((sum, item) => sum + item.quantity, 0);
   this.totalPrice = this.items.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) =>
+      sum + item.price * item.quantity + (item.customDesignFee || 0),
     0,
   );
 });

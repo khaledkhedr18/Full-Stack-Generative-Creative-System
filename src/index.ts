@@ -21,6 +21,7 @@ import paymentRoutes from "./routes/paymentRoutes.js"; // ← NEW
 import { logger } from "./middleware/logger.js";
 import notFound from "./middleware/notFound.js";
 import errorHandler from "./middleware/errorHandler.js";
+import aiDesignRoutes from "./routes/aiDesignRoutes.js";
 
 connectDB();
 
@@ -94,6 +95,7 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use("/api/ai", aiDesignRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

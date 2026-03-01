@@ -7,13 +7,28 @@ export const createOrderRules = [
     .isObject()
     .withMessage("Shipping address must be an object"),
 
-  body("shippingAddress.fullName")
+  body("shippingAddress.firstName")
     .notEmpty()
-    .withMessage("Full name is required")
+    .withMessage("First name is required")
     .isString()
-    .withMessage("Full name must be a string")
-    .isLength({ max: 100 })
-    .withMessage("Full name cannot exceed 100 characters"),
+    .withMessage("First name must be a string")
+    .isLength({ max: 50 })
+    .withMessage("First name cannot exceed 50 characters"),
+
+  body("shippingAddress.lastName")
+    .notEmpty()
+    .withMessage("Last name is required")
+    .isString()
+    .withMessage("Last name must be a string")
+    .isLength({ max: 50 })
+    .withMessage("Last name cannot exceed 50 characters"),
+
+  body("shippingAddress.email")
+    .notEmpty()
+    .withMessage("Email is required")
+    .isEmail()
+    .withMessage("Email must be a valid email address")
+    .normalizeEmail(),
 
   body("shippingAddress.address")
     .notEmpty()
@@ -38,14 +53,6 @@ export const createOrderRules = [
     .withMessage("Postal code must be a string")
     .isLength({ max: 20 })
     .withMessage("Postal code cannot exceed 20 characters"),
-
-  body("shippingAddress.country")
-    .notEmpty()
-    .withMessage("Country is required")
-    .isString()
-    .withMessage("Country must be a string")
-    .isLength({ max: 100 })
-    .withMessage("Country cannot exceed 100 characters"),
 
   body("shippingAddress.phone")
     .notEmpty()

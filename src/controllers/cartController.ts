@@ -4,6 +4,8 @@ import Product from "../models/Product.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import AppError from "../utils/AppError.js";
 import { AuthRequest } from "../middleware/auth.js";
+import CustomDesign from "../models/CustomDesign.js";
+import config from "../config/env.js";
 
 /**
  * @desc Get the current user's cart
@@ -38,7 +40,13 @@ export const addToCart = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const authReq = req as AuthRequest;
     const userId = authReq.user?.userId;
-    const { productId, variantId, size, quantity = 1 } = req.body;
+    const {
+      productId,
+      variantId,
+      size,
+      quantity = 1,
+      customDesignId,
+    } = req.body;
 
     const product = await Product.findById(productId);
     if (!product) {
@@ -71,6 +79,31 @@ export const addToCart = asyncHandler(
       );
     }
 
+    let customDesignFee = 0;
+    let customDesignRef = undefined;
+
+    if (customDesignId) {
+      const design = await CustomDesign.findOne({
+        _id: customDesignId,
+        user: userId,
+        product: productId,
+        variantId: variantId,
+        status: "completed",
+      });
+
+      if (!design) {
+        return next(
+          new AppError(
+            "Custom design not found, does not match this product/variant, or is not completed yet",
+            404,
+          ),
+        );
+      }
+
+      customDesignFee = config.customDesignFee;
+      customDesignRef = design._id;
+    }
+
     let cart = await Cart.findOne({ user: userId });
 
     if (!cart) {
@@ -81,7 +114,9 @@ export const addToCart = asyncHandler(
       (item) =>
         item.product.toString() === productId &&
         item.variantId === variantId &&
-        item.size === size,
+        item.size === size &&
+        (item.customDesignId?.toString() || null) ===
+          (customDesignRef?.toString() || null),
     );
 
     if (existingIndex > -1) {
@@ -96,6 +131,11 @@ export const addToCart = asyncHandler(
       }
       cart.items[existingIndex].quantity = newQty;
       cart.items[existingIndex].price = sizeEntry.price;
+
+      if (customDesignRef) {
+        cart.items[existingIndex].customDesignId = customDesignRef;
+        cart.items[existingIndex].customDesignFee = customDesignFee;
+      }
     } else {
       cart.items.push({
         product: product._id as any,
@@ -103,6 +143,8 @@ export const addToCart = asyncHandler(
         size,
         quantity,
         price: sizeEntry.price,
+        customDesignId: customDesignRef,
+        customDesignFee,
       });
     }
 
@@ -115,7 +157,9 @@ export const addToCart = asyncHandler(
 
     res.status(200).json({
       success: true,
-      message: "Item added to cart",
+      message: customDesignId
+        ? "Custom design added to cart"
+        : "Item added to cart",
       data: cart,
     });
   },
@@ -154,22 +198,39 @@ export const updateCartItem = asyncHandler(
     }
 
     const variant = product.variants.find((v) => v.variantId === variantId);
-    if (variant) {
-      const sizeEntry = variant.sizes.find((s) => s.size === size);
-      if (sizeEntry && quantity > sizeEntry.stock) {
-        return next(
-          new AppError(
-            `Insufficient stock. Only ${sizeEntry.stock} available`,
-            400,
-          ),
-        );
-      }
+    if (!variant) {
+      return next(
+        new AppError(
+          `Variant "${variantId}" no longer exists on this product`,
+          404,
+        ),
+      );
+    }
+
+    const sizeEntry = variant.sizes.find((s) => s.size === size);
+    if (!sizeEntry) {
+      return next(
+        new AppError(
+          `Size "${size}" no longer available for variant "${variantId}"`,
+          404,
+        ),
+      );
+    }
+
+    if (quantity > sizeEntry.stock) {
+      return next(
+        new AppError(
+          `Insufficient stock. Only ${sizeEntry.stock} available`,
+          400,
+        ),
+      );
     }
 
     if (quantity <= 0) {
       cart.items.splice(itemIndex, 1);
     } else {
       cart.items[itemIndex].quantity = quantity;
+      cart.items[itemIndex].price = sizeEntry.price;
     }
 
     await cart.save();

@@ -23,6 +23,11 @@ export const addToCartRules = [
     .optional()
     .isInt({ min: 1 })
     .withMessage("Quantity must be a positive integer"),
+
+  body("customDesignId")
+    .optional()
+    .isMongoId()
+    .withMessage("Custom Design ID must be a valid MongoDB ObjectId"),
 ];
 
 export const updateCartItemRules = [

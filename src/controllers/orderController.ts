@@ -73,11 +73,14 @@ export const createOrder = asyncHandler(
         size: cartItem.size,
         quantity: cartItem.quantity,
         price: sizeEntry.price,
+        customDesignId: cartItem.customDesignId,
+        customDesignFee: cartItem.customDesignFee,
       });
     }
 
     const itemsTotal = orderItems.reduce(
-      (sum, item) => sum + item.price * item.quantity,
+      (sum, item) =>
+        sum + (item.price + (item.customDesignFee || 0)) * item.quantity,
       0,
     );
     const shippingCost = req.body.shippingCost || 0;
@@ -128,7 +131,7 @@ export const createOrder = asyncHandler(
 
     await order.populate(
       "items.product",
-      "name slug basePrice currency brand category",
+      "name slug basePrice currency brand category variants",
     );
 
     res.status(201).json({

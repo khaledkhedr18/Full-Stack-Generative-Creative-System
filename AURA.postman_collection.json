@@ -50,6 +50,11 @@
       "key": "sessionId",
       "value": "",
       "type": "string"
+    },
+    {
+      "key": "designId",
+      "value": "",
+      "type": "string"
     }
   ],
   "item": [
@@ -1235,7 +1240,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"shippingAddress\": {\n    \"fullName\": \"Khaled Khedr\",\n    \"address\": \"123 Main Street, Apt 4B\",\n    \"city\": \"Cairo\",\n    \"postalCode\": \"11511\",\n    \"country\": \"Egypt\",\n    \"phone\": \"+201234567890\"\n  },\n  \"payment\": {\n    \"method\": \"credit_card\",\n    \"transactionId\": \"txn_abc123\"\n  },\n  \"shippingCost\": 5.99,\n  \"tax\": 2.50,\n  \"notes\": \"Please leave at the front door\"\n}",
+              "raw": "{\n  \"shippingAddress\": {\n    \"firstName\": \"Khaled\",\n    \"lastName\": \"Khedr\",\n    \"email\": \"khaled@example.com\",\n    \"address\": \"123 Main Street, Apt 4B\",\n    \"city\": \"Cairo\",\n    \"postalCode\": \"11511\",\n    \"phone\": \"+201234567890\"\n  },\n  \"payment\": {\n    \"method\": \"credit_card\",\n    \"transactionId\": \"txn_abc123\"\n  },\n  \"shippingCost\": 5.99,\n  \"tax\": 2.50,\n  \"notes\": \"Please leave at the front door\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1247,7 +1252,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "orders"]
             },
-            "description": "Create a new order from the user's cart. The cart must contain at least one item. Stock is validated and decremented, and the cart is cleared upon success.\n\n**Auth:** Bearer token required.\n\n**Body fields:**\n- `shippingAddress` (required) – fullName, address, city, postalCode, country, phone\n- `payment` (required) – method (credit_card | debit_card | paypal | cash_on_delivery), transactionId (optional)\n- `shippingCost` (optional, default: 0)\n- `tax` (optional, default: 0)\n- `notes` (optional, max 500 chars)"
+            "description": "Create a new order from the user's cart. The cart must contain at least one item. Stock is validated and decremented, and the cart is cleared upon success.\n\n**Auth:** Bearer token required.\n\n**Body fields:**\n- `shippingAddress` (required) – firstName, lastName, email, address, city, postalCode, phone\n- `payment` (required) – method (credit_card | debit_card | paypal | cash_on_delivery), transactionId (optional)\n- `shippingCost` (optional, default: 0)\n- `tax` (optional, default: 0)\n- `notes` (optional, max 500 chars)"
           },
           "response": []
         },
@@ -1268,7 +1273,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"shippingAddress\": {\n    \"fullName\": \"Khaled Khedr\",\n    \"address\": \"456 Elm Street\",\n    \"city\": \"Alexandria\",\n    \"postalCode\": \"21500\",\n    \"country\": \"Egypt\",\n    \"phone\": \"+201098765432\"\n  },\n  \"payment\": {\n    \"method\": \"cash_on_delivery\"\n  }\n}",
+              "raw": "{\n  \"shippingAddress\": {\n    \"firstName\": \"Khaled\",\n    \"lastName\": \"Khedr\",\n    \"email\": \"khaled@example.com\",\n    \"address\": \"456 Elm Street\",\n    \"city\": \"Alexandria\",\n    \"postalCode\": \"21500\",\n    \"phone\": \"+201098765432\"\n  },\n  \"payment\": {\n    \"method\": \"cash_on_delivery\"\n  }\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1423,7 +1428,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"shippingAddress\": {\n    \"street\": \"123 Main St\",\n    \"city\": \"Cairo\",\n    \"state\": \"Cairo\",\n    \"zip\": \"11511\",\n    \"country\": \"EG\"\n  },\n  \"notes\": \"Please deliver before 5 PM\"\n}",
+              "raw": "{\n  \"shippingAddress\": {\n    \"firstName\": \"Khaled\",\n    \"lastName\": \"Khedr\",\n    \"email\": \"khaled@example.com\",\n    \"street\": \"123 Main St\",\n    \"city\": \"Cairo\",\n    \"state\": \"Cairo\",\n    \"zip\": \"11511\"\n  },\n  \"notes\": \"Please deliver before 5 PM\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1435,7 +1440,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "payments", "create-checkout-session"]
             },
-            "description": "Create a Stripe Checkout Session from the authenticated user's cart. Returns a session ID and redirect URL.\n\n**Auth:** Bearer token required.\n\n**Body fields:**\n- `shippingAddress` (object, required) – street, city, state, zip, country\n- `notes` (string, optional) – order notes"
+            "description": "Create a Stripe Checkout Session from the authenticated user's cart. Returns a session ID and redirect URL.\n\n**Auth:** Bearer token required.\n\n**Body fields:**\n- `shippingAddress` (object, required) – firstName, lastName, email, street, city, state, zip\n- `notes` (string, optional) – order notes"
           },
           "response": []
         },
@@ -1489,6 +1494,139 @@
               "path": ["api", "payments", "verify-session", "{{sessionId}}"]
             },
             "description": "Verify a Stripe checkout session status. Used by the frontend confirmation page to check payment status and retrieve the associated order.\n\n**Auth:** Bearer token required.\n\n**Path params:**\n- `sessionId` – Stripe checkout session ID (e.g. cs_test_...)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "AI Design",
+      "description": "AI-powered custom design generation. All endpoints require authentication.",
+      "item": [
+        {
+          "name": "Check AI Model Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ai/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "ai", "status"]
+            },
+            "description": "Check if the AI model is loaded and ready to accept requests. Returns load status and estimated wait time if warming up.\n\n**Auth:** Bearer token required."
+          },
+          "response": []
+        },
+        {
+          "name": "Generate Design",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data.designId) {",
+                  "    pm.collectionVariables.set('designId', res.data.designId);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"variantId\": \"var_001\",\n  \"prompt\": \"A fire-breathing dragon in Japanese ink style\",\n  \"strength\": 0.55\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/ai/generate-design",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "ai", "generate-design"]
+            },
+            "description": "Generate a custom AI design on a product image. Creates a design record and calls the AI model.\n\n**Auth:** Bearer token required.\n\n**Body fields:**\n- `productId` (required, MongoDB ObjectId)\n- `variantId` (required, string)\n- `prompt` (required, string, 3-500 chars)\n- `strength` (optional, float 0.2-0.8, default: 0.55)"
+          },
+          "response": []
+        },
+        {
+          "name": "Retry Failed Design",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ai/designs/{{designId}}/retry",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "ai", "designs", "{{designId}}", "retry"]
+            },
+            "description": "Retry a failed design generation. Only designs with status 'failed' can be retried.\n\n**Auth:** Bearer token required.\n\n**Path params:**\n- `id` - valid MongoDB ObjectId of the failed design"
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Designs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ai/my-designs",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "ai", "my-designs"]
+            },
+            "description": "Get all custom designs created by the current user, sorted by newest first.\n\n**Auth:** Bearer token required."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Design by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/ai/designs/{{designId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "ai", "designs", "{{designId}}"]
+            },
+            "description": "Get a single custom design by its ID.\n\n**Auth:** Bearer token required.\n\n**Path params:**\n- `id` - valid MongoDB ObjectId"
           },
           "response": []
         }

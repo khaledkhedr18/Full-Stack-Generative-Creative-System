@@ -7,14 +7,17 @@ export interface IOrderItem {
   size: string;
   quantity: number;
   price: number;
+  customDesignId?: mongoose.Types.ObjectId;
+  customDesignFee?: number;
 }
 
 export interface IShippingAddress {
-  fullName: string;
+  firstName: string;
+  lastName: string;
+  email: string;
   address: string;
   city: string;
   postalCode: string;
-  country: string;
   phone: string;
 }
 
@@ -75,16 +78,36 @@ const orderItemSchema = new Schema<IOrderItem>(
       required: [true, "Price is required"],
       min: [0, "Price cannot be negative"],
     },
+    customDesignId: {
+      type: Schema.Types.ObjectId,
+      ref: "CustomDesign",
+    },
+    customDesignFee: {
+      type: Number,
+      default: 0,
+      min: [0, "Custom design fee cannot be negative"],
+    },
   },
   { _id: false },
 );
 
 const shippingAddressSchema = new Schema<IShippingAddress>(
   {
-    fullName: {
+    firstName: {
       type: String,
-      required: [true, "Full name is required"],
+      required: [true, "First name is required"],
       trim: true,
+    },
+    lastName: {
+      type: String,
+      required: [true, "Last name is required"],
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+      trim: true,
+      lowercase: true,
     },
     address: {
       type: String,
@@ -101,11 +124,6 @@ const shippingAddressSchema = new Schema<IShippingAddress>(
       required: [true, "Postal code is required"],
       trim: true,
     },
-    country: {
-      type: String,
-      required: [true, "Country is required"],
-      trim: true,
-    },
     phone: {
       type: String,
       required: [true, "Phone number is required"],
@@ -119,10 +137,7 @@ const paymentSchema = new Schema<IPayment>(
   {
     method: {
       type: String,
-      enum: [
-        "cash_on_delivery",
-        "stripe",
-      ],
+      enum: ["cash_on_delivery", "stripe"],
       required: [true, "Payment method is required"],
     },
     status: {
