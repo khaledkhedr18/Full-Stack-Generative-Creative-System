@@ -14,7 +14,7 @@ export interface GenerateDesignRequest {
   productId: string;
   variantId: string;
   prompt: string;
-  strength: number;
+  strength?: number;
 }
 
 export interface DesignProduct {
@@ -49,6 +49,32 @@ export interface RetryDesignResponse {
     isOperational: boolean;
   };
   stack?: string;
+}
+
+// My Designs (full design document from GET /api/ai/my-designs)
+export interface MyDesign {
+  _id: string;
+  user: string;
+  product: any;
+  variantId: string;
+  prompt: string;
+  originalImageUrl: string;
+  generatedImageUrl: string | null;
+  fee: number;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MyDesignsResponse {
+  success: boolean;
+  count: number;
+  data: MyDesign[];
+}
+
+export interface DesignByIdResponse {
+  success: boolean;
+  data: MyDesign;
 }
 
 // Art Styles

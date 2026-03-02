@@ -79,7 +79,16 @@
         <div class="flex flex-col gap-1">
           <div class="flex lg:flex-row md:flex-col justify-between font-bold">
             <h1>{{ product().name }}</h1>
-            <h2>${{ product().basePrice }}</h2>
+            <div class="flex flex-col items-end">
+              <h2>${{ displayPrice() }}</h2>
+              @if (totalDesignFee() > 0) {
+                <span class="text-primary text-xs font-normal">
+                  Includes ${{ totalDesignFee() }} design fee ({{ designCount() }} side{{
+                    designCount() > 1 ? 's' : ''
+                  }})
+                </span>
+              }
+            </div>
           </div>
           <span class="text-text-muted text-xs">{{ product().description }}</span>
         </div>
@@ -115,7 +124,7 @@
               </svg>
             }
           </div>
-          <p class="self-end text-text-muted text-xs">({{ product().ratings?.count }} reviews)</p>
+          <p class="self-end text-text-muted text-xs">({{ product().ratings.count }} reviews)</p>
         </div>
       </div>
     }

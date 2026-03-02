@@ -15,5 +15,10 @@
       <span>{{ item.quantity }}</span>
     </p>
   </div>
-  <p class="font-medium text-white text-sm">{{ item.price | currency }}</p>
+  <div class="flex flex-col items-end">
+    <p class="font-medium text-white text-sm">{{ getItemTotalPrice() | currency }}</p>
+    @if (item.customDesignFee && item.customDesignFee > 0) {
+      <span class="text-primary text-[10px]">+{{ item.customDesignFee | currency }} design</span>
+    }
+  </div>
 </div>

@@ -37,10 +37,7 @@ export class OrdersService {
     });
   }
 
-  makeOrder(orderRequest: {
-    shippingAddress: ShippingAddressI;
-    payment: { method: PaymentInterface };
-  }) {
+  makeOrder(orderRequest: { shippingAddress: ShippingAddressI; payment: PaymentInterface }) {
     return this.http.post(this.baseURL, orderRequest, { headers: this.getAuthHeaders() });
   }
 }

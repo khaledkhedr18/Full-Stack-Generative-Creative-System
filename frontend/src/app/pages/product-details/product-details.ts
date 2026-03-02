@@ -239,6 +239,66 @@ export class ProductDetails {
   designError = signal<string | null>(null);
   designView = signal<string>('front');
 
+  // Computed price: base price + total design fees for current variant
+  displayPrice = computed(() => {
+    const base = this.product()?.basePrice ?? 0;
+    const variant = this.selectedVariant();
+    if (!variant) return base;
+
+    const designs = this.generatedDesigns();
+    let totalFee = 0;
+
+    const frontKey = `${variant.variantId}_front`;
+    const backKey = `${variant.variantId}_back`;
+
+    if (designs[frontKey] && designs[frontKey].status === 'completed') {
+      totalFee += designs[frontKey].fee;
+    }
+    if (designs[backKey] && designs[backKey].status === 'completed') {
+      totalFee += designs[backKey].fee;
+    }
+
+    return base + totalFee;
+  });
+
+  // Total design fee for current variant (for display)
+  totalDesignFee = computed(() => {
+    const variant = this.selectedVariant();
+    if (!variant) return 0;
+
+    const designs = this.generatedDesigns();
+    let totalFee = 0;
+
+    const frontKey = `${variant.variantId}_front`;
+    const backKey = `${variant.variantId}_back`;
+
+    if (designs[frontKey] && designs[frontKey].status === 'completed') {
+      totalFee += designs[frontKey].fee;
+    }
+    if (designs[backKey] && designs[backKey].status === 'completed') {
+      totalFee += designs[backKey].fee;
+    }
+
+    return totalFee;
+  });
+
+  // Number of completed designs for current variant
+  designCount = computed(() => {
+    const variant = this.selectedVariant();
+    if (!variant) return 0;
+
+    const designs = this.generatedDesigns();
+    let count = 0;
+
+    const frontKey = `${variant.variantId}_front`;
+    const backKey = `${variant.variantId}_back`;
+
+    if (designs[frontKey] && designs[frontKey].status === 'completed') count++;
+    if (designs[backKey] && designs[backKey].status === 'completed') count++;
+
+    return count;
+  });
+
   // AI Design Methods
   selectArtStyle(style: ArtStyle) {
     this.selectedArtStyle.set(style);

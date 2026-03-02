@@ -22,6 +22,7 @@ export interface CartItemI {
   price: number;
   customDesignIds?: string[];
   customDesignFee?: number;
+  _resolvedDesignImages?: string[]; // populated on frontend from AI designs
 }
 
 export interface AddToCartI {

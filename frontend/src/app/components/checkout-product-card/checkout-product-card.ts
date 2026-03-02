@@ -32,6 +32,11 @@ export class CheckoutProductCard {
   }
 
   getVariantImage() {
+    // If there are resolved custom design images, show the first one
+    const resolvedImages = this.item._resolvedDesignImages;
+    if (resolvedImages && resolvedImages.length > 0) {
+      return resolvedImages[0];
+    }
     const variant = this.getVariant();
     return variant ? variant.images[0].url : '';
   }
@@ -39,5 +44,13 @@ export class CheckoutProductCard {
   getVariantColor() {
     const variant = this.getVariant();
     return variant ? variant.color.name : '';
+  }
+
+  hasCustomDesign(): boolean {
+    return !!(this.item.customDesignIds && this.item.customDesignIds.length > 0);
+  }
+
+  getItemTotalPrice(): number {
+    return this.item.price + (this.item.customDesignFee || 0);
   }
 }

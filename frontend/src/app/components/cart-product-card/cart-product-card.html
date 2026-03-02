@@ -10,6 +10,7 @@
       />
       <div
         class="top-2 left-2 absolute flex items-center gap-1 bg-black/60 backdrop-blur-sm px-1.5 py-0.5 border border-white/10 rounded"
+        [style.display]="hasCustomDesign() ? 'flex' : 'none'"
       >
         <span class="text-[10px] text-primary">
           <svg
@@ -39,10 +40,20 @@
       <div>
         <div class="flex justify-between items-start">
           <h3 class="font-bold text-white text-lg">{{ item().product.name }}</h3>
-          <p class="font-bold text-white text-lg">{{ item().price | currency }}</p>
+          <div class="flex flex-col items-end">
+            <p class="font-bold text-white text-lg">{{ getItemTotalPrice() | currency }}</p>
+            @if (item().customDesignFee && item().customDesignFee! > 0) {
+              <span class="text-primary text-xs"
+                >+{{ item().customDesignFee | currency }} design fee</span
+              >
+            }
+          </div>
         </div>
-        <p class="mt-1 text-slate-400 text-sm italic">
-          Generated Prompt: "Neon lights, rain, dystopian city vibes"
+        <p
+          class="mt-1 text-slate-400 text-sm italic"
+          [style.display]="hasCustomDesign() ? 'block' : 'none'"
+        >
+          AI Custom Design
         </p>
         <div class="flex flex-wrap gap-4 mt-4 text-sm">
           <div class="flex items-center gap-2">
@@ -109,7 +120,7 @@
         </div>
         <div class="flex gap-4">
           <button
-          (click)="handleRemove()"
+            (click)="handleRemove()"
             class="flex items-center gap-1 text-slate-500 hover:text-red-400 text-sm transition-colors duration-300 cursor-pointer"
           >
             <span class="text-base">

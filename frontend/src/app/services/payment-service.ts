@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import {
   CheckoutResponseI,
-  ShippingAddressI,
+  StripeShippingAddressI,
   VerifySessionResponseI,
 } from '../utils/order-interface';
 
@@ -25,7 +25,7 @@ export class PaymentService {
     });
   }
 
-  checkout(shippingAddress: ShippingAddressI, notes?: string) {
+  checkout(shippingAddress: StripeShippingAddressI, notes?: string) {
     return this.http.post<CheckoutResponseI>(
       `${this.baseURL}/create-checkout-session`,
       { shippingAddress, notes },

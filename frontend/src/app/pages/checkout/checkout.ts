@@ -7,11 +7,13 @@ import { CartService } from '../../services/cart-service';
 import { CartInterface } from '../../utils/cart-interface';
 import { CurrencyPipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ShippingAddressI } from '../../utils/order-interface';
+import { ShippingAddressI, StripeShippingAddressI } from '../../utils/order-interface';
 import { NgxStripeModule } from 'ngx-stripe';
 import { PaymentService } from '../../services/payment-service';
 import { OrdersService } from '../../services/orders-service';
 import { Router } from '@angular/router';
+import { AiService } from '../../services/ai-service';
+import { MyDesign } from '../../utils/ai-interface';
 
 @Component({
   selector: 'app-checkout',
@@ -26,6 +28,7 @@ export class Checkout implements CheckDeactivate, OnInit {
     private paymentService: PaymentService,
     private ordersService: OrdersService,
     private router: Router,
+    private aiService: AiService,
   ) {}
 
   isLoading = signal<boolean>(true);
@@ -79,8 +82,45 @@ export class Checkout implements CheckDeactivate, OnInit {
   ngOnInit(): void {
     this.cartService.getCart().subscribe({
       next: (data) => {
-        this.isLoading.set(false);
-        this.cartData.set(data.data);
+        const cartData = data.data;
+        const hasCustomDesigns = cartData.items.some(
+          (item) => item.customDesignIds && item.customDesignIds.length > 0,
+        );
+
+        if (hasCustomDesigns) {
+          this.aiService.getMyDesigns().subscribe({
+            next: (designsRes) => {
+              const designsMap = new Map<string, MyDesign>();
+              for (const d of designsRes.data) {
+                designsMap.set(d._id, d);
+              }
+
+              cartData.items = cartData.items.map((item) => {
+                if (item.customDesignIds && item.customDesignIds.length > 0) {
+                  const resolvedImages: string[] = [];
+                  for (const designId of item.customDesignIds) {
+                    const design = designsMap.get(designId);
+                    if (design && design.generatedImageUrl) {
+                      resolvedImages.push(design.generatedImageUrl);
+                    }
+                  }
+                  return { ...item, _resolvedDesignImages: resolvedImages };
+                }
+                return item;
+              });
+
+              this.isLoading.set(false);
+              this.cartData.set(cartData);
+            },
+            error: () => {
+              this.isLoading.set(false);
+              this.cartData.set(cartData);
+            },
+          });
+        } else {
+          this.isLoading.set(false);
+          this.cartData.set(cartData);
+        }
       },
       error: (error) => {
         this.isLoading.set(false);
@@ -105,14 +145,14 @@ export class Checkout implements CheckDeactivate, OnInit {
       this.spinner.set(true);
       if (this.checkoutForm.get('paymentMethod')?.value === 'stripe') {
         const formVal = this.checkoutForm.value;
-        const shippingAddress: ShippingAddressI = {
+        const shippingAddress: StripeShippingAddressI = {
           firstName: formVal.fName,
           lastName: formVal.lName,
           email: formVal.email,
-          phone: formVal.phone,
-          address: formVal.address,
+          street: formVal.address,
           city: formVal.city,
-          postalCode: formVal.zip,
+          state: formVal.city,
+          zip: formVal.zip,
         };
         this.paymentService.checkout(shippingAddress).subscribe({
           next: (data) => {

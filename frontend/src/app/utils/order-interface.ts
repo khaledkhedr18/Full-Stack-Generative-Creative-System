@@ -68,6 +68,16 @@ export interface ShippingAddressI {
   postalCode: string;
 }
 
+export interface StripeShippingAddressI {
+  firstName: string;
+  lastName: string;
+  email: string;
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+}
+
 export interface CheckoutResponseI {
   success: boolean;
   message: string;

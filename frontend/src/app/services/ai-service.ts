@@ -4,8 +4,10 @@ import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import {
   AiStatusResponse,
+  DesignByIdResponse,
   GenerateDesignRequest,
   GenerateDesignResponse,
+  MyDesignsResponse,
   RetryDesignResponse,
 } from '../utils/ai-interface';
 
@@ -60,5 +62,23 @@ export class AiService {
         headers: this.getAuthHeaders(),
       },
     );
+  }
+
+  /**
+   * Get all custom designs created by the current user
+   */
+  getMyDesigns(): Observable<MyDesignsResponse> {
+    return this.http.get<MyDesignsResponse>(`${this.BASE_URL}/my-designs`, {
+      headers: this.getAuthHeaders(),
+    });
+  }
+
+  /**
+   * Get a single custom design by ID
+   */
+  getDesignById(designId: string): Observable<DesignByIdResponse> {
+    return this.http.get<DesignByIdResponse>(`${this.BASE_URL}/designs/${designId}`, {
+      headers: this.getAuthHeaders(),
+    });
   }
 }
