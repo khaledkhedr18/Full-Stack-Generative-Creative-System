@@ -7,16 +7,22 @@ import { CartService } from '../../services/cart-service';
 import { CartInterface } from '../../utils/cart-interface';
 import { CurrencyPipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ShippingAddressI } from '../../utils/order-interface';
+import { NgxStripeModule } from 'ngx-stripe';
+import { PaymentService } from '../../services/payment-service';
 
 @Component({
   selector: 'app-checkout',
-  imports: [CheckoutProductCard, NgIcon, CurrencyPipe, ReactiveFormsModule],
+  imports: [CheckoutProductCard, NgIcon, CurrencyPipe, ReactiveFormsModule, NgxStripeModule],
   providers: [provideIcons({ lucideVan, lucideWalletCards, lucideCheck })],
   templateUrl: './checkout.html',
   styles: ``,
 })
 export class Checkout implements CheckDeactivate, OnInit {
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private paymentService: PaymentService,
+  ) {}
 
   isLoading = signal<boolean>(true);
   spinner = signal<boolean>(false);
@@ -79,6 +85,8 @@ export class Checkout implements CheckDeactivate, OnInit {
     });
   }
 
+  sessionURL = signal('');
+
   canDeactivate(): boolean {
     if (this.checkoutForm.dirty) {
       return confirm('You have unsaved changes! Are you sure you want to leave the checkout?');
@@ -88,6 +96,23 @@ export class Checkout implements CheckDeactivate, OnInit {
 
   handlePay() {
     if (this.checkoutForm.valid) {
+      this.spinner.set(true);
+      if (this.checkoutForm.get('paymentMethod')?.value === 'stripe') {
+        const shippingAddress: ShippingAddressI = {
+          ...this.checkoutForm.value,
+        };
+        this.paymentService.checkout(shippingAddress).subscribe({
+          next: (data) => {
+            this.spinner.set(false);
+            this.sessionURL.set(data.data.url);
+            window.location.href = this.sessionURL();
+          },
+          error: (error) => {
+            this.spinner.set(false);
+            console.log(error);
+          },
+        });
+      }
     } else {
       this.checkoutForm.markAllAsTouched();
     }

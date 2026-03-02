@@ -38,10 +38,9 @@ export const routes: Routes = [
     canActivate: [authGuard, checkoutGuard],
     canDeactivate: [unsavedChangesGuard],
   },
-  { path: 'confirmation', component: Confirmation, canActivate: [authGuard, paymentSuccessGuard] },
+  { path: 'order/success', component: Confirmation, canActivate: [authGuard, paymentSuccessGuard] },
   { path: 'orders', component: Orders, canActivate: [authGuard] },
   { path: 'forgetPassword', component: ForgetPassword, canActivate: [guestGuard] },
-  { path: 'resetPassword/:email', component: ResetPassword},
+  { path: 'resetPassword/:email', component: ResetPassword },
   { path: '**', component: Error },
-  
 ];

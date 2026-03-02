@@ -1,13 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { CheckoutResponseI, OrderResponseI, ShippingAddressI } from '../utils/order-interface';
+import { CheckoutResponseI, ShippingAddressI } from '../utils/order-interface';
 
 @Injectable({
   providedIn: 'root',
 })
-export class OrdersService {
-  private readonly baseURL = 'http://localhost:3000/api/orders';
+export class PaymentService {
+  private readonly baseURL = 'http://localhost:3000/api/payments';
 
   constructor(
     private http: HttpClient,
@@ -21,7 +21,11 @@ export class OrdersService {
     });
   }
 
-  getOrders() {
-    return this.http.get<OrderResponseI>(this.baseURL, { headers: this.getAuthHeaders() });
+  checkout(shippingAddress: ShippingAddressI) {
+    return this.http.post<CheckoutResponseI>(
+      `${this.baseURL}/create-checkout-session`,
+      shippingAddress,
+      { headers: this.getAuthHeaders() },
+    );
   }
 }

@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CheckoutProductCard } from '../../components/checkout-product-card/checkout-product-card';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCheck, lucideMapPin } from '@ng-icons/lucide';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-confirmation',
@@ -10,4 +11,12 @@ import { lucideCheck, lucideMapPin } from '@ng-icons/lucide';
   templateUrl: './confirmation.html',
   styles: ``,
 })
-export class Confirmation {}
+export class Confirmation implements OnInit{
+  sessionId = signal("")
+
+  constructor(private route:ActivatedRoute){}
+
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe
+  }
+}

@@ -1,4 +1,4 @@
-import { ProductVariant } from "./product-interface";
+import { ProductVariant } from './product-interface';
 
 export interface OrderResponseI {
   success: boolean;
@@ -38,7 +38,7 @@ export interface OrderProductI {
   name: string;
   category: string;
   brand: string;
-  variants: ProductVariant[]
+  variants: ProductVariant[];
   basePrice: number;
   currency: string;
   id: string;
@@ -56,4 +56,23 @@ export interface AddressInterface {
 export interface PaymentInterface {
   method: string;
   status: string;
+}
+
+export interface ShippingAddressI {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  address: string;
+  city: string;
+  postalCode: string;
+}
+
+export interface CheckoutResponseI {
+  success: boolean;
+  message: string;
+  data: {
+    sessionId: string;
+    url: string;
+  };
 }
