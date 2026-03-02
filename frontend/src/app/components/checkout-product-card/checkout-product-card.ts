@@ -32,10 +32,13 @@ export class CheckoutProductCard {
   }
 
   getVariantImage() {
-    // If there are resolved custom design images, show the first one
-    const resolvedImages = this.item._resolvedDesignImages;
-    if (resolvedImages && resolvedImages.length > 0) {
-      return resolvedImages[0];
+    // If there are populated custom designs, show the first generated image
+    const designs = this.item.customDesignIds;
+    if (designs && designs.length > 0) {
+      const firstCompleted = designs.find((d) => d.status === 'completed' && d.generatedImageUrl);
+      if (firstCompleted) {
+        return firstCompleted.generatedImageUrl!;
+      }
     }
     const variant = this.getVariant();
     return variant ? variant.images[0].url : '';

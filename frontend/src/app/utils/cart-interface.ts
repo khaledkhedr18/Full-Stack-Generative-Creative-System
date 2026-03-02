@@ -14,15 +14,24 @@ export interface CartProductI {
   id: string;
 }
 
+// Populated design object returned by GET /api/cart
+export interface PopulatedDesignI {
+  _id: string;
+  prompt: string;
+  originalImageUrl: string;
+  generatedImageUrl: string | null;
+  fee: number;
+  status: string;
+}
+
 export interface CartItemI {
   product: CartProductI;
   variantId: string;
   size: string;
   quantity: number;
   price: number;
-  customDesignIds?: string[];
+  customDesignIds?: PopulatedDesignI[];
   customDesignFee?: number;
-  _resolvedDesignImages?: string[]; // populated on frontend from AI designs
 }
 
 export interface AddToCartI {

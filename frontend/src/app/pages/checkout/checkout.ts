@@ -12,8 +12,6 @@ import { NgxStripeModule } from 'ngx-stripe';
 import { PaymentService } from '../../services/payment-service';
 import { OrdersService } from '../../services/orders-service';
 import { Router } from '@angular/router';
-import { AiService } from '../../services/ai-service';
-import { MyDesign } from '../../utils/ai-interface';
 
 @Component({
   selector: 'app-checkout',
@@ -28,7 +26,6 @@ export class Checkout implements CheckDeactivate, OnInit {
     private paymentService: PaymentService,
     private ordersService: OrdersService,
     private router: Router,
-    private aiService: AiService,
   ) {}
 
   isLoading = signal<boolean>(true);
@@ -82,45 +79,8 @@ export class Checkout implements CheckDeactivate, OnInit {
   ngOnInit(): void {
     this.cartService.getCart().subscribe({
       next: (data) => {
-        const cartData = data.data;
-        const hasCustomDesigns = cartData.items.some(
-          (item) => item.customDesignIds && item.customDesignIds.length > 0,
-        );
-
-        if (hasCustomDesigns) {
-          this.aiService.getMyDesigns().subscribe({
-            next: (designsRes) => {
-              const designsMap = new Map<string, MyDesign>();
-              for (const d of designsRes.data) {
-                designsMap.set(d._id, d);
-              }
-
-              cartData.items = cartData.items.map((item) => {
-                if (item.customDesignIds && item.customDesignIds.length > 0) {
-                  const resolvedImages: string[] = [];
-                  for (const designId of item.customDesignIds) {
-                    const design = designsMap.get(designId);
-                    if (design && design.generatedImageUrl) {
-                      resolvedImages.push(design.generatedImageUrl);
-                    }
-                  }
-                  return { ...item, _resolvedDesignImages: resolvedImages };
-                }
-                return item;
-              });
-
-              this.isLoading.set(false);
-              this.cartData.set(cartData);
-            },
-            error: () => {
-              this.isLoading.set(false);
-              this.cartData.set(cartData);
-            },
-          });
-        } else {
-          this.isLoading.set(false);
-          this.cartData.set(cartData);
-        }
+        this.cartData.set(data.data);
+        this.isLoading.set(false);
       },
       error: (error) => {
         this.isLoading.set(false);
