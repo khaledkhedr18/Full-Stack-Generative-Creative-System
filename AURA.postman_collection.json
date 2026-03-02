@@ -1,8 +1,8 @@
 {
   "info": {
-    "_postman_id": "express-mongoose-api-collection",
-    "name": "ExpressAndMongoose API",
-    "description": "Full API collection for the Express & Mongoose project. Includes Auth, Users, Products, and Categories endpoints with all parameters, query options, and request bodies.",
+    "_postman_id": "aura-api-collection",
+    "name": "AURA API",
+    "description": "Full API collection for the AURA e-commerce platform. Includes Auth, Users, Products, Categories, Cart, Wishlist, Orders, Payments (Stripe), and AI Design endpoints with all parameters, query options, and request bodies.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -369,13 +369,19 @@
     },
     {
       "name": "Users",
-      "description": "CRUD operations for users.",
+      "description": "CRUD operations for users. All endpoints require admin authentication.",
       "item": [
         {
           "name": "Get All Users",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token (admin only)"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/api/users?page=1&limit=10&sort=-createdAt&fields=firstName,lastName,email&search=",
               "host": ["{{baseUrl}}"],
@@ -408,7 +414,7 @@
                 }
               ]
             },
-            "description": "Get all users with filtering, sorting, field selection, search, and pagination.\n\n**Query parameters:**\n- `page` – page number (default: 1)\n- `limit` – results per page (default: 10)\n- `sort` – sort field(s), prefix `-` for descending\n- `fields` – comma-separated field names to select\n- `search` – regex search across firstName, lastName, email\n- Any model field can be used as a filter (e.g. `role=admin`, `age[gte]=18`)"
+            "description": "Get all users with filtering, sorting, field selection, search, and pagination.\n\n**Auth:** Bearer token required (admin only).\n\n**Query parameters:**\n- `page` – page number (default: 1)\n- `limit` – results per page (default: 10)\n- `sort` – sort field(s), prefix `-` for descending\n- `fields` – comma-separated field names to select\n- `search` – regex search across firstName, lastName, email\n- Any model field can be used as a filter (e.g. `role=admin`, `age[gte]=18`)"
           },
           "response": []
         },
@@ -416,13 +422,19 @@
           "name": "Get User by ID",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token (admin only)"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/api/users/{{userId}}",
               "host": ["{{baseUrl}}"],
               "path": ["api", "users", "{{userId}}"]
             },
-            "description": "Get a single user by their MongoDB ObjectId.\n\n**Path parameters:**\n- `id` – valid MongoDB ObjectId"
+            "description": "Get a single user by their MongoDB ObjectId.\n\n**Auth:** Bearer token required (admin only).\n\n**Path parameters:**\n- `id` – valid MongoDB ObjectId"
           },
           "response": []
         },
@@ -434,6 +446,11 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token (admin only)"
               }
             ],
             "body": {
@@ -450,7 +467,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "users"]
             },
-            "description": "Create a new user.\n\n**Body fields:**\n- `firstName` (required, string, 2-30 chars)\n- `lastName` (required, string, 2-30 chars)\n- `email` (required, valid email)\n- `password` (required, min 8 chars, must include uppercase, lowercase, and a number)\n- `age` (optional, integer, 13-120)\n- `role` (optional, one of: user, admin, moderator)"
+            "description": "Create a new user.\n\n**Auth:** Bearer token required (admin only).\n\n**Body fields:**\n- `firstName` (required, string, 2-30 chars)\n- `lastName` (required, string, 2-30 chars)\n- `email` (required, valid email)\n- `password` (required, min 8 chars, must include uppercase, lowercase, and a number)\n- `age` (optional, integer, 13-120)\n- `role` (optional, one of: user, admin, moderator)"
           },
           "response": []
         },
@@ -462,6 +479,11 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token (admin only)"
               }
             ],
             "body": {
@@ -478,7 +500,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "users", "{{userId}}"]
             },
-            "description": "Update a user by ID (partial update).\n\n**Path parameters:**\n- `id` – valid MongoDB ObjectId\n\n**Body fields (all optional):**\n- `firstName` (string, 2-30 chars)\n- `lastName` (string, 2-30 chars)\n- `email` (valid email)\n- `age` (integer, 13-120)"
+            "description": "Update a user by ID (partial update).\n\n**Auth:** Bearer token required (admin only).\n\n**Path parameters:**\n- `id` – valid MongoDB ObjectId\n\n**Body fields (all optional):**\n- `firstName` (string, 2-30 chars)\n- `lastName` (string, 2-30 chars)\n- `email` (valid email)\n- `age` (integer, 13-120)"
           },
           "response": []
         },
@@ -486,13 +508,19 @@
           "name": "Delete User",
           "request": {
             "method": "DELETE",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token (admin only)"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/api/users/{{userId}}",
               "host": ["{{baseUrl}}"],
               "path": ["api", "users", "{{userId}}"]
             },
-            "description": "Delete a user by ID. Also deletes all products created by the user and removes their reviews from other products.\n\n**Path parameters:**\n- `id` – valid MongoDB ObjectId"
+            "description": "Delete a user by ID. Also deletes all products created by the user and removes their reviews from other products.\n\n**Auth:** Bearer token required (admin only).\n\n**Path parameters:**\n- `id` – valid MongoDB ObjectId"
           },
           "response": []
         }
@@ -995,7 +1023,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "cart"]
             },
-            "description": "Get the current user's cart with populated product details.\n\n**Auth:** Bearer token required."
+            "description": "Get the current user's cart with populated product and custom design details. Each cart item includes populated `product` (name, slug, basePrice, currency, variants) and populated `customDesignIds` (prompt, originalImageUrl, generatedImageUrl, fee, status) when present.\n\n**Auth:** Bearer token required."
           },
           "response": []
         },
@@ -1028,7 +1056,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "cart"]
             },
-            "description": "Add an item to the cart. If the same product+variant+size already exists, the quantity is increased.\n\n**Auth:** Bearer token required.\n\n**Body fields:**\n- `productId` (required, MongoDB ObjectId)\n- `variantId` (required, string – must match a variant on the product)\n- `size` (required, string – must match an available size in the variant)\n- `quantity` (optional, positive integer, default: 1)"
+            "description": "Add an item to the cart. If the same product+variant+size+customDesignIds combination already exists, the quantity is increased. Items with different custom designs are treated as separate cart items.\n\n**Auth:** Bearer token required.\n\n**Body fields:**\n- `productId` (required, MongoDB ObjectId)\n- `variantId` (required, string – must match a variant on the product)\n- `size` (required, string – must match an available size in the variant)\n- `quantity` (optional, positive integer, default: 1)"
           },
           "response": []
         },
@@ -1285,7 +1313,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "orders"]
             },
-            "description": "Create a new order from the user's cart. The cart must contain at least one item. Stock is validated and decremented, and the cart is cleared upon success.\n\n**Auth:** Bearer token required.\n\n**Body fields:**\n- `shippingAddress` (required) – firstName, lastName, email, address, city, postalCode, phone\n- `payment` (required) – method (credit_card | debit_card | paypal | cash_on_delivery), transactionId (optional)\n- `shippingCost` (optional, default: 0)\n- `tax` (optional, default: 0)\n- `notes` (optional, max 500 chars)"
+            "description": "Create a new order from the user's cart. The cart must contain at least one item. Stock is validated and decremented, and the cart is cleared upon success. If cart items have custom designs, `customDesignIds` and `customDesignFee` are carried into the order items. The `itemsTotal` is calculated as `(price + customDesignFee) × quantity` per item.\n\n**Auth:** Bearer token required.\n\n**Body fields:**\n- `shippingAddress` (required) – firstName, lastName, email, address, city, postalCode, phone\n- `payment` (required) – method (credit_card | debit_card | paypal | cash_on_delivery), transactionId (optional)\n- `shippingCost` (optional, default: 0)\n- `tax` (optional, default: 0)\n- `notes` (optional, max 500 chars)"
           },
           "response": []
         },
@@ -1318,7 +1346,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "orders"]
             },
-            "description": "Create an order with cash on delivery payment. Payment status will be 'pending' until delivery.\n\n**Auth:** Bearer token required."
+            "description": "Create an order with cash on delivery payment. Payment status will be 'pending' until delivery. Custom design data (`customDesignIds`, `customDesignFee`) is preserved in order items if present.\n\n**Auth:** Bearer token required."
           },
           "response": []
         },
@@ -1473,7 +1501,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "payments", "create-checkout-session"]
             },
-            "description": "Create a Stripe Checkout Session from the authenticated user's cart. Returns a session ID and redirect URL.\n\n**Auth:** Bearer token required.\n\n**Body fields:**\n- `shippingAddress` (object, required) – firstName, lastName, email, street, city, state, zip\n- `notes` (string, optional) – order notes"
+            "description": "Create a Stripe Checkout Session from the authenticated user's cart. Returns a session ID and redirect URL. If cart items have custom designs, the design fee is included in the Stripe line item unit price (`price + customDesignFee`), and the line item description shows '+ Custom Design Fee'.\n\n**Auth:** Bearer token required.\n\n**Body fields:**\n- `shippingAddress` (object, required) – firstName, lastName, email, street, city, state, zip\n- `notes` (string, optional) – order notes"
           },
           "response": []
         },

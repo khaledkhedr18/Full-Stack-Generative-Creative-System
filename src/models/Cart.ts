@@ -91,7 +91,7 @@ cartSchema.pre("save", function () {
   this.totalItems = this.items.reduce((sum, item) => sum + item.quantity, 0);
   this.totalPrice = this.items.reduce(
     (sum, item) =>
-      sum + item.price * item.quantity + (item.customDesignFee || 0),
+      sum + (item.price + (item.customDesignFee || 0)) * item.quantity,
     0,
   );
 });

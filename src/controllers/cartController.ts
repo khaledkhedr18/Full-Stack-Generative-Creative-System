@@ -17,10 +17,12 @@ export const getCart = asyncHandler(async (req: Request, res: Response) => {
   const authReq = req as AuthRequest;
   const userId = authReq.user?.userId;
 
-  let cart = await Cart.findOne({ user: userId }).populate(
-    "items.product",
-    "name slug basePrice currency variants",
-  );
+  let cart = await Cart.findOne({ user: userId })
+    .populate("items.product", "name slug basePrice currency variants")
+    .populate(
+      "items.customDesignIds",
+      "prompt originalImageUrl generatedImageUrl fee status",
+    );
 
   if (!cart) {
     cart = await Cart.create({ user: userId, items: [] });
@@ -175,6 +177,10 @@ export const addToCart = asyncHandler(
       "items.product",
       "name slug basePrice currency variants",
     );
+    await cart.populate(
+      "items.customDesignIds",
+      "prompt originalImageUrl generatedImageUrl fee status",
+    );
 
     res.status(200).json({
       success: true,
@@ -261,6 +267,10 @@ export const updateCartItem = asyncHandler(
       "items.product",
       "name slug basePrice currency variants",
     );
+    await cart.populate(
+      "items.customDesignIds",
+      "prompt originalImageUrl generatedImageUrl fee status",
+    );
 
     res.status(200).json({
       success: true,
@@ -303,6 +313,10 @@ export const removeFromCart = asyncHandler(
     await cart.populate(
       "items.product",
       "name slug basePrice currency variants",
+    );
+    await cart.populate(
+      "items.customDesignIds",
+      "prompt originalImageUrl generatedImageUrl fee status",
     );
 
     res.status(200).json({
