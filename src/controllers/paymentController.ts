@@ -141,7 +141,9 @@ export const stripeWebhook = asyncHandler(
 );
 
 /**
- * Helper: Create the Order in your DB after Stripe confirms payment
+ * Helper: Create the Order in your DB after Stripe confirms payment.
+ * Called from the webhook AND from verifySession as a fallback.
+ * Idempotent — safe to call multiple times for the same session.
  */
 async function fulfillOrder(session: Stripe.Checkout.Session) {
   const userId = session.metadata?.userId;
@@ -149,18 +151,26 @@ async function fulfillOrder(session: Stripe.Checkout.Session) {
   const notes = session.metadata?.notes;
 
   if (!userId) {
+    console.error("[fulfillOrder] No userId in session metadata", session.id);
     throw new AppError("No userId in session metadata", 400);
   }
 
+  // Idempotency: skip if order already created for this session
   const existingOrder = await Order.findOne({
     "payment.stripeSessionId": session.id,
   });
   if (existingOrder) {
-    return;
+    return existingOrder;
   }
 
   const cart = await Cart.findOne({ user: userId });
   if (!cart || cart.items.length === 0) {
+    console.error(
+      "[fulfillOrder] Cart is empty for user",
+      userId,
+      "session",
+      session.id,
+    );
     throw new AppError("Cart is empty during fulfillment", 400);
   }
 
@@ -184,11 +194,14 @@ async function fulfillOrder(session: Stripe.Checkout.Session) {
       size: cartItem.size,
       quantity: cartItem.quantity,
       price: sizeEntry.price,
+      customDesignId: cartItem.customDesignId,
+      customDesignFee: cartItem.customDesignFee || 0,
     });
   }
 
   const itemsTotal = orderItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) =>
+      sum + (item.price + (item.customDesignFee || 0)) * item.quantity,
     0,
   );
 
@@ -211,6 +224,7 @@ async function fulfillOrder(session: Stripe.Checkout.Session) {
     notes,
   });
 
+  // Decrement stock
   for (const item of orderItems) {
     await Product.updateOne(
       {
@@ -232,12 +246,23 @@ async function fulfillOrder(session: Stripe.Checkout.Session) {
     );
   }
 
+  // Clear the cart
   cart.items = [] as any;
   await cart.save();
+
+  console.log(
+    "[fulfillOrder] Order created:",
+    order.orderNumber,
+    "for session",
+    session.id,
+  );
+  return order;
 }
 
 /**
- * @desc    Verify a checkout session status (for frontend confirmation page)
+ * @desc    Verify a checkout session status (for frontend confirmation page).
+ *          Also acts as a FALLBACK: if the webhook hasn't fired yet (common in
+ *          local dev) and the payment is confirmed, it creates the order here.
  * @route   GET /api/payments/verify-session/:sessionId
  * @access  Private
  */
@@ -252,9 +277,21 @@ export const verifySession = asyncHandler(
       return next(new AppError("Session not found", 404));
     }
 
-    const order = await Order.findOne({
-      "payment.stripeSessionId": sessionId,
+    let order = await Order.findOne({
+      "payment.stripeSessionId": id,
     });
+
+    // Fallback: if payment succeeded but the webhook hasn't created the order yet, do it now
+    if (!order && session.payment_status === "paid") {
+      try {
+        order = await fulfillOrder(session);
+      } catch (err: any) {
+        console.error(
+          "[verifySession] Fallback fulfillOrder failed:",
+          err.message,
+        );
+      }
+    }
 
     res.status(200).json({
       success: true,
