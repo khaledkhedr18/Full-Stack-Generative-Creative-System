@@ -76,3 +76,12 @@ export interface CheckoutResponseI {
     url: string;
   };
 }
+
+export interface VerifySessionResponseI {
+  success: boolean;
+  data: {
+    paymentStatus: string;
+    orderNumber: string | null;
+    orderId: string | null;
+  };
+}

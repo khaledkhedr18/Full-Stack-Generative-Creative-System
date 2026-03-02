@@ -98,8 +98,15 @@ export class Checkout implements CheckDeactivate, OnInit {
     if (this.checkoutForm.valid) {
       this.spinner.set(true);
       if (this.checkoutForm.get('paymentMethod')?.value === 'stripe') {
+        const formVal = this.checkoutForm.value;
         const shippingAddress: ShippingAddressI = {
-          ...this.checkoutForm.value,
+          firstName: formVal.fName,
+          lastName: formVal.lName,
+          email: formVal.email,
+          phone: formVal.phone,
+          address: formVal.address,
+          city: formVal.city,
+          postalCode: formVal.zip,
         };
         this.paymentService.checkout(shippingAddress).subscribe({
           next: (data) => {

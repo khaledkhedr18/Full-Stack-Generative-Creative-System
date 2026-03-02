@@ -1,104 +1,170 @@
-<section class="mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 max-w-4xl overflow-hidden">
-  <div class="mb-12 text-center">
-    <div class="inline-flex justify-center items-center bg-primary/10 mb-6 rounded-full w-15 h-15">
-      <span
-        class="flex justify-center items-center bg-blue-900 p-1 rounded-full text-primary text-4xl"
+@if (isLoading()) {
+  <section class="mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 max-w-4xl overflow-hidden">
+    <div class="flex flex-col justify-center items-center min-h-[40vh]">
+      <span class="loading loading-spinner loading-lg text-primary"></span>
+      <p class="mt-4 text-slate-400">Verifying your payment...</p>
+    </div>
+  </section>
+} @else if (error()) {
+  <section class="mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 max-w-4xl overflow-hidden">
+    <div class="flex flex-col justify-center items-center min-h-[40vh] text-center">
+      <h1 class="mb-4 font-semibold text-3xl text-red-400">Something went wrong</h1>
+      <p class="text-slate-400 text-lg">{{ error() }}</p>
+      <a
+        routerLink="/orders"
+        class="mt-6 bg-primary hover:bg-blue-600 px-6 py-3 rounded-xl font-bold text-white transition-colors duration-300"
       >
-        <ng-icon size="24" name="lucideCheck"></ng-icon>
-      </span>
+        View Orders
+      </a>
     </div>
-    <h1 class="mb-4 font-semibold text-4xl md:text-5xl tracking-tight">Order Confirmed!</h1>
-    <p class="mx-auto max-w-xl text-slate-400 text-lg">
-      Thank you, Alex! Your custom AI-generated design has been sent to our production studio. We've
-      sent a confirmation email to
-      <span class="font-semibold text-white">alex.design@example.com</span>.
-    </p>
-  </div>
-  <div class="gap-8 grid grid-cols-1 lg:grid-cols-3">
-    <!-- Left Section -->
-    <div class="space-y-8 lg:col-span-2">
-      <!-- Shipping Timeline -->
-      <div class="bg-slate-900/50 p-6 border border-slate-800 rounded-xl">
-        <div class="flex justify-between items-center mb-8">
-          <div>
-            <p class="mb-1 font-bold text-slate-500 text-xs uppercase tracking-widest">Status</p>
-            <p class="text-primary">In Production</p>
-          </div>
-          <div>
-            <p class="mb-1 font-bold text-slate-500 text-xs uppercase tracking-widest">
-              Estimated Delivery
-            </p>
-            <p>Oct 12 - Oct 15, 2023</p>
-          </div>
-        </div>
-        <div class="relative flex justify-between items-center">
-          <div class="top-1/2 left-0 z-0 absolute bg-slate-800 w-full h-1 -translate-y-1/2"></div>
-          <div class="top-1/2 left-0 z-0 absolute bg-primary w-[33%] h-1 -translate-y-1/2"></div>
-          <!-- Steps -->
-          <div class="z-10 relative flex flex-col items-center">
-            <div class="bg-primary border-4 border-slate-900 rounded-full w-4 h-4"></div>
-            <span class="mt-2 font-bold text-[10px] text-primary uppercase">Placed</span>
-          </div>
-          <div class="z-10 relative flex flex-col items-center">
-            <div class="bg-primary border-4 border-slate-900 rounded-full w-4 h-4"></div>
-            <span class="mt-2 font-bold text-[10px] text-primary uppercase">AI Processing</span>
-          </div>
-          <div class="z-10 relative flex flex-col items-center">
-            <div class="bg-slate-500 border-4 border-slate-900 rounded-full w-4 h-4"></div>
-            <span class="mt-2 font-bold text-[10px] text-slate-500 uppercase">Shipped</span>
-          </div>
-          <div class="z-10 relative flex flex-col items-center">
-            <div class="bg-slate-500 border-4 border-slate-900 rounded-full w-4 h-4"></div>
-            <span class="mt-2 font-bold text-[10px] text-slate-500 uppercase">Delivered</span>
-          </div>
-        </div>
-      </div>
-      <!-- Order Items -->
-      <div class="bg-slate-900/50 border border-slate-800 rounded-xl overflow-hidden">
-        <div class="flex justify-between items-center p-6 border-slate-800 border-b">
-          <h3>Order Summary</h3>
-          <span class="text-slate-500 text-sm">
-            Order ID:
-            <span class="text-white">#AI-98234B</span>
-          </span>
-        </div>
-        <div class="flex flex-col space-y-6 p-6">
-          <app-checkout-product-card></app-checkout-product-card>
-          <app-checkout-product-card></app-checkout-product-card>
-          <app-checkout-product-card></app-checkout-product-card>
-          <app-checkout-product-card></app-checkout-product-card>
-        </div>
-        <div class="space-y-2 bg-card p-6 border-slate-800 border-t">
-          <div class="flex justify-between text-sm">
-            <span class="text-slate-500">Subtotal</span>
-            <span>$234.00</span>
-          </div>
-          <div class="flex justify-between text-sm">
-            <span class="text-slate-500">Shipping</span>
-            <span class="text-green-500">Free</span>
-          </div>
-          <div class="flex justify-between pt-4 text-lg">
-            <span>Total</span>
-            <span>$234.00</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Right Section -->
-    <div class="self-start bg-slate-900/50 p-6 border border-slate-800 rounded-xl">
-      <h4 class="flex items-center gap-2 mb-3">
-        <span class="flex justify-center items-center text-slate-400 text-lg">
-          <ng-icon size="24" name="lucideMapPin"></ng-icon>
+  </section>
+} @else {
+  <section class="mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 max-w-4xl overflow-hidden">
+    <div class="mb-12 text-center">
+      <div
+        class="inline-flex justify-center items-center bg-primary/10 mb-6 rounded-full w-15 h-15"
+      >
+        <span
+          class="flex justify-center items-center bg-blue-900 p-1 rounded-full text-primary text-4xl"
+        >
+          <ng-icon size="24" name="lucideCheck"></ng-icon>
         </span>
-        Shipping To
-      </h4>
-      <div class="text-slate-500 text-sm leading-relaxed">
-        <p class="text-white">Alex Rivera</p>
-        <p>tot@mail.com</p>
-        <p>010101010101</p>
-        <p>Ismailia</p>
-        <p>Egypt</p>
+      </div>
+      <h1 class="mb-4 font-semibold text-4xl md:text-5xl tracking-tight">Order Confirmed!</h1>
+      <p class="mx-auto max-w-xl text-slate-400 text-lg">
+        Thank you for your order! Your payment was successful.
+        @if (orderNumber()) {
+          Your order number is
+          <span class="font-semibold text-white">{{ orderNumber() }}</span
+          >.
+        }
+      </p>
+    </div>
+    <div class="gap-8 grid grid-cols-1 lg:grid-cols-3">
+      <!-- Left Section -->
+      <div class="space-y-8 lg:col-span-2">
+        <!-- Shipping Timeline -->
+        <div class="bg-slate-900/50 p-6 border border-slate-800 rounded-xl">
+          <div class="flex justify-between items-center mb-8">
+            <div>
+              <p class="mb-1 font-bold text-slate-500 text-xs uppercase tracking-widest">Status</p>
+              <p class="text-primary">{{ order()?.status || 'Confirmed' }}</p>
+            </div>
+            <div>
+              <p class="mb-1 font-bold text-slate-500 text-xs uppercase tracking-widest">Payment</p>
+              <p class="text-green-500">
+                {{ paymentStatus() === 'paid' ? 'Paid' : paymentStatus() }}
+              </p>
+            </div>
+          </div>
+          <div class="relative flex justify-between items-center">
+            <div class="top-1/2 left-0 z-0 absolute bg-slate-800 w-full h-1 -translate-y-1/2"></div>
+            <div class="top-1/2 left-0 z-0 absolute bg-primary w-[33%] h-1 -translate-y-1/2"></div>
+            <!-- Steps -->
+            <div class="z-10 relative flex flex-col items-center">
+              <div class="bg-primary border-4 border-slate-900 rounded-full w-4 h-4"></div>
+              <span class="mt-2 font-bold text-[10px] text-primary uppercase">Placed</span>
+            </div>
+            <div class="z-10 relative flex flex-col items-center">
+              <div class="bg-primary border-4 border-slate-900 rounded-full w-4 h-4"></div>
+              <span class="mt-2 font-bold text-[10px] text-primary uppercase">Confirmed</span>
+            </div>
+            <div class="z-10 relative flex flex-col items-center">
+              <div class="bg-slate-500 border-4 border-slate-900 rounded-full w-4 h-4"></div>
+              <span class="mt-2 font-bold text-[10px] text-slate-500 uppercase">Shipped</span>
+            </div>
+            <div class="z-10 relative flex flex-col items-center">
+              <div class="bg-slate-500 border-4 border-slate-900 rounded-full w-4 h-4"></div>
+              <span class="mt-2 font-bold text-[10px] text-slate-500 uppercase">Delivered</span>
+            </div>
+          </div>
+        </div>
+        <!-- Order Items -->
+        @if (order()) {
+          <div class="bg-slate-900/50 border border-slate-800 rounded-xl overflow-hidden">
+            <div class="flex justify-between items-center p-6 border-slate-800 border-b">
+              <h3>Order Summary</h3>
+              <span class="text-slate-500 text-sm">
+                Order #:
+                <span class="text-white">{{ order()!.orderNumber }}</span>
+              </span>
+            </div>
+            <div class="flex flex-col space-y-6 p-6">
+              @for (item of order()!.items; track item.variantId + item.size) {
+                <div class="flex gap-4">
+                  <div class="flex-1 space-y-0.5">
+                    <h3 class="font-medium text-white text-sm line-clamp-1">
+                      {{ item.product.name }}
+                    </h3>
+                    <p class="flex gap-1 text-slate-400 text-xs">
+                      <span>{{ item.size }}</span>
+                      <span>|</span>
+                      <span>{{ item.color }}</span>
+                    </p>
+                    <p class="flex gap-1 text-slate-400 text-xs">
+                      <span>Qty: {{ item.quantity }}</span>
+                    </p>
+                  </div>
+                  <p class="font-medium text-white text-sm">
+                    {{ item.price * item.quantity | currency }}
+                  </p>
+                </div>
+              }
+            </div>
+            <div class="space-y-2 bg-card p-6 border-slate-800 border-t">
+              <div class="flex justify-between text-sm">
+                <span class="text-slate-500">Subtotal</span>
+                <span>{{ order()!.itemsTotal | currency }}</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-slate-500">Shipping</span>
+                @if (order()!.shippingCost > 0) {
+                  <span>{{ order()!.shippingCost | currency }}</span>
+                } @else {
+                  <span class="text-green-500">Free</span>
+                }
+              </div>
+              @if (order()!.tax > 0) {
+                <div class="flex justify-between text-sm">
+                  <span class="text-slate-500">Tax</span>
+                  <span>{{ order()!.tax | currency }}</span>
+                </div>
+              }
+              <div class="flex justify-between pt-4 text-lg">
+                <span>Total</span>
+                <span>{{ order()!.totalAmount | currency }}</span>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+      <!-- Right Section -->
+      <div class="space-y-4 self-start">
+        @if (order()?.shippingAddress) {
+          <div class="bg-slate-900/50 p-6 border border-slate-800 rounded-xl">
+            <h4 class="flex items-center gap-2 mb-3">
+              <span class="flex justify-center items-center text-slate-400 text-lg">
+                <ng-icon size="24" name="lucideMapPin"></ng-icon>
+              </span>
+              Shipping To
+            </h4>
+            <div class="text-slate-500 text-sm leading-relaxed">
+              <p class="text-white">{{ order()!.shippingAddress.fullName }}</p>
+              <p>{{ order()!.shippingAddress.address }}</p>
+              <p>{{ order()!.shippingAddress.city }}</p>
+              @if (order()!.shippingAddress.phone) {
+                <p>{{ order()!.shippingAddress.phone }}</p>
+              }
+            </div>
+          </div>
+        }
+        <a
+          routerLink="/orders"
+          class="block bg-primary hover:bg-blue-600 py-3 rounded-xl w-full font-bold text-white text-center transition-colors duration-300"
+        >
+          View My Orders
+        </a>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+}

@@ -1,7 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { CheckoutResponseI, OrderResponseI, ShippingAddressI } from '../utils/order-interface';
+import {
+  CheckoutResponseI,
+  OrderResponseI,
+  OrderInterface,
+  ShippingAddressI,
+} from '../utils/order-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -23,5 +28,11 @@ export class OrdersService {
 
   getOrders() {
     return this.http.get<OrderResponseI>(this.baseURL, { headers: this.getAuthHeaders() });
+  }
+
+  getOrderById(orderId: string) {
+    return this.http.get<{ success: boolean; data: OrderInterface }>(`${this.baseURL}/${orderId}`, {
+      headers: this.getAuthHeaders(),
+    });
   }
 }

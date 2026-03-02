@@ -1,7 +1,11 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { CheckoutResponseI, ShippingAddressI } from '../utils/order-interface';
+import {
+  CheckoutResponseI,
+  ShippingAddressI,
+  VerifySessionResponseI,
+} from '../utils/order-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -21,11 +25,17 @@ export class PaymentService {
     });
   }
 
-  checkout(shippingAddress: ShippingAddressI) {
+  checkout(shippingAddress: ShippingAddressI, notes?: string) {
     return this.http.post<CheckoutResponseI>(
       `${this.baseURL}/create-checkout-session`,
-      shippingAddress,
+      { shippingAddress, notes },
       { headers: this.getAuthHeaders() },
     );
+  }
+
+  verifySession(sessionId: string) {
+    return this.http.get<VerifySessionResponseI>(`${this.baseURL}/verify-session/${sessionId}`, {
+      headers: this.getAuthHeaders(),
+    });
   }
 }
