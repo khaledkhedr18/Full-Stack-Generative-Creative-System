@@ -3,7 +3,6 @@ import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/ro
 import { Header } from './components/header/header';
 import { Footer } from './components/footer/footer';
 import { filter, map } from 'rxjs';
-import { WishlistService } from './services/wishlist-service';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +15,6 @@ export class App {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private wishlistService: WishlistService,
   ) {
     this.router.events
       .pipe(
@@ -33,8 +31,5 @@ export class App {
         const hide = route.snapshot.data['hideHeaderFooter'];
         this.showLayout.set(!hide);
       });
-  }
-  ngOnInit() {
-    this.wishlistService.getWishlist().subscribe();
   }
 }
