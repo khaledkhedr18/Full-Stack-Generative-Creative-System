@@ -7,16 +7,26 @@ import { CartService } from '../../services/cart-service';
 import { CartInterface } from '../../utils/cart-interface';
 import { CurrencyPipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ShippingAddressI } from '../../utils/order-interface';
+import { NgxStripeModule } from 'ngx-stripe';
+import { PaymentService } from '../../services/payment-service';
+import { OrdersService } from '../../services/orders-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-checkout',
-  imports: [CheckoutProductCard, NgIcon, CurrencyPipe, ReactiveFormsModule],
+  imports: [CheckoutProductCard, NgIcon, CurrencyPipe, ReactiveFormsModule, NgxStripeModule],
   providers: [provideIcons({ lucideVan, lucideWalletCards, lucideCheck })],
   templateUrl: './checkout.html',
   styles: ``,
 })
 export class Checkout implements CheckDeactivate, OnInit {
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private paymentService: PaymentService,
+    private ordersService: OrdersService,
+    private router: Router,
+  ) {}
 
   isLoading = signal<boolean>(true);
   spinner = signal<boolean>(false);
@@ -79,8 +89,12 @@ export class Checkout implements CheckDeactivate, OnInit {
     });
   }
 
+  sessionURL = signal<string>('');
+
+  isPayClicked = signal<boolean>(false);
+
   canDeactivate(): boolean {
-    if (this.checkoutForm.dirty) {
+    if (this.checkoutForm.dirty && !this.isPayClicked()) {
       return confirm('You have unsaved changes! Are you sure you want to leave the checkout?');
     }
     return true;
@@ -88,6 +102,62 @@ export class Checkout implements CheckDeactivate, OnInit {
 
   handlePay() {
     if (this.checkoutForm.valid) {
+      this.spinner.set(true);
+      if (this.checkoutForm.get('paymentMethod')?.value === 'stripe') {
+        const formVal = this.checkoutForm.value;
+        const shippingAddress: ShippingAddressI = {
+          firstName: formVal.fName,
+          lastName: formVal.lName,
+          email: formVal.email,
+          phone: formVal.phone,
+          address: formVal.address,
+          city: formVal.city,
+          postalCode: formVal.zip,
+        };
+        this.paymentService.checkout(shippingAddress).subscribe({
+          next: (data) => {
+            this.spinner.set(false);
+            this.sessionURL.set(data.data.url);
+            window.location.href = this.sessionURL();
+          },
+          error: (error) => {
+            this.spinner.set(false);
+            console.log(error);
+          },
+        });
+      } else {
+        const orderRequest = {
+          shippingAddress: {
+            firstName: this.checkoutForm.get('fName')?.value,
+            lastName: this.checkoutForm.get('lName')?.value,
+            email: this.checkoutForm.get('email')?.value,
+            address: this.checkoutForm.get('address')?.value,
+            city: this.checkoutForm.get('city')?.value,
+            postalCode: this.checkoutForm.get('zip')?.value,
+            phone: this.checkoutForm.get('phone')?.value,
+          },
+          payment: {
+            method: this.checkoutForm.get('paymentMethod')?.value,
+          },
+        };
+        this.ordersService.makeOrder(orderRequest).subscribe({
+          next: (data: any) => {
+            this.isPayClicked.set(true);
+            this.spinner.set(false);
+            this.router.navigate(['/order/success'], {
+              queryParams: {
+                session_id: data.data._id,
+                method: 'cash_on_delivery',
+              },
+              state: { orderCompleted: true },
+            });
+          },
+          error: (error) => {
+            this.spinner.set(false);
+            console.log(error);
+          },
+        });
+      }
     } else {
       this.checkoutForm.markAllAsTouched();
     }

@@ -7,8 +7,9 @@ export const paymentSuccessGuard: CanActivateFn = (route, state) => {
   const currentNavigation = router.getCurrentNavigation();
 
   const isOrderCompleted = currentNavigation?.extras?.state?.['orderCompleted'];
+  const hasSessionId = route.queryParams['session_id'];
 
-  if (isOrderCompleted) {
+  if (isOrderCompleted || hasSessionId) {
     return true;
   }
   return router.createUrlTree(['/home']);

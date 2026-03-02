@@ -10,6 +10,9 @@ import { AuthService } from './auth-service';
 })
 export class CartService {
   private readonly baseURL = 'http://localhost:3000/api/cart';
+  
+  cartCount = signal<number>(0);
+  isLoaded = signal<boolean>(false);
 
   constructor(
     private httpClient: HttpClient,
@@ -18,10 +21,11 @@ export class CartService {
   ) {
     if (authService.isLoggedIn()) {
       this.getCart().subscribe();
+    } else {
+      this.isLoaded.set(true);
     }
   }
 
-  cartCount = signal<number>(0);
 
   private getAuthHeaders() {
     const token = this.cookieService.get('jwt_token');
@@ -38,6 +42,7 @@ export class CartService {
       .pipe(
         tap((response) => {
           this.cartCount.set(response.data.totalItems);
+          this.isLoaded.set(true)
         }),
       );
   }

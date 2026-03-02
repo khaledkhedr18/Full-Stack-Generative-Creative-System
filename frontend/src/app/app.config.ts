@@ -2,6 +2,7 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter, withInMemoryScrolling, withViewTransitions } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHotToastConfig } from '@ngxpert/hot-toast';
+import { provideNgxStripe } from 'ngx-stripe';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -33,5 +34,8 @@ export const appConfig: ApplicationConfig = {
         maxWidth: '400px',
       },
     }),
+    provideNgxStripe(
+      'pk_test_51T58Xd2Q7fSnx4k7YkYVVmbuRbVTP4fr2a8rVn7E4QgNtz6eBAild5mXBHvASogDVhb4CFglmHXs35g9lOJVHlgY00v8v5UUqO',
+    ),
   ],
 };
