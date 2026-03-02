@@ -7,6 +7,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { CartService } from '../../services/cart-service';
 import { WishlistService } from '../../services/wishlist-service';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { HotToastService } from '@ngxpert/hot-toast';
 
 @Component({
   selector: 'app-header',
@@ -23,6 +24,7 @@ export class Header {
     private authService: AuthService,
     private cookieService: CookieService,
     private router: Router,
+    private toast: HotToastService,
   ) {}
   private cartService = inject(CartService);
 
@@ -33,6 +35,7 @@ export class Header {
   }
 
   handleLogout() {
+    this.toast.success('Logged out successfully');
     this.cookieService.delete('jwt_token');
     this.cartService.clearCart();
     this.router.navigate(['/home']);

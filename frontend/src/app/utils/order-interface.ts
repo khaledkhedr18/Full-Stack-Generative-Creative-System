@@ -1,3 +1,5 @@
+import { ProductVariant } from "./product-interface";
+
 export interface OrderResponseI {
   success: boolean;
   results: number;
@@ -36,6 +38,7 @@ export interface OrderProductI {
   name: string;
   category: string;
   brand: string;
+  variants: ProductVariant[]
   basePrice: number;
   currency: string;
   id: string;

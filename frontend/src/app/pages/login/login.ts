@@ -10,6 +10,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideEye, lucideEyeOff, lucideLock, lucideMail, lucideSparkles } from '@ng-icons/lucide';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faFacebook } from '@fortawesome/free-brands-svg-icons';
+import { HotToastService } from '@ngxpert/hot-toast';
 
 @Component({
   selector: 'app-login',
@@ -25,12 +26,11 @@ export class Login {
     private router: Router,
     private cartService: CartService,
     private wishlistService: WishlistService,
+    private toast: HotToastService,
   ) {}
   faFacebook = faFacebook;
 
   isPasswordVisible = false;
-
-  errorMessage = signal('');
 
   loading = signal(false);
 
@@ -51,20 +51,21 @@ export class Login {
       const user: UserLoginInterface = { ...this.loginForm.value };
       this.authService.login(user).subscribe({
         next: (data: any) => {
+          this.loading.set(false);
           const token = data.token;
           this.cookieService.set('jwt_token', token, undefined, '/', undefined, true, 'Strict');
           this.cartService.getCart().subscribe();
           this.wishlistService.getWishlist().subscribe();
+          this.toast.success(`Welcome back ${data.data.firstName + ' ' + data.data.lastName}`);
           this.router.navigate(['/home']);
-          this.loading.set(false);
         },
         error: (error) => {
-          this.errorMessage.set(error.error.message);
           this.loading.set(false);
+          this.toast.error(error.error.message);
         },
       });
     } else {
-      this.errorMessage.set('Invalid email or password.');
+      this.toast.error('Invalid email or password.');
     }
   }
 

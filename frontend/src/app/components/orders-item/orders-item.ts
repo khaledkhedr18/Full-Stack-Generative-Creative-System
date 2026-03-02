@@ -14,6 +14,7 @@ export class OrdersItem {
       name: '',
       category: '',
       brand: '',
+      variants: [],
       basePrice: 0,
       currency: '',
       id: '',
@@ -50,4 +51,11 @@ export class OrdersItem {
     orderNumber: '',
     id: '',
   };
+
+  getVariantImage() {
+    const variant = this.item.product.variants.find(
+      (variant) => variant.variantId === this.item.variantId,
+    );
+    return variant ? variant.images[0].url : '';
+  }
 }
