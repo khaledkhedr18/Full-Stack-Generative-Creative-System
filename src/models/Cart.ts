@@ -6,7 +6,7 @@ export interface ICartItem {
   size: string;
   quantity: number;
   price: number;
-  customDesignId?: mongoose.Types.ObjectId;
+  customDesignIds?: mongoose.Types.ObjectId[];
   customDesignFee?: number;
 }
 
@@ -44,10 +44,12 @@ const cartItemSchema = new Schema<ICartItem>(
       required: [true, "Price is required"],
       min: [0, "Price cannot be negative"],
     },
-    customDesignId: {
-      type: Schema.Types.ObjectId,
-      ref: "CustomDesign",
-    },
+    customDesignIds: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "CustomDesign",
+      },
+    ],
     customDesignFee: {
       type: Number,
       default: 0,

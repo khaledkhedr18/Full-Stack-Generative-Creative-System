@@ -7,7 +7,7 @@ export interface IOrderItem {
   size: string;
   quantity: number;
   price: number;
-  customDesignId?: mongoose.Types.ObjectId;
+  customDesignIds?: mongoose.Types.ObjectId[];
   customDesignFee?: number;
 }
 
@@ -78,10 +78,12 @@ const orderItemSchema = new Schema<IOrderItem>(
       required: [true, "Price is required"],
       min: [0, "Price cannot be negative"],
     },
-    customDesignId: {
-      type: Schema.Types.ObjectId,
-      ref: "CustomDesign",
-    },
+    customDesignIds: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "CustomDesign",
+      },
+    ],
     customDesignFee: {
       type: Number,
       default: 0,

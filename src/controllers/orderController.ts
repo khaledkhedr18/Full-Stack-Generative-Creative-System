@@ -73,7 +73,7 @@ export const createOrder = asyncHandler(
         size: cartItem.size,
         quantity: cartItem.quantity,
         price: sizeEntry.price,
-        customDesignId: cartItem.customDesignId,
+        customDesignIds: cartItem.customDesignIds,
         customDesignFee: cartItem.customDesignFee,
       });
     }

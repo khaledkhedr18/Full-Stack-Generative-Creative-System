@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import mongoose from "mongoose";
 import Cart from "../models/Cart.js";
 import Product from "../models/Product.js";
 import asyncHandler from "../utils/asyncHandler.js";
@@ -45,7 +46,7 @@ export const addToCart = asyncHandler(
       variantId,
       size,
       quantity = 1,
-      customDesignId,
+      customDesignIds,
     } = req.body;
 
     const product = await Product.findById(productId);
@@ -80,28 +81,36 @@ export const addToCart = asyncHandler(
     }
 
     let customDesignFee = 0;
-    let customDesignRef = undefined;
+    const validatedDesignIds: mongoose.Types.ObjectId[] = [];
 
-    if (customDesignId) {
-      const design = await CustomDesign.findOne({
-        _id: customDesignId,
-        user: userId,
-        product: productId,
-        variantId: variantId,
-        status: "completed",
-      });
+    if (
+      customDesignIds &&
+      Array.isArray(customDesignIds) &&
+      customDesignIds.length > 0
+    ) {
+      for (const designId of customDesignIds) {
+        const design = await CustomDesign.findOne({
+          _id: designId,
+          user: userId,
+          product: productId,
+          variantId: variantId,
+          status: "completed",
+        });
 
-      if (!design) {
-        return next(
-          new AppError(
-            "Custom design not found, does not match this product/variant, or is not completed yet",
-            404,
-          ),
-        );
+        if (!design) {
+          return next(
+            new AppError(
+              `Custom design "${designId}" not found, does not match this product/variant, or is not completed yet`,
+              404,
+            ),
+          );
+        }
+
+        validatedDesignIds.push(design._id as mongoose.Types.ObjectId);
       }
 
-      customDesignFee = config.customDesignFee;
-      customDesignRef = design._id;
+      // Fee is applied per design side (front, back, etc.)
+      customDesignFee = config.customDesignFee * validatedDesignIds.length;
     }
 
     let cart = await Cart.findOne({ user: userId });
@@ -110,13 +119,24 @@ export const addToCart = asyncHandler(
       cart = new Cart({ user: userId, items: [] });
     }
 
+    // Compare design arrays: same designs in any order means same item
+    const designIdsKey = (ids?: mongoose.Types.ObjectId[]) =>
+      ids && ids.length > 0
+        ? [...ids]
+            .map((id) => id.toString())
+            .sort()
+            .join(",")
+        : null;
+
     const existingIndex = cart.items.findIndex(
       (item) =>
         item.product.toString() === productId &&
         item.variantId === variantId &&
         item.size === size &&
-        (item.customDesignId?.toString() || null) ===
-          (customDesignRef?.toString() || null),
+        designIdsKey(item.customDesignIds) ===
+          designIdsKey(
+            validatedDesignIds.length > 0 ? validatedDesignIds : undefined,
+          ),
     );
 
     if (existingIndex > -1) {
@@ -132,8 +152,8 @@ export const addToCart = asyncHandler(
       cart.items[existingIndex].quantity = newQty;
       cart.items[existingIndex].price = sizeEntry.price;
 
-      if (customDesignRef) {
-        cart.items[existingIndex].customDesignId = customDesignRef;
+      if (validatedDesignIds.length > 0) {
+        cart.items[existingIndex].customDesignIds = validatedDesignIds;
         cart.items[existingIndex].customDesignFee = customDesignFee;
       }
     } else {
@@ -143,7 +163,8 @@ export const addToCart = asyncHandler(
         size,
         quantity,
         price: sizeEntry.price,
-        customDesignId: customDesignRef,
+        customDesignIds:
+          validatedDesignIds.length > 0 ? validatedDesignIds : undefined,
         customDesignFee,
       });
     }
@@ -157,9 +178,10 @@ export const addToCart = asyncHandler(
 
     res.status(200).json({
       success: true,
-      message: customDesignId
-        ? "Custom design added to cart"
-        : "Item added to cart",
+      message:
+        validatedDesignIds.length > 0
+          ? `Custom design(s) added to cart (${validatedDesignIds.length} side${validatedDesignIds.length > 1 ? "s" : ""})`
+          : "Item added to cart",
       data: cart,
     });
   },

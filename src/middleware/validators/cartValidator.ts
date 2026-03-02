@@ -24,10 +24,14 @@ export const addToCartRules = [
     .isInt({ min: 1 })
     .withMessage("Quantity must be a positive integer"),
 
-  body("customDesignId")
+  body("customDesignIds")
     .optional()
+    .isArray({ min: 1, max: 2 })
+    .withMessage("customDesignIds must be an array of 1 or 2 design IDs"),
+
+  body("customDesignIds.*")
     .isMongoId()
-    .withMessage("Custom Design ID must be a valid MongoDB ObjectId"),
+    .withMessage("Each Custom Design ID must be a valid MongoDB ObjectId"),
 ];
 
 export const updateCartItemRules = [

@@ -68,14 +68,16 @@ export const createCheckoutSession = asyncHandler(
         );
       }
 
+      const designFee = cartItem.customDesignFee || 0;
+
       lineItems.push({
         price_data: {
           currency: "usd",
           product_data: {
             name: product.name,
-            description: `${variant.color.name} - Size ${cartItem.size}`,
+            description: `${variant.color.name} - Size ${cartItem.size}${designFee > 0 ? ` + Custom Design Fee` : ""}`,
           },
-          unit_amount: Math.round(sizeEntry.price * 100),
+          unit_amount: Math.round((sizeEntry.price + designFee) * 100),
         },
         quantity: cartItem.quantity,
       });
@@ -194,7 +196,7 @@ async function fulfillOrder(session: Stripe.Checkout.Session) {
       size: cartItem.size,
       quantity: cartItem.quantity,
       price: sizeEntry.price,
-      customDesignId: cartItem.customDesignId,
+      customDesignIds: cartItem.customDesignIds,
       customDesignFee: cartItem.customDesignFee || 0,
     });
   }

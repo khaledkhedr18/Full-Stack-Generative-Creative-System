@@ -1033,6 +1033,39 @@
           "response": []
         },
         {
+          "name": "Add to Cart (with Custom Design(s))",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "JWT auth token"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"variantId\": \"var_001\",\n  \"size\": \"M\",\n  \"quantity\": 1,\n  \"customDesignIds\": [\"{{designId}}\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart"]
+            },
+            "description": "Add a product with custom AI-generated design(s) to the cart. You can send 1 design (front only) or 2 designs (front + back). Each design must belong to the current user, match the specified product/variant, and have status 'completed'. A custom design fee is applied per design side.\n\n**Auth:** Bearer token required.\n\n**Body fields:**\n- `productId` (required, MongoDB ObjectId)\n- `variantId` (required, string – must match a variant on the product)\n- `size` (required, string – must match an available size in the variant)\n- `quantity` (optional, positive integer, default: 1)\n- `customDesignIds` (required, array of 1-2 MongoDB ObjectIds – design IDs returned from POST /api/ai/generate-design)"
+          },
+          "response": []
+        },
+        {
           "name": "Update Cart Item Quantity",
           "request": {
             "method": "PATCH",
@@ -1493,7 +1526,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "payments", "verify-session", "{{sessionId}}"]
             },
-            "description": "Verify a Stripe checkout session status. Used by the frontend confirmation page to check payment status and retrieve the associated order.\n\n**Auth:** Bearer token required.\n\n**Path params:**\n- `sessionId` – Stripe checkout session ID (e.g. cs_test_...)"
+            "description": "Verify a Stripe checkout session status and retrieve the associated order. Also acts as a **fallback**: if the webhook hasn't fired yet (common in local development) and the payment is confirmed (`payment_status === 'paid'`), the order is automatically created here.\n\n**Auth:** Bearer token required.\n\n**Path params:**\n- `sessionId` – Stripe checkout session ID (e.g. cs_test_...)\n\n**Response:**\n- `paymentStatus` – Stripe payment status (paid, unpaid, etc.)\n- `orderNumber` – the created order number (or null if not yet created)\n- `orderId` – the created order ID (or null if not yet created)"
           },
           "response": []
         }
