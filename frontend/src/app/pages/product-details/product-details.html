@@ -47,10 +47,6 @@
             <input id="back" type="radio" name="view" class="sr-only peer" />
             <label (click)="selectImg('back')" for="back" class="product-view">Back</label>
           </div>
-          <!-- <div>
-            <input id="side" type="radio" name="view" class="sr-only peer" />
-            <label (click)="selectImg('side')" for="side" class="product-view">Side</label>
-          </div> -->
         </div>
       </div>
     </div>
@@ -161,7 +157,7 @@
         <div class="bg-card mt-3 h-px"></div>
       </form>
     } @else {
-      <form class="flex flex-col gap-2 px-4.5 py-5">
+      <div class="flex flex-col gap-2 px-4.5 py-5">
         <div class="flex items-center gap-1.5">
           <svg viewBox="0 0 1.4 1.4" xmlns="http://www.w3.org/2000/svg" class="size-4 text-primary">
             <path
@@ -173,6 +169,7 @@
         </div>
         <div class="flex flex-col gap-6">
           <textarea
+            [(ngModel)]="designPrompt"
             class="bg-card p-3 border border-border rounded-lg focus:outline-none w-full h-25 text-text-muted text-xs caret-blue-500 resize-none"
             placeholder="A cyberpunk city skyline with neon pink and blue lights, realistic style..."
           ></textarea>
@@ -187,35 +184,63 @@
                     name="art-style"
                     class="sr-only peer"
                     checked
+                    (click)="selectArtStyle('realistic')"
                   />
                   <label for="realistic" class="art-style">Realistic</label>
                 </div>
                 <div>
-                  <input id="cyberpunk" type="radio" name="art-style" class="sr-only peer" />
+                  <input
+                    (click)="selectArtStyle('cyberpunk')"
+                    id="cyberpunk"
+                    type="radio"
+                    name="art-style"
+                    class="sr-only peer"
+                  />
                   <label for="cyberpunk" class="art-style">Cyberpunk</label>
                 </div>
                 <div>
-                  <input id="oilPainting" type="radio" name="art-style" class="sr-only peer" />
+                  <input
+                    (click)="selectArtStyle('oilPainting')"
+                    id="oilPainting"
+                    type="radio"
+                    name="art-style"
+                    class="sr-only peer"
+                  />
                   <label for="oilPainting" class="art-style">Oil Painting</label>
                 </div>
                 <div>
-                  <input id="minimalist" type="radio" name="art-style" class="sr-only peer" />
+                  <input
+                    (click)="selectArtStyle('minimalist')"
+                    id="minimalist"
+                    type="radio"
+                    name="art-style"
+                    class="sr-only peer"
+                  />
                   <label for="minimalist" class="art-style">Minimalist</label>
                 </div>
                 <div>
-                  <input id="sketch" type="radio" name="art-style" class="sr-only peer" />
+                  <input
+                    (click)="selectArtStyle('sketch')"
+                    id="sketch"
+                    type="radio"
+                    name="art-style"
+                    class="sr-only peer"
+                  />
                   <label for="sketch" class="art-style">Sketch</label>
                 </div>
               </div>
             </div>
-            <button class="shadow-primary-glow transition-colors duration-300 btn-primary">
+            <button
+              (click)="generateDesign()"
+              class="shadow-primary-glow transition-colors duration-300 btn-primary"
+            >
               <ng-icon name="lucideWandSparkles" size="13" color="white"></ng-icon>
               <span>Generate Artwork</span>
             </button>
           </div>
         </div>
         <hr class="mt-3 border-border" />
-      </form>
+      </div>
     }
     <!-- Colors and Size -->
     @if (loading()) {
