@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { CartResponseI, RemoveItemI, UpdateCartItemI } from '../utils/cart-interface';
+import { AddToCartI, CartResponseI, RemoveItemI, UpdateCartItemI } from '../utils/cart-interface';
 import { tap } from 'rxjs';
 import { AuthService } from './auth-service';
 
@@ -10,7 +10,7 @@ import { AuthService } from './auth-service';
 })
 export class CartService {
   private readonly baseURL = 'http://localhost:3000/api/cart';
-  
+
   cartCount = signal<number>(0);
   isLoaded = signal<boolean>(false);
 
@@ -25,7 +25,6 @@ export class CartService {
       this.isLoaded.set(true);
     }
   }
-
 
   private getAuthHeaders() {
     const token = this.cookieService.get('jwt_token');
@@ -42,7 +41,24 @@ export class CartService {
       .pipe(
         tap((response) => {
           this.cartCount.set(response.data.totalItems);
-          this.isLoaded.set(true)
+          this.isLoaded.set(true);
+        }),
+      );
+  }
+
+  addToCart(item: AddToCartI) {
+    return this.httpClient
+      .post<{ success: boolean; message: string; data: any }>(this.baseURL, item, {
+        headers: this.getAuthHeaders(),
+      })
+      .pipe(
+        tap((response) => {
+          if (response.data?.totalItems != null) {
+            this.cartCount.set(response.data.totalItems);
+          } else {
+            // Refresh cart count
+            this.getCart().subscribe();
+          }
         }),
       );
   }

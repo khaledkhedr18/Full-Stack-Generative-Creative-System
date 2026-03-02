@@ -12,6 +12,7 @@ import { finalize } from 'rxjs';
 import { AiService } from '../../services/ai-service';
 import { ArtStyle, ArtStyleConfig, GeneratedDesign } from '../../utils/ai-interface';
 import { FormsModule } from '@angular/forms';
+import { CartService } from '../../services/cart-service';
 
 @Component({
   selector: 'app-product-details',
@@ -64,12 +65,15 @@ export class ProductDetails {
   wishlistItems = signal<WishlistItem[]>([]);
   loadingWishlist = signal(false);
 
+  addingToCart = signal(false);
+
   constructor(
     private readonly productService: ProductServices,
     private wishlistService: WishlistService,
     activatedRoute: ActivatedRoute,
     private toast: HotToastService,
     private aiDesignService: AiService,
+    private cartService: CartService,
   ) {
     const { params, queryParams } = activatedRoute.snapshot;
     this.productId.set(params['id']);
@@ -127,8 +131,17 @@ export class ProductDetails {
     this.selectedVariant.set(variant);
     this.selectedSize.set(variant.sizes[0]?.size);
 
-    if (variant.images.length > 0) {
-      this.selectedImg.set(variant.images[0].url);
+    // Check if there's a generated design for this variant + current view
+    const currentView = this.designView();
+    const key = `${variant.variantId}_${currentView}`;
+    const aiDesign = this.generatedDesigns()[key];
+
+    if (aiDesign && aiDesign.status === 'completed') {
+      this.selectedImg.set(aiDesign.generatedImageUrl);
+    } else if (variant.images.length > 0) {
+      // Fallback: try to find an image matching the current view, else first image
+      const viewImg = variant.images.find((img) => img.view === currentView);
+      this.selectedImg.set(viewImg?.url || variant.images[0].url);
     }
   }
 
@@ -147,8 +160,10 @@ export class ProductDetails {
     // Keep track of the current view
     this.designView.set(view);
 
-    // 1. Check if we have an AI design for this view
-    const aiDesign = this.generatedDesigns()[view];
+    // 1. Check if we have an AI design for this variant + view
+    const variantId = this.selectedVariant()?.variantId;
+    const key = `${variantId}_${view}`;
+    const aiDesign = this.generatedDesigns()[key];
 
     if (aiDesign && aiDesign.status === 'completed') {
       this.selectedImg.set(aiDesign.generatedImageUrl);
@@ -310,6 +325,66 @@ export class ProductDetails {
           this.designError.set(
             err.error?.message || 'Failed to generate design. Please try again.',
           );
+        },
+      });
+  }
+
+  // Cart
+  addToCart() {
+    const variant = this.selectedVariant();
+    const size = this.selectedSize();
+
+    if (!variant) {
+      this.toast.error('Please select a color variant');
+      return;
+    }
+
+    if (!size) {
+      this.toast.error('Please select a size');
+      return;
+    }
+
+    // Collect all design IDs for this variant (front + back)
+    const designs = this.generatedDesigns();
+    const customDesignIds: string[] = [];
+
+    const frontKey = `${variant.variantId}_front`;
+    const backKey = `${variant.variantId}_back`;
+
+    if (designs[frontKey] && designs[frontKey].status === 'completed') {
+      customDesignIds.push(designs[frontKey].designId);
+    }
+    if (designs[backKey] && designs[backKey].status === 'completed') {
+      customDesignIds.push(designs[backKey].designId);
+    }
+
+    this.addingToCart.set(true);
+
+    const body: any = {
+      productId: this.productId(),
+      variantId: variant.variantId,
+      size,
+      quantity: 1,
+    };
+
+    if (customDesignIds.length > 0) {
+      body.customDesignIds = customDesignIds;
+    }
+
+    this.cartService
+      .addToCart(body)
+      .pipe(
+        this.toast.observe({
+          loading: 'Adding to cart...',
+          success: (res: any) => res.message || 'Added to cart!',
+          error: (err: any) => err.error?.message || 'Failed to add to cart',
+        }),
+        finalize(() => this.addingToCart.set(false)),
+      )
+      .subscribe({
+        next: () => {},
+        error: (err: any) => {
+          console.error('Add to cart error:', err);
         },
       });
   }

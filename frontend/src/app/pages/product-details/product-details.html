@@ -313,10 +313,12 @@
         >
           <div class="flex gap-3">
             <button
-              type="submit"
-              class="bg-white hover:bg-primary text-black hover:text-white transition-colors duration-300 btn-primary grow"
+              (click)="addToCart()"
+              [disabled]="addingToCart()"
+              type="button"
+              class="bg-white hover:bg-primary text-black hover:text-white transition-colors duration-300 btn-primary grow disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <span>Add to Cart</span>
+              <span>{{ addingToCart() ? 'Adding...' : 'Add to Cart' }}</span>
               <span class="flex justify-center items-center">
                 <ng-icon name="lucideMoveRight" size="15"></ng-icon>
               </span>

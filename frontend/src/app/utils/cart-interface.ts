@@ -20,6 +20,16 @@ export interface CartItemI {
   size: string;
   quantity: number;
   price: number;
+  customDesignIds?: string[];
+  customDesignFee?: number;
+}
+
+export interface AddToCartI {
+  productId: string;
+  variantId: string;
+  size: string;
+  quantity: number;
+  customDesignIds?: string[];
 }
 
 export interface UpdateCartItemI {
