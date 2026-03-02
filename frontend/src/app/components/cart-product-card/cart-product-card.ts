@@ -4,6 +4,8 @@ import { CurrencyPipe } from '@angular/common';
 import { CartService } from '../../services/cart-service';
 import { HotToastService } from '@ngxpert/hot-toast';
 
+const BACKEND_URL = 'http://localhost:3000';
+
 @Component({
   selector: 'app-cart-product-card',
   imports: [CurrencyPipe],
@@ -32,7 +34,9 @@ export class CartProductCard {
     if (designs && designs.length > 0) {
       const firstCompleted = designs.find((d) => d.status === 'completed' && d.generatedImageUrl);
       if (firstCompleted) {
-        return firstCompleted.generatedImageUrl!;
+        const url = firstCompleted.generatedImageUrl!;
+        if (url.startsWith('http://') || url.startsWith('https://')) return url;
+        return `${BACKEND_URL}/${url}`;
       }
     }
     // Otherwise fall back to the variant's first image

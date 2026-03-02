@@ -14,6 +14,8 @@ import { ArtStyle, ArtStyleConfig, GeneratedDesign } from '../../utils/ai-interf
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../../services/cart-service';
 
+const BACKEND_URL = 'http://localhost:3000';
+
 @Component({
   selector: 'app-product-details',
   imports: [NgClass, NgIcon, FormsModule],
@@ -137,7 +139,7 @@ export class ProductDetails {
     const aiDesign = this.generatedDesigns()[key];
 
     if (aiDesign && aiDesign.status === 'completed') {
-      this.selectedImg.set(aiDesign.generatedImageUrl);
+      this.selectedImg.set(this.resolveImageUrl(aiDesign.generatedImageUrl));
     } else if (variant.images.length > 0) {
       // Fallback: try to find an image matching the current view, else first image
       const viewImg = variant.images.find((img) => img.view === currentView);
@@ -166,7 +168,7 @@ export class ProductDetails {
     const aiDesign = this.generatedDesigns()[key];
 
     if (aiDesign && aiDesign.status === 'completed') {
-      this.selectedImg.set(aiDesign.generatedImageUrl);
+      this.selectedImg.set(this.resolveImageUrl(aiDesign.generatedImageUrl));
     } else {
       // 2. Fallback to original product image
       const originalImg = this.selectedVariant()?.images.find((el) => el.view === view);
@@ -360,7 +362,7 @@ export class ProductDetails {
             }));
 
             if (response.data.status === 'completed') {
-              this.selectedImg.set(response.data.generatedImageUrl);
+              this.selectedImg.set(this.resolveImageUrl(response.data.generatedImageUrl));
             }
           }
         },
@@ -387,6 +389,13 @@ export class ProductDetails {
           );
         },
       });
+  }
+
+  /** Prefix relative image paths with the backend URL */
+  private resolveImageUrl(url: string): string {
+    if (!url) return url;
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    return `${BACKEND_URL}/${url}`;
   }
 
   // Cart

@@ -2,6 +2,8 @@ import { Component, Input } from '@angular/core';
 import { CartItemI } from '../../utils/cart-interface';
 import { CurrencyPipe } from '@angular/common';
 
+const BACKEND_URL = 'http://localhost:3000';
+
 @Component({
   selector: 'app-checkout-product-card',
   imports: [CurrencyPipe],
@@ -37,7 +39,9 @@ export class CheckoutProductCard {
     if (designs && designs.length > 0) {
       const firstCompleted = designs.find((d) => d.status === 'completed' && d.generatedImageUrl);
       if (firstCompleted) {
-        return firstCompleted.generatedImageUrl!;
+        const url = firstCompleted.generatedImageUrl!;
+        if (url.startsWith('http://') || url.startsWith('https://')) return url;
+        return `${BACKEND_URL}/${url}`;
       }
     }
     const variant = this.getVariant();
