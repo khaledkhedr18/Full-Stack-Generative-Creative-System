@@ -2,6 +2,7 @@ import { Component, model, output } from '@angular/core';
 import { CartItemI, RemoveItemI, UpdateCartItemI } from '../../utils/cart-interface';
 import { CurrencyPipe } from '@angular/common';
 import { CartService } from '../../services/cart-service';
+import { HotToastService } from '@ngxpert/hot-toast';
 
 @Component({
   selector: 'app-cart-product-card',
@@ -14,7 +15,10 @@ export class CartProductCard {
 
   itemsChange = output<void>();
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private toast: HotToastService,
+  ) {}
 
   getVariant() {
     return this.item().product.variants.find(
@@ -68,10 +72,11 @@ export class CartProductCard {
     };
     this.cartService.removeItem(removedItem).subscribe({
       next: () => {
+        this.toast.success('Item removed from cart');
         this.itemsChange.emit();
       },
       error: (error) => {
-        console.log(error);
+        this.toast.error(error.error.message);
       },
     });
   }

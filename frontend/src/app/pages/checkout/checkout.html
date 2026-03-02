@@ -1,160 +1,323 @@
-<section class="mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 max-w-7xl overflow-hidden">
-  <!-- Start Checkout Header -->
-  <header class="mb-12">
-    <ol class="flex justify-center items-center space-x-2 sm:space-x-8 mx-auto w-full max-w-3xl">
-      <li class="flex items-center text-primary">
-        <span
-          class="flex justify-center items-center bg-primary border-2 border-primary rounded-full w-8 h-8 text-white"
-        >
-          <ng-icon size="14" name="lucideCheck"></ng-icon>
-        </span>
-        <span class="hidden sm:block ml-3 font-medium text-sm">Cart Review</span>
-      </li>
-      <li class="flex-1 bg-primary/30 h-0.5"></li>
-      <li class="flex items-center text-primary">
-        <span
-          class="flex justify-center items-center bg-primary border-2 border-primary rounded-full w-8 h-8 font-bold text-white text-sm"
-        >
-          2
-        </span>
-        <span class="hidden sm:block ml-3 font-bold text-sm">Checkout</span>
-      </li>
-      <li class="flex-1 bg-slate-700 h-0.5"></li>
-      <li class="flex items-center text-slate-500">
-        <span
-          class="flex justify-center items-center bg-transparent border-2 border-slate-700 rounded-full w-8 h-8 font-medium text-sm"
-          >3 </span
-        ><span class="hidden sm:block ml-3 font-medium text-sm">Confirmation</span>
-      </li>
-    </ol>
-  </header>
-  <!-- End Checkout Header -->
-  <div class="lg:gap-x-12 lg:grid lg:grid-cols-12">
-    <!-- Left Section -->
-    <div class="space-y-10 lg:col-span-7">
-      <section>
-        <h2 class="flex items-center gap-2 mb-6 font-bold text-white text-xl">
-          <span class="text-primary">
-            <ng-icon size="24" name="lucideVan"></ng-icon>
-          </span>
-          Shipping Details
-        </h2>
-        <div class="gap-x-4 gap-y-6 grid grid-cols-1 sm:grid-cols-6">
-          <div class="sm:col-span-3">
-            <label class="font-medium text-slate-300 text-sm">First name</label>
-            <input
-              type="text"
-              class="bg-card mt-1 p-2.5 border border-slate-600 focus:border-primary rounded-lg outline-none w-full text-white text-sm transition-all duration-300"
-            />
-          </div>
-          <div class="sm:col-span-3">
-            <label class="font-medium text-slate-300 text-sm">Last name</label>
-            <input
-              type="text"
-              class="bg-card mt-1 p-2.5 border border-slate-600 focus:border-primary rounded-lg outline-none w-full text-white text-sm transition-all duration-300"
-            />
-          </div>
-          <div class="sm:col-span-6">
-            <label class="font-medium text-slate-300 text-sm">Phone</label>
-            <input
-              type="text"
-              class="bg-card mt-1 p-2.5 border border-slate-600 focus:border-primary rounded-lg outline-none w-full text-white text-sm transition-all duration-300"
-            />
-          </div>
-          <div class="sm:col-span-6">
-            <label class="font-medium text-slate-300 text-sm">Email</label>
-            <input
-              type="text"
-              class="bg-card mt-1 p-2.5 border border-slate-600 focus:border-primary rounded-lg outline-none w-full text-white text-sm transition-all duration-300"
-            />
-          </div>
-          <div class="sm:col-span-6">
-            <label class="font-medium text-slate-300 text-sm">Address</label>
-            <input
-              type="text"
-              class="bg-card mt-1 p-2.5 border border-slate-600 focus:border-primary rounded-lg outline-none w-full text-white text-sm transition-all duration-300"
-            />
-          </div>
-          <div class="sm:col-span-3">
-            <label class="font-medium text-slate-300 text-sm">City</label>
-            <input
-              type="text"
-              class="bg-card mt-1 p-2.5 border border-slate-600 focus:border-primary rounded-lg outline-none w-full text-white text-sm transition-all duration-300"
-            />
-          </div>
-          <div class="sm:col-span-3">
-            <label class="font-medium text-slate-300 text-sm">ZIP</label>
-            <input
-              type="text"
-              class="bg-card mt-1 p-2.5 border border-slate-600 focus:border-primary rounded-lg outline-none w-full text-white text-sm transition-all duration-300"
-            />
-          </div>
-        </div>
-      </section>
-      <section>
-        <h2 class="flex items-center gap-2 mb-6 font-bold text-white text-xl">
-          <span class="flex justify-center items-center text-primary">
-            <ng-icon size="24" name="lucideWalletCards"></ng-icon>
-          </span>
-          Payment Method
-        </h2>
-        <div class="gap-4 grid grid-cols-2 mb-6">
-          <label
-            for="credit"
-            class="flex bg-card shadow-sm p-4 border border-slate-700 has-checked:border-primary rounded-xl cursor-pointer"
-          >
-            <input id="credit" type="radio" name="payment-method" checked class="hidden" />
-            <div class="flex flex-col flex-1">
-              <span class="block font-bold text-white text-sm">Credit Card</span>
-              <span class="mt-1 text-slate-400 text-sm">Faster checkout</span>
+@if (isLoading()) {
+  <section class="mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 max-w-7xl overflow-hidden">
+    <header class="mb-12">
+      <div class="flex justify-center items-center space-x-2 sm:space-x-8 mx-auto w-full max-w-3xl">
+        <div class="skeleton size-8 shrink-0 rounded-full"></div>
+        <div class="skeleton h-0.5 flex-1 opacity-20"></div>
+        <div class="skeleton size-8 shrink-0 rounded-full"></div>
+        <div class="skeleton h-0.5 flex-1 opacity-20"></div>
+        <div class="skeleton size-8 shrink-0 rounded-full"></div>
+      </div>
+    </header>
+
+    <div class="lg:gap-x-12 lg:grid lg:grid-cols-12">
+      <div class="space-y-10 lg:col-span-7">
+        <section>
+          <div class="skeleton h-8 w-48 mb-6"></div>
+          <div class="gap-x-4 gap-y-6 grid grid-cols-1 sm:grid-cols-6">
+            <div class="sm:col-span-3 space-y-2">
+              <div class="skeleton h-4 w-20"></div>
+              <div class="skeleton h-11 w-full rounded-lg"></div>
             </div>
-          </label>
-          <label
-            for="cash"
-            class="flex bg-card shadow-sm p-4 border border-slate-700 has-checked:border-primary rounded-xl cursor-pointer"
-          >
-            <input id="cash" type="radio" name="payment-method" class="hidden" />
-            <div class="flex flex-col flex-1">
-              <span class="block font-medium text-white text-sm">COD</span>
-              <span class="mt-1 text-slate-400 text-sm">Cash on Delivery</span>
+            <div class="sm:col-span-3 space-y-2">
+              <div class="skeleton h-4 w-20"></div>
+              <div class="skeleton h-11 w-full rounded-lg"></div>
             </div>
-          </label>
-        </div>
-      </section>
-    </div>
-    <!-- Right Section -->
-    <div class="lg:col-span-5 mt-10 lg:mt-0">
-      <div class="bg-card shadow-lg p-6 border border-slate-800 rounded-xl">
-        <h2 class="mb-4 font-bold text-white text-lg">Order Summary</h2>
-        <div class="flex flex-col space-y-4 mb-4 pr-2 max-h-60 overflow-y-auto">
-          <app-checkout-product-card></app-checkout-product-card>
-          <app-checkout-product-card></app-checkout-product-card>
-          <app-checkout-product-card></app-checkout-product-card>
-          <app-checkout-product-card></app-checkout-product-card>
-          <app-checkout-product-card></app-checkout-product-card>
-          <app-checkout-product-card></app-checkout-product-card>
-          <app-checkout-product-card></app-checkout-product-card>
-        </div>
-        <div class="space-y-2 pt-4 border-slate-700 border-t">
-          <div class="flex justify-between text-slate-400 text-sm">
-            <span>Subtotal</span>
-            <span>$210.00</span>
+            <div class="sm:col-span-6 space-y-2">
+              <div class="skeleton h-4 w-16"></div>
+              <div class="skeleton h-11 w-full rounded-lg"></div>
+            </div>
+            <div class="sm:col-span-6 space-y-2">
+              <div class="skeleton h-4 w-16"></div>
+              <div class="skeleton h-11 w-full rounded-lg"></div>
+            </div>
           </div>
-          <div class="flex justify-between text-slate-400 text-sm">
-            <span>Shipping</span>
-            <span class="text-green-500">Free</span>
+        </section>
+
+        <section>
+          <div class="skeleton h-8 w-40 mb-6"></div>
+          <div class="gap-4 grid grid-cols-2">
+            <div class="skeleton h-20 w-full rounded-xl"></div>
+            <div class="skeleton h-20 w-full rounded-xl"></div>
           </div>
-          <div class="flex justify-between pt-2 font-bold text-white text-base">
-            <span>Total</span>
-            <span>$210.00</span>
+        </section>
+      </div>
+
+      <div class="lg:col-span-5 mt-10 lg:mt-0">
+        <div class="bg-card/30 p-6 border border-slate-800 rounded-xl space-y-6">
+          <div class="skeleton h-6 w-32 mb-4"></div>
+
+          <div class="space-y-4">
+            @for (i of [1, 2, 3]; track i) {
+              <div class="flex gap-4">
+                <div class="skeleton size-16 shrink-0 rounded-lg"></div>
+                <div class="flex-1 space-y-2">
+                  <div class="skeleton h-4 w-3/4"></div>
+                  <div class="skeleton h-3 w-1/2"></div>
+                </div>
+                <div class="skeleton h-4 w-12"></div>
+              </div>
+            }
           </div>
+
+          <div class="pt-4 border-t border-slate-700 space-y-3">
+            <div class="flex justify-between">
+              <div class="skeleton h-4 w-16"></div>
+              <div class="skeleton h-4 w-12"></div>
+            </div>
+            <div class="flex justify-between pt-2">
+              <div class="skeleton h-6 w-20"></div>
+              <div class="skeleton h-6 w-16"></div>
+            </div>
+          </div>
+          <div class="skeleton h-12 w-full rounded-xl mt-6"></div>
         </div>
-        <button
-          class="bg-primary hover:bg-blue-600 mt-6 py-3 rounded-xl w-full font-bold text-white transition-colors duration-300 cursor-pointer"
-        >
-          Pay
-        </button>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+} @else {
+  <section class="mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 max-w-7xl overflow-hidden">
+    <!-- Start Checkout Header -->
+    <header class="mb-12">
+      <ol class="flex justify-center items-center space-x-2 sm:space-x-8 mx-auto w-full max-w-3xl">
+        <li class="flex items-center text-primary">
+          <span
+            class="flex justify-center items-center bg-primary border-2 border-primary rounded-full w-8 h-8 text-white"
+          >
+            <ng-icon size="14" name="lucideCheck"></ng-icon>
+          </span>
+          <span class="hidden sm:block ml-3 font-medium text-sm">Cart Review</span>
+        </li>
+        <li class="flex-1 bg-primary/30 h-0.5"></li>
+        <li class="flex items-center text-primary">
+          <span
+            class="flex justify-center items-center bg-primary border-2 border-primary rounded-full w-8 h-8 font-bold text-white text-sm"
+          >
+            2
+          </span>
+          <span class="hidden sm:block ml-3 font-bold text-sm">Checkout</span>
+        </li>
+        <li class="flex-1 bg-slate-700 h-0.5"></li>
+        <li class="flex items-center text-slate-500">
+          <span
+            class="flex justify-center items-center bg-transparent border-2 border-slate-700 rounded-full w-8 h-8 font-medium text-sm"
+            >3 </span
+          ><span class="hidden sm:block ml-3 font-medium text-sm">Confirmation</span>
+        </li>
+      </ol>
+    </header>
+    <!-- End Checkout Header -->
+    <div class="lg:gap-x-12 lg:grid lg:grid-cols-12">
+      <!-- Left Section -->
+      <div [formGroup]="checkoutForm" class="space-y-10 lg:col-span-7">
+        <section>
+          <h2 class="flex items-center gap-2 mb-6 font-bold text-white text-xl">
+            <span class="text-primary">
+              <ng-icon size="24" name="lucideVan"></ng-icon>
+            </span>
+            Shipping Details
+          </h2>
+          <div class="gap-x-4 gap-y-6 grid grid-cols-1 sm:grid-cols-6">
+            <div class="sm:col-span-3">
+              <label class="font-medium text-slate-300 text-sm">First name</label>
+              <input
+                formControlName="fName"
+                type="text"
+                class="bg-card mt-1 p-2.5 border border-slate-600 focus:border-primary rounded-lg outline-none w-full text-white text-sm transition-all duration-300"
+              />
+              @if (checkoutForm.get('fName')?.touched && checkoutForm.get('fName')?.invalid) {
+                @if (checkoutForm.get('fName')?.errors?.['required']) {
+                  <p class="error-message mt-1">First name is required.</p>
+                } @else if (checkoutForm.get('fName')?.errors?.['minlength']) {
+                  <p class="error-message mt-1">Must be at least 2 characters.</p>
+                } @else if (checkoutForm.get('fName')?.errors?.['pattern']) {
+                  <p class="error-message mt-1">
+                    Please remove any spaces or use a hyphen instead.
+                  </p>
+                }
+              }
+            </div>
+            <div class="sm:col-span-3">
+              <label class="font-medium text-slate-300 text-sm">Last name</label>
+              <input
+                formControlName="lName"
+                type="text"
+                class="bg-card mt-1 p-2.5 border border-slate-600 focus:border-primary rounded-lg outline-none w-full text-white text-sm transition-all duration-300"
+              />
+              @if (checkoutForm.get('lName')?.touched && checkoutForm.get('lName')?.invalid) {
+                @if (checkoutForm.get('lName')?.errors?.['required']) {
+                  <p class="error-message mt-1">Last name is required.</p>
+                } @else if (checkoutForm.get('lName')?.errors?.['minlength']) {
+                  <p class="error-message mt-1">Must be at least 2 characters.</p>
+                } @else if (checkoutForm.get('lName')?.errors?.['pattern']) {
+                  <p class="error-message mt-1">
+                    Please remove any spaces or use a hyphen instead.
+                  </p>
+                }
+              }
+            </div>
+            <div class="sm:col-span-6">
+              <label class="font-medium text-slate-300 text-sm">Phone</label>
+              <input
+                formControlName="phone"
+                type="text"
+                class="bg-card mt-1 p-2.5 border border-slate-600 focus:border-primary rounded-lg outline-none w-full text-white text-sm transition-all duration-300"
+              />
+              @if (checkoutForm.get('phone')?.touched && checkoutForm.get('phone')?.invalid) {
+                @if (checkoutForm.get('phone')?.errors?.['required']) {
+                  <p class="error-message mt-1">Phone number is required.</p>
+                } @else if (checkoutForm.get('phone')?.errors?.['minlength']) {
+                  <p class="error-message mt-1">Must be at least 7 digits.</p>
+                } @else if (checkoutForm.get('phone')?.errors?.['pattern']) {
+                  <p class="error-message mt-1">Numbers only (can start with +).</p>
+                }
+              }
+            </div>
+            <div class="sm:col-span-6">
+              <label class="font-medium text-slate-300 text-sm">Email</label>
+              <input
+                formControlName="email"
+                type="text"
+                class="bg-card mt-1 p-2.5 border border-slate-600 focus:border-primary rounded-lg outline-none w-full text-white text-sm transition-all duration-300"
+              />
+              @if (checkoutForm.get('email')?.touched && checkoutForm.get('email')?.invalid) {
+                @if (checkoutForm.get('email')?.errors?.['required']) {
+                  <p class="error-message mt-1">Email is required.</p>
+                } @else if (checkoutForm.get('email')?.errors?.['email']) {
+                  <p class="error-message mt-1">Please enter a valid email address.</p>
+                }
+              }
+            </div>
+            <div class="sm:col-span-6">
+              <label class="font-medium text-slate-300 text-sm">Address</label>
+              <input
+                formControlName="address"
+                type="text"
+                class="bg-card mt-1 p-2.5 border border-slate-600 focus:border-primary rounded-lg outline-none w-full text-white text-sm transition-all duration-300"
+              />
+              @if (checkoutForm.get('address')?.touched && checkoutForm.get('address')?.invalid) {
+                @if (checkoutForm.get('address')?.errors?.['required']) {
+                  <p class="error-message mt-1">Address is required.</p>
+                } @else if (checkoutForm.get('address')?.errors?.['minlength']) {
+                  <p class="error-message mt-1">Must be at least 5 characters.</p>
+                }
+              }
+            </div>
+            <div class="sm:col-span-3">
+              <label class="font-medium text-slate-300 text-sm">City</label>
+              <input
+                formControlName="city"
+                type="text"
+                class="bg-card mt-1 p-2.5 border border-slate-600 focus:border-primary rounded-lg outline-none w-full text-white text-sm transition-all duration-300"
+              />
+              @if (checkoutForm.get('city')?.touched && checkoutForm.get('city')?.invalid) {
+                @if (checkoutForm.get('city')?.errors?.['required']) {
+                  <p class="error-message mt-1">City is required.</p>
+                } @else if (checkoutForm.get('city')?.errors?.['minlength']) {
+                  <p class="error-message mt-1">Must be at least 2 characters.</p>
+                } @else if (checkoutForm.get('city')?.errors?.['pattern']) {
+                  <p class="error-message mt-1">Letters only.</p>
+                }
+              }
+            </div>
+            <div class="sm:col-span-3">
+              <label class="font-medium text-slate-300 text-sm">ZIP</label>
+              <input
+                formControlName="zip"
+                type="text"
+                class="bg-card mt-1 p-2.5 border border-slate-600 focus:border-primary rounded-lg outline-none w-full text-white text-sm transition-all duration-300"
+              />
+              @if (checkoutForm.get('zip')?.touched && checkoutForm.get('zip')?.invalid) {
+                @if (checkoutForm.get('zip')?.errors?.['required']) {
+                  <p class="error-message mt-1">ZIP code is required.</p>
+                } @else if (checkoutForm.get('zip')?.errors?.['minlength']) {
+                  <p class="error-message mt-1">Must be at least 5 digits.</p>
+                } @else if (checkoutForm.get('zip')?.errors?.['pattern']) {
+                  <p class="error-message mt-1">Numbers only.</p>
+                }
+              }
+            </div>
+          </div>
+        </section>
+        <section>
+          <h2 class="flex items-center gap-2 mb-6 font-bold text-white text-xl">
+            <span class="flex justify-center items-center text-primary">
+              <ng-icon size="24" name="lucideWalletCards"></ng-icon>
+            </span>
+            Payment Method
+          </h2>
+          <div class="gap-4 grid grid-cols-2 mb-6">
+            <label
+              for="credit"
+              class="flex bg-card shadow-sm p-4 border border-slate-700 has-checked:border-primary rounded-xl cursor-pointer"
+            >
+              <input
+                formControlName="paymentMethod"
+                value="stripe"
+                id="credit"
+                type="radio"
+                class="hidden"
+              />
+              <div class="flex flex-col flex-1">
+                <span class="block font-bold text-white text-sm">Credit Card</span>
+                <span class="mt-1 text-slate-400 text-sm">Faster checkout</span>
+              </div>
+            </label>
+            <label
+              for="cash"
+              class="flex bg-card shadow-sm p-4 border border-slate-700 has-checked:border-primary rounded-xl cursor-pointer"
+            >
+              <input
+                formControlName="paymentMethod"
+                value="cash_on_delivery"
+                id="cash"
+                type="radio"
+                class="hidden"
+              />
+              <div class="flex flex-col flex-1">
+                <span class="block font-medium text-white text-sm">COD</span>
+                <span class="mt-1 text-slate-400 text-sm">Cash on Delivery</span>
+              </div>
+            </label>
+          </div>
+        </section>
+      </div>
+      <!-- Right Section -->
+      <div class="lg:col-span-5 mt-10 lg:mt-0">
+        <div class="bg-card shadow-lg p-6 border border-slate-800 rounded-xl">
+          <h2 class="mb-4 font-bold text-white text-lg">Order Summary</h2>
+          <div class="flex flex-col space-y-4 mb-4 pr-2 max-h-60 overflow-y-auto">
+            @for (item of cartData().items; track item.product._id + item.variantId) {
+              <app-checkout-product-card [item]="item"></app-checkout-product-card>
+            }
+          </div>
+          <div class="space-y-2 pt-4 border-slate-700 border-t">
+            <div class="flex justify-between text-slate-400 text-sm">
+              <span>Subtotal</span>
+              <span>{{ cartData().totalPrice | currency }}</span>
+            </div>
+            <div class="flex justify-between text-slate-400 text-sm">
+              <span>Shipping</span>
+              <span class="text-green-500">Free</span>
+            </div>
+            <div class="flex justify-between pt-2 font-bold text-white text-base">
+              <span>Total</span>
+              <span>{{ cartData().totalPrice | currency }}</span>
+            </div>
+          </div>
+          <button
+            (click)="handlePay()"
+            class="bg-primary hover:bg-blue-600 mt-6 py-3 rounded-xl w-full font-bold text-white transition-colors duration-300 cursor-pointer disabled:bg-primary/50"
+            [disabled]="spinner() ? true : false"
+          >
+            @if (spinner()) {
+              <span class="loading loading-spinner"></span>
+            } @else {
+              Pay
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+}

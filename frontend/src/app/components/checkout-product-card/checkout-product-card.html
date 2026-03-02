@@ -1,22 +1,19 @@
 <div class="flex gap-4">
   <div class="bg-slate-700 rounded-lg w-16 h-16 overflow-hidden shrink-0">
-    <img
-      class="w-full h-full object-cover"
-      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVw80M_WO5VfoQm2b4KSTbD7oy9H4B6zzT3YEnB-mwsNXtkCEnQVkHGNQRrcXwibtqyhcSiQOhixrPods_3GKe5OA3qu3DRW_4TAez8glfZnnmYRJPXsrKhaV-IJ1vBaGt6Pt2UDBqYPeNCpsoiDjZHPz3O5MDjd7GVNTCO8M5u3UevsS11LEZxo2O5_CT50gT7HFL8Pq7-qUMRvK8v9v4ZGx4ISpKiyQI_-eI7kXCZSeKQ1_47vb2RAygHceLf6QuuJ6BY5U5SAg"
-    />
+    <img class="w-full h-full object-cover" [src]="getVariantImage()" />
   </div>
   <div class="flex-1 space-y-0.5">
-    <h3 class="font-medium text-white text-sm line-clamp-1">Neon Cyberpunk Jacket - AI V2</h3>
+    <h3 class="font-medium text-white text-sm line-clamp-1">{{ item.product.name }}</h3>
     <p class="flex gap-1 text-slate-400 text-xs">
-      <span>M</span>
+      <span>{{ item.size }}</span>
       <span>|</span>
-      <span>Cyan</span>
+      <span>{{ getVariantColor() }}</span>
     </p>
     <p class="flex gap-1 text-slate-400 text-xs">
       <span>Qty</span>
       <span>:</span>
-      <span>1</span>
+      <span>{{ item.quantity }}</span>
     </p>
   </div>
-  <p class="font-medium text-white text-sm">$120</p>
+  <p class="font-medium text-white text-sm">{{ item.price | currency }}</p>
 </div>

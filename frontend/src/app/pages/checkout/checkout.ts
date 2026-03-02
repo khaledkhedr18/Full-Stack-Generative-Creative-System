@@ -1,24 +1,95 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CheckoutProductCard } from '../../components/checkout-product-card/checkout-product-card';
 import { CheckDeactivate } from '../../utils/check-deactivate';
-import { Observable } from 'rxjs';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCheck, lucideVan, lucideWalletCards } from '@ng-icons/lucide';
+import { CartService } from '../../services/cart-service';
+import { CartInterface } from '../../utils/cart-interface';
+import { CurrencyPipe } from '@angular/common';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-checkout',
-  imports: [CheckoutProductCard, NgIcon],
+  imports: [CheckoutProductCard, NgIcon, CurrencyPipe, ReactiveFormsModule],
   providers: [provideIcons({ lucideVan, lucideWalletCards, lucideCheck })],
   templateUrl: './checkout.html',
   styles: ``,
 })
-export class Checkout implements CheckDeactivate {
-  isFormDirty = false;
+export class Checkout implements CheckDeactivate, OnInit {
+  constructor(private cartService: CartService) {}
+
+  isLoading = signal<boolean>(true);
+  spinner = signal<boolean>(false);
+
+  cartData = signal<CartInterface>({
+    _id: '',
+    user: '',
+    items: [],
+    totalItems: 0,
+    totalPrice: 0,
+    createdAt: '',
+    updatedAt: '',
+    __V: 0,
+    id: '',
+  });
+
+  readonly nameRegex = /^[\p{L}]+$/u;
+
+  checkoutForm: FormGroup = new FormGroup({
+    fName: new FormControl('', [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.pattern(this.nameRegex),
+    ]),
+    lName: new FormControl('', [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.pattern(this.nameRegex),
+    ]),
+    phone: new FormControl('', [
+      Validators.required,
+      Validators.pattern('^\\+?[0-9]*$'),
+      Validators.minLength(7),
+    ]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    address: new FormControl('', [Validators.required, Validators.minLength(5)]),
+    city: new FormControl('', [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.pattern(/^[a-zA-Z\s\-\'.]*$/),
+    ]),
+    zip: new FormControl('', [
+      Validators.required,
+      Validators.pattern('^[0-9]*$'),
+      Validators.minLength(5),
+    ]),
+    paymentMethod: new FormControl('stripe', Validators.required),
+  });
+
+  ngOnInit(): void {
+    this.cartService.getCart().subscribe({
+      next: (data) => {
+        this.isLoading.set(false);
+        this.cartData.set(data.data);
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        console.log(error);
+      },
+    });
+  }
 
   canDeactivate(): boolean {
-    if (this.isFormDirty) {
+    if (this.checkoutForm.dirty) {
       return confirm('You have unsaved changes! Are you sure you want to leave the checkout?');
     }
     return true;
+  }
+
+  handlePay() {
+    if (this.checkoutForm.valid) {
+    } else {
+      this.checkoutForm.markAllAsTouched();
+    }
   }
 }

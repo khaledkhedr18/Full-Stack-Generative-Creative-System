@@ -1,7 +1,7 @@
 <div class="flex justify-center items-center h-full">
-  <div class="flex">
+  <div class="flex xl:w-5xl">
     <div
-      class="hidden md:block bg-[url('/images/material.png')] bg-cover bg-center rounded-l-2xl w-3xs"
+      class="hidden md:block bg-[url('/images/material.png')] bg-cover bg-center rounded-l-2xl md:w-3xs xl:w-xs"
     >
       <div
         class="relative flex flex-col bg-linear-to-t from-background via-background/60 to-transparent p-5 rounded-l-2xl h-full"
@@ -16,7 +16,7 @@
         </div>
         <div class="flex flex-col gap-2.5 my-auto">
           <div class="font-bold text-3xl">
-            <p class="w-60">Welcome back to</p>
+            <p>Welcome back to</p>
             <p class="bg-clip-text bg-linear-to-r from-primary to-cyan-400 text-transparent">
               your studio.
             </p>
@@ -31,7 +31,7 @@
       </div>
     </div>
     <div
-      class="flex md:justify-center bg-card p-5 md:py-14 rounded-2xl md:rounded-r-2xl md:rounded-l-none md:w-md lg:w-xl"
+      class="flex md:justify-center bg-card p-5 md:py-14 rounded-2xl md:rounded-r-2xl md:rounded-l-none md:w-md lg:grow"
     >
       <div class="flex flex-col gap-6">
         <div class="flex flex-col gap-1.5">
@@ -133,9 +133,6 @@
                 Sign In
               }
             </button>
-            @if (errorMessage()) {
-              <p class="error-message">{{ errorMessage() }}</p>
-            }
           </div>
         </form>
         <p class="self-center text-text-muted text-xs">

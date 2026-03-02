@@ -8,6 +8,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../../services/auth-service';
 import { UserRegisterInterface } from '../../utils/user-interface';
 import { CookieService } from 'ngx-cookie-service';
+import { HotToastService } from '@ngxpert/hot-toast';
 
 @Component({
   selector: 'app-sign-up',
@@ -20,6 +21,7 @@ export class SignUp {
     private authService: AuthService,
     private cookieService: CookieService,
     private router: Router,
+    private toast: HotToastService,
   ) {}
 
   faFacebook = faFacebook;
@@ -61,14 +63,15 @@ export class SignUp {
       const newUser: UserRegisterInterface = { ...this.registrationForm.value };
       this.authService.register(newUser).subscribe({
         next: (data: any) => {
+          this.loading.set(false);
           const token = data.token;
           this.cookieService.set('jwt_token', token, undefined, '/', undefined, true, 'Strict');
+          this.toast.success(`Welcome ${newUser.firstName + ' ' + newUser.lastName}`);
           this.router.navigate(['/home']);
-          this.loading.set(false);
         },
         error: (error) => {
-          console.log(error);
           this.loading.set(false);
+          this.toast.error(error.error.message);
         },
       });
     } else {

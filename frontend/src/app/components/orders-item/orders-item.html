@@ -1,9 +1,6 @@
 <div class="flex sm:flex-row flex-col gap-6 p-6 border-slate-800 border-t">
   <div class="bg-slate-800 rounded-lg w-32 h-32 overflow-hidden shrink-0">
-    <img
-      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWZi4abUoVIWjfSWtH5nfZy2nrZihZNKycvpiMkoXm4-9the-Wvb18qnvROBpHLzYdX6GmtufrxaHGL5VqaKdgwIxft958GgaM1p1YZYGigqIbJYVob9tkgwhXn-MfzXGr-MjTVVbOjwPmbvATnzG9B2jbCVQa25k03Re4XlsQjln0Bvd3o8Y4DL0-LUycPrr_uhjMluPmLSxT7HHvkik0zbf_3eW8Ww_Tcs95DIKFPOdeLp2qBlVpMzO2QyWbJWt0xOaVwz13Jao"
-      class="w-full h-full object-cover"
-    />
+    <img [src]="getVariantImage()" class="w-full h-full object-cover" />
   </div>
   <div class="flex-1">
     <h4 class="font-bold text-white text-lg">{{ item.product.name }}</h4>

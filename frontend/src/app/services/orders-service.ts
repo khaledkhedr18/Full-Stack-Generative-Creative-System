@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { OrderResponseI } from '../utils/order-interface';
+import { AddressInterface, OrderResponseI } from '../utils/order-interface';
 
 @Injectable({
   providedIn: 'root',
