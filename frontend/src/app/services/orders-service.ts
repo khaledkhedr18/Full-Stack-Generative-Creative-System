@@ -6,6 +6,7 @@ import {
   OrderResponseI,
   OrderInterface,
   ShippingAddressI,
+  PaymentInterface,
 } from '../utils/order-interface';
 
 @Injectable({
@@ -34,5 +35,12 @@ export class OrdersService {
     return this.http.get<{ success: boolean; data: OrderInterface }>(`${this.baseURL}/${orderId}`, {
       headers: this.getAuthHeaders(),
     });
+  }
+
+  makeOrder(orderRequest: {
+    shippingAddress: ShippingAddressI;
+    payment: { method: PaymentInterface };
+  }) {
+    return this.http.post(this.baseURL, orderRequest, { headers: this.getAuthHeaders() });
   }
 }

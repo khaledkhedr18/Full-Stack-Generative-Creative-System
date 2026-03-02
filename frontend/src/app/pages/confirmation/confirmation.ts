@@ -6,6 +6,7 @@ import { PaymentService } from '../../services/payment-service';
 import { OrdersService } from '../../services/orders-service';
 import { OrderInterface } from '../../utils/order-interface';
 import { CurrencyPipe } from '@angular/common';
+import { CartService } from '../../services/cart-service';
 
 @Component({
   selector: 'app-confirmation',
@@ -25,46 +26,60 @@ export class Confirmation implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private paymentService: PaymentService,
     private ordersService: OrdersService,
+    private cartService: CartService,
   ) {}
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params) => {
       const sid = params.get('session_id');
+      const method = params.get('method');
       if (!sid) {
         this.error.set('No session ID found.');
         this.isLoading.set(false);
         return;
       }
       this.sessionId.set(sid);
-      this.paymentService.verifySession(sid).subscribe({
-        next: (res) => {
-          this.paymentStatus.set(res.data.paymentStatus);
-          this.orderNumber.set(res.data.orderNumber);
-          this.orderId.set(res.data.orderId);
-
-          if (res.data.orderId) {
-            this.ordersService.getOrderById(res.data.orderId).subscribe({
-              next: (orderRes) => {
-                this.order.set(orderRes.data);
-                this.isLoading.set(false);
-              },
-              error: () => {
-                this.isLoading.set(false);
-              },
-            });
-          } else {
+      if (method) {
+        this.ordersService.getOrderById(sid).subscribe({
+          next: (orderRes) => {
+            this.order.set(orderRes.data);
             this.isLoading.set(false);
-          }
-        },
-        error: (err) => {
-          console.error('Failed to verify session:', err);
-          this.error.set('Failed to verify payment. Please contact support.');
-          this.isLoading.set(false);
-        },
-      });
+          },
+          error: () => {
+            this.isLoading.set(false);
+          },
+        });
+      } else {
+        this.paymentService.verifySession(sid).subscribe({
+          next: (res) => {
+            this.paymentStatus.set(res.data.paymentStatus);
+            this.orderNumber.set(res.data.orderNumber);
+            this.orderId.set(res.data.orderId);
+
+            if (res.data.orderId) {
+              this.ordersService.getOrderById(res.data.orderId).subscribe({
+                next: (orderRes) => {
+                  this.order.set(orderRes.data);
+                  this.isLoading.set(false);
+                },
+                error: () => {
+                  this.isLoading.set(false);
+                },
+              });
+            } else {
+              this.isLoading.set(false);
+            }
+          },
+          error: (err) => {
+            console.error('Failed to verify session:', err);
+            this.error.set('Failed to verify payment. Please contact support.');
+            this.isLoading.set(false);
+          },
+        });
+      }
+      this.cartService.clearCart();
     });
   }
 }

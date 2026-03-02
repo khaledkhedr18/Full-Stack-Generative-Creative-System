@@ -55,7 +55,7 @@ export interface AddressInterface {
 
 export interface PaymentInterface {
   method: string;
-  status: string;
+  status?: string;
 }
 
 export interface ShippingAddressI {

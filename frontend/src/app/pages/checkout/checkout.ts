@@ -10,6 +10,8 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ShippingAddressI } from '../../utils/order-interface';
 import { NgxStripeModule } from 'ngx-stripe';
 import { PaymentService } from '../../services/payment-service';
+import { OrdersService } from '../../services/orders-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-checkout',
@@ -22,6 +24,8 @@ export class Checkout implements CheckDeactivate, OnInit {
   constructor(
     private cartService: CartService,
     private paymentService: PaymentService,
+    private ordersService: OrdersService,
+    private router: Router,
   ) {}
 
   isLoading = signal<boolean>(true);
@@ -85,10 +89,12 @@ export class Checkout implements CheckDeactivate, OnInit {
     });
   }
 
-  sessionURL = signal('');
+  sessionURL = signal<string>('');
+
+  isPayClicked = signal<boolean>(false);
 
   canDeactivate(): boolean {
-    if (this.checkoutForm.dirty) {
+    if (this.checkoutForm.dirty && !this.isPayClicked()) {
       return confirm('You have unsaved changes! Are you sure you want to leave the checkout?');
     }
     return true;
@@ -113,6 +119,38 @@ export class Checkout implements CheckDeactivate, OnInit {
             this.spinner.set(false);
             this.sessionURL.set(data.data.url);
             window.location.href = this.sessionURL();
+          },
+          error: (error) => {
+            this.spinner.set(false);
+            console.log(error);
+          },
+        });
+      } else {
+        const orderRequest = {
+          shippingAddress: {
+            firstName: this.checkoutForm.get('fName')?.value,
+            lastName: this.checkoutForm.get('lName')?.value,
+            email: this.checkoutForm.get('email')?.value,
+            address: this.checkoutForm.get('address')?.value,
+            city: this.checkoutForm.get('city')?.value,
+            postalCode: this.checkoutForm.get('zip')?.value,
+            phone: this.checkoutForm.get('phone')?.value,
+          },
+          payment: {
+            method: this.checkoutForm.get('paymentMethod')?.value,
+          },
+        };
+        this.ordersService.makeOrder(orderRequest).subscribe({
+          next: (data: any) => {
+            this.isPayClicked.set(true);
+            this.spinner.set(false);
+            this.router.navigate(['/order/success'], {
+              queryParams: {
+                session_id: data.data._id,
+                method: 'cash_on_delivery',
+              },
+              state: { orderCompleted: true },
+            });
           },
           error: (error) => {
             this.spinner.set(false);

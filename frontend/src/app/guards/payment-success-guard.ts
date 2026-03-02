@@ -5,12 +5,12 @@ export const paymentSuccessGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   const currentNavigation = router.getCurrentNavigation();
-  return true;
 
-  // const isOrderCompleted = currentNavigation?.extras?.state?.['orderCompleted'];
+  const isOrderCompleted = currentNavigation?.extras?.state?.['orderCompleted'];
+  const hasSessionId = route.queryParams['session_id'];
 
-  // if (isOrderCompleted) {
-  //   return true;
-  // }
-  // return router.createUrlTree(['/home']);
+  if (isOrderCompleted || hasSessionId) {
+    return true;
+  }
+  return router.createUrlTree(['/home']);
 };
