@@ -395,7 +395,7 @@ export class ProductDetails {
   private resolveImageUrl(url: string): string {
     if (!url) return url;
     if (url.startsWith('http://') || url.startsWith('https://')) return url;
-    return `${BACKEND_URL}/${url}`;
+    return url.startsWith('/') ? `${BACKEND_URL}${url}` : `${BACKEND_URL}/${url}`;
   }
 
   // Cart

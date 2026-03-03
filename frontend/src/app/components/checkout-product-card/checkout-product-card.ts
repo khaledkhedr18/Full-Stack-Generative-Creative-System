@@ -41,7 +41,7 @@ export class CheckoutProductCard {
       if (firstCompleted) {
         const url = firstCompleted.generatedImageUrl!;
         if (url.startsWith('http://') || url.startsWith('https://')) return url;
-        return `${BACKEND_URL}/${url}`;
+        return url.startsWith('/') ? `${BACKEND_URL}${url}` : `${BACKEND_URL}/${url}`;
       }
     }
     const variant = this.getVariant();
