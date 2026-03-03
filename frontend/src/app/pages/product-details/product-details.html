@@ -23,6 +23,22 @@
     </div>
   } @else {
     <div class="relative bg-card md:px-20 xl:px-10 md:py-40 xl:py-20 lg:w-2/3">
+      @if (generatingDesign()) {
+        <div
+          class="z-10 absolute inset-0 flex flex-col justify-center items-center bg-card animate-pulse"
+        >
+          <div class="relative">
+            <ng-icon name="lucideWandSparkles" class="text-slate-300 text-4xl animate-bounce">
+            </ng-icon>
+            <div
+              class="absolute inset-0 -m-2 border-2 border-slate-200 border-t-red-400 rounded-full animate-spin"
+            ></div>
+          </div>
+          <p class="mt-4 font-medium text-slate-400 text-xs uppercase tracking-widest">
+            Enhancing Details...
+          </p>
+        </div>
+      }
       <div
         #imageWrapper
         (mousemove)="onMouseMove($event)"
@@ -80,9 +96,9 @@
           <div class="flex lg:flex-row md:flex-col justify-between font-bold">
             <h1>{{ product().name }}</h1>
             <div class="flex flex-col items-end">
-              <h2>${{ displayPrice() }}</h2>
+              <h2>${{ displayPrice().toFixed(2) }}</h2>
               @if (totalDesignFee() > 0) {
-                <span class="text-primary text-xs font-normal">
+                <span class="font-normal text-primary text-xs">
                   Includes ${{ totalDesignFee() }} design fee ({{ designCount() }} side{{
                     designCount() > 1 ? 's' : ''
                   }})
@@ -325,7 +341,7 @@
               (click)="addToCart()"
               [disabled]="addingToCart()"
               type="button"
-              class="bg-white hover:bg-primary text-black hover:text-white transition-colors duration-300 btn-primary grow disabled:opacity-50 disabled:cursor-not-allowed"
+              class="bg-white hover:bg-primary disabled:opacity-50 text-black hover:text-white transition-colors duration-300 disabled:cursor-not-allowed btn-primary grow"
             >
               <span>{{ addingToCart() ? 'Adding...' : 'Add to Cart' }}</span>
               <span class="flex justify-center items-center">
