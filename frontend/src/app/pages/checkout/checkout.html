@@ -287,7 +287,7 @@
         <div class="bg-card shadow-lg p-6 border border-slate-800 rounded-xl">
           <h2 class="mb-4 font-bold text-white text-lg">Order Summary</h2>
           <div class="flex flex-col space-y-4 mb-4 pr-2 max-h-60 overflow-y-auto">
-            @for (item of cartData().items; track item.product._id + item.variantId) {
+            @for (item of cartData().items; track item.product._id + item.variantId + item.size) {
               <app-checkout-product-card [item]="item"></app-checkout-product-card>
             }
           </div>

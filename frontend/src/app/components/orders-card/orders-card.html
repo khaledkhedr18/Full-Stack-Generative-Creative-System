@@ -10,10 +10,10 @@
     </div>
     <div>
       <span class="block font-semibold text-slate-400 text-xs uppercase">Order ID</span>
-      <span class="text-primary">{{order.orderNumber}}</span>
+      <span class="text-primary">{{ order.orderNumber }}</span>
     </div>
   </div>
-  @for (item of order.items; track item.product._id + item.variantId) {
+  @for (item of order.items; track item.product._id + item.variantId + item.size) {
     <app-orders-item [item]="item" [order]="order"></app-orders-item>
   }
 </div>
